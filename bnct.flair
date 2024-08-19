@@ -2,15 +2,15 @@
 Version: 300
 Mode: fluka
 Title: LiF neutron source
-md5: ca4ef5fa3548c361749b1ed692bc32f7
+md5: 0a1f7198f560f1ac8c9ac387d330f868
 Input:
 TITLE
 	LiF neutron source
-RADDECAY , 2
+RADDECAY , 2,,, 303,, 1
 * Set the defaults for precision simulations
 DEFAULTS PRECISIO
 * Define the beam characteristics
-BEAM PROTON -0.01 -0.004 -1.0 -2.0 -2.0 1.0
+BEAM PROTON -0.01 0 10001.0 2.0 2.0 1.0
 * Define the beam position
 BEAMPOS , 0 0 -5 0 0
 PHOTONUC ELECTNUC 1
@@ -28,12 +28,12 @@ USRBDX I2 8 NEUTRON -34 MOD1 MOD2 78.5398,, 1E-14 500,,, 3
 USRBDX I3 8 NEUTRON -35 MOD2 MOD3 78.5398,, 1E-14 500,,, 3
 USRBDX I4 8 NEUTRON -36 MOD3 MOD4 78.5398,, 1E-14 500,,, 3
 USRBDX I5 8 NEUTRON -37 MOD4 MODEND 78.5398,, 1E-14 500,,, 3
-USRBDX ETarget1 1 NEUTRON -38 TARGET DUMP 78.5398,, 1E-14 1000
-USRBDX ETarget2 1 NEUTRON -39 TARGET PIPEHOLE 78.5398,, 1E-14 1000
+USRBDX ETarget1 1 NEUTRON -38 TARGET DUMP 78.5398 0.01 1E-14 300
+USRBDX ETarget2 1 NEUTRON -39 TARGET PIPEHOLE 78.5398 0.01 1E-14 300
 !USRTRACK flnvlm,, NEUTRON -41 DET_AM 78.5398 100,, 0.001
 IONTRANS , -2
 !IRRPROFI , 3600 3.1E+12
-LOW-NEUT , 260 42,, 0,, 4
+LOW-NEUT , 260 42 0.02 0,, 4
 PHYSICS DECAYS 3,,,, NEUTRON 1000
 PHYSICS PEATHRES 1
 PHYSICS EM-DISSO 4
@@ -115,12 +115,12 @@ START , 100000,,, 1
 STOP
 EndInput
 
-Page: Plot
+Page: Run
 plotengine: Gnuplot
 
 # Run information
 Run: <default>
-	Last:     1
+	Last:     300
 	Status:   3
 	StartRun: 1724080557.247529
 	open:     1
@@ -205,161 +205,161 @@ Run: <default>
 End
 Run: bnct_01
 	Rnd:      377747
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085472.8562312
+	StartRun: 1724088479.6801932
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_02
 	Rnd:      377748
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085472.909248
+	StartRun: 1724088479.7346447
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_03
 	Rnd:      377749
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085472.9690351
+	StartRun: 1724088479.7967982
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_04
 	Rnd:      377750
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085473.0318723
+	StartRun: 1724088479.8611937
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_05
 	Rnd:      377751
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085473.095451
+	StartRun: 1724088479.9251778
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_06
 	Rnd:      377752
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085473.1574554
+	StartRun: 1724088479.9889538
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_07
 	Rnd:      377753
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085473.219833
+	StartRun: 1724088480.0533435
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_08
 	Rnd:      377754
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085473.2820082
+	StartRun: 1724088480.1217985
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_09
 	Rnd:      377755
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085473.3477967
+	StartRun: 1724088480.185587
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_10
 	Rnd:      377756
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085473.4260554
+	StartRun: 1724088480.2681305
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_11
 	Rnd:      377757
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085473.5022037
+	StartRun: 1724088480.3461432
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_12
 	Rnd:      377758
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085473.5798187
+	StartRun: 1724088480.424609
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_13
 	Rnd:      377759
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085473.6611125
+	StartRun: 1724088480.5079055
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_14
 	Rnd:      377760
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085473.7416165
+	StartRun: 1724088480.5899673
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_15
 	Rnd:      377761
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085473.822973
+	StartRun: 1724088480.6777189
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_16
 	Rnd:      377762
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085473.9024665
+	StartRun: 1724088480.7633498
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_17
 	Rnd:      377763
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085473.9822614
+	StartRun: 1724088480.8453295
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_18
 	Rnd:      377764
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085474.0642855
+	StartRun: 1724088480.9305227
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_19
 	Rnd:      377765
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085474.14584
+	StartRun: 1724088481.0216146
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_20
 	Rnd:      377766
-	Last:     1
+	Last:     300
 	Status:   3
-	StartRun: 1724085474.2283335
+	StartRun: 1724088481.1076097
 	Parent:   <default>
 	open:     1
 End
@@ -432,7 +432,7 @@ Plot: Blue
 	Type: Geometry
 	basisu: 0 0 1
 	coord: Z-Y
-	extends: 82.42233118047551 38.237163949705135
+	extends: 82.42233118047551 38.402908991243706
 	grid: 0
 	group: Geometry
 	layer: 3D
@@ -443,7 +443,7 @@ Plot: Green
 	Type: Geometry
 	basisu: -0.408813 -0.342434 -0.845938
 	basisv: -0.831174 0.522476 0.190181
-	extends: 108.10694145208475 50.23843591667063
+	extends: 108.10694145208475 50.37009963738532
 	grid: 0
 	group: Geometry
 	layer: 3D
@@ -455,7 +455,7 @@ Plot: Red
 	basisu: 0 0 1
 	basisv: -1 0 0
 	coord: Z-X
-	extends: 43.49488054607501 20.212529738302898
+	extends: 43.49488054607501 20.26550226465335
 	grid: 0
 	group: Geometry
 	layer: Lattice
@@ -465,7 +465,7 @@ End
 Plot: Magenta
 	Type: Geometry
 	coord: X-Y
-	extends: 21.835683257812768 10.129956150531697
+	extends: 21.835683257812768 10.173866049423836
 	grid: 0
 	group: Geometry
 	layer: Media
@@ -591,6 +591,7 @@ End
 Plot: bnct_37_plot
 	Type: USR-1D
 	file.0: bnct_37_tab.lis
+	grid: 0
 	lc.0: red
 	lw.0: 2
 	name.0: Detector 1
@@ -602,26 +603,10 @@ Plot: bnct_37_plot
 	y.0: 0
 	ylog: 1
 End
-Plot: bnct_38_plot
-	Type: USR-1D
-	file.0: bnct_38_tab.lis
-	grid: 0
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	open: 1
-	title: USR-1D bnct 38
-	x.0: 2
-	xlog: 1
-	y.0: 0
-	ylog: 1
-End
 Plot: bnct_39_plot
 	Type: USR-1D
 	file.0: bnct_39_tab.lis
 	grid: 0
-	index: 1
 	lc.0: red
 	lw.0: 2
 	name.0: Detector 2
@@ -632,4 +617,29 @@ Plot: bnct_39_plot
 	xlog: 1
 	y.0: 0
 	ylog: 1
+End
+Plot: Ecombined
+	Type: USR-1D
+	file.0: bnct_38_tab.lis
+	file.1: bnct_39_tab.lis
+	grid: 0
+	lc.0: red
+	lc.1: blue
+	lw.0: 2
+	lw.1: 2
+	name.0: Forwards
+	name.1: Backwards
+	ndetectors: 2
+	open: 1
+	title: USR-1D bnct 38
+	with.0: histogram
+	with.1: histogram
+	x.0: 2
+	xlabel: E (GeV)
+	xmax: 0.01
+	xmin: 0
+	y.0: 0
+	y.1: 0
+	ylabel: Counts
+	ymin: 0
 End

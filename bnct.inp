@@ -1,10 +1,10 @@
 TITLE
 LiF neutron source
-RADDECAY           2
+RADDECAY           2                           303                   1
 * Set the defaults for precision simulations
 DEFAULTS                                                              PRECISIO
 * Define the beam characteristics
-BEAM           -0.01    -0.004      -1.0      -2.0      -2.0       1.0PROTON
+BEAM           -0.01         0   10001.0       2.0       2.0       1.0PROTON
 * Define the beam position
 BEAMPOS            0         0        -5         0         0
 PHOTONUC           1                                                  ELECTNUC
@@ -34,14 +34,14 @@ USRBDX                   1E-14       500                             3 &
 USRBDX             8   NEUTRON       -37      MOD4    MODEND   78.5398I5
 USRBDX                   1E-14       500                             3 &
 USRBDX             1   NEUTRON       -38    TARGET      DUMP   78.5398ETarget1
-USRBDX                   1E-14      1000                               &
+USRBDX          0.01     1E-14       300                               &
 USRBDX             1   NEUTRON       -39    TARGET  PIPEHOLE   78.5398ETarget2
-USRBDX                   1E-14      1000                               &
+USRBDX          0.01     1E-14       300                               &
 *USRTRACK               NEUTRON       -41    DET_AM   78.5398       100flnvlm
 *USRTRACK                 0.001                                         &
 IONTRANS          -2
 *IRRPROFI        3600   3.1E+12
-LOW-NEUT         260        42                   0                   4
+LOW-NEUT         260        42      0.02         0                   4
 PHYSICS            3                                 NEUTRON      1000DECAYS
 PHYSICS            1                                                  PEATHRES
 PHYSICS            4                                                  EM-DISSO
