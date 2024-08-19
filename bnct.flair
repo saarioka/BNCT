@@ -2,7 +2,7 @@
 Version: 300
 Mode: fluka
 Title: LiF neutron source
-md5: 973759234f3a44df5c6a2f08bce09e28
+md5: a2ff3781e5f0de0f985f84589f922557
 Input:
 TITLE
 	LiF neutron source
@@ -17,15 +17,15 @@ PHOTONUC ELECTNUC 1
 PHYSICS COALESCE 1
 PHYSICS EVAPORAT 3
 EMF
-USRBIN det 10 NEUTRON -22 50 50 50 -50 -50 -25 1 1000 1000
-USRBIN det2 10 NEUTRON -23 5 5 15 -5 -5 9 1000 1 1000
-USRBIN det3 10 PROTON -24 10 2 20 -10 -2 -10 1000 1 1000
+USRBIN overview 10 NEUTRON -22 20 20 110 -20 -20 -5 1 1000 1000
+USRBIN moderator 10 NEUTRON -23 5 5 110 -5 -5 102 1 1000 1000
+!USRBIN det3 10 PROTON -24 10 2 20 -10 -2 -10 1000 1 1000
 USRBIN det1 11 ENERGY -25 10 0 20 0 0 -10 100 1 200
-USRBDX fluencbdx1 111 NEUTRON -31 DUMP DET 78.5398 0.03 0 100
-USRBDX bfrmod2 111 NEUTRON -34 DET_BM MODSTART 78.5398 0.03 0 100,,, 3
-USRBDX bfrmod 108 NEUTRON -32 DET_BM MODSTART 78.5398 0.03 0.001 500,,, 3
-USRBDX aftrmod 108 NEUTRON -33 MODSTART DET_AM 78.5398 0.03 0.001 500,,, 3
-USRTRACK flnvlm,, NEUTRON -41 DET_AM 78.5398 100 0.03 0.001
+USRBDX fluencbdx1 111 NEUTRON -31 TARGET DUMP 78.5398 0.03 0 100
+USRBDX bfrmod2 111 NEUTRON -34 DUMP MODSTART 78.5398 0.03 0 100,,, 3
+USRBDX bfrmod 108 NEUTRON -32 MODSTART MOD 78.5398 0.03 0.001 500,,, 3
+!USRBDX aftrmod 108 NEUTRON -33 MODSTART DET_AM 78.5398 0.03 0.001 500,,, 3
+!USRTRACK flnvlm,, NEUTRON -41 DET_AM 78.5398 100 0.03 0.001
 IONTRANS , -2
 !IRRPROFI , 3600 3.1E+12
 LOW-NEUT , 260 42,, 0,, 4
@@ -46,10 +46,10 @@ RCC tubeOut,,, -10,,, 12 6
 XYP LiFStart 0
 XYP LiFEnd 1
 XYP DumpEnd 2
-XYP modStart 26
-XYP modEnd 106
+XYP modStart 102
+XYP modEnd 110
+RCC mod,,, 101,,, 10 5
 	@select=1
-RCC mod,,, 25,,, 82 5
 END
 * Black hole
 REGION BLKBODY 5
@@ -57,9 +57,9 @@ REGION BLKBODY 5
 * Void around
 REGION AIR 5
 	+air -mod -tubeOut        
-REGION TUBE 5
+REGION PIPE 5
 	+tubeOut -tubeIn 
-REGION TUBEHOLE 5
+REGION PIPEHOLE 5
 	+tubeIn +LiFStart
 REGION DUMP 5
 	+tubeIn -LiFEnd +DumpEnd 
@@ -83,8 +83,8 @@ STERNHEI LiF 3.1667 0.0171 2.7049 0.07593 3.7478
 * ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
 ASSIGNMA , BLCKHOLE BLKBODY
 ASSIGNMA , AIR AIR
-ASSIGNMA , ALUMINUM TUBE
-ASSIGNMA , AIR TUBEHOLE
+ASSIGNMA , ALUMINUM PIPE
+ASSIGNMA , AIR PIPEHOLE
 ASSIGNMA , ALUMINUM DUMP
 ASSIGNMA , LiF TARGET
 ASSIGNMA , AIR MODSTART
@@ -97,14 +97,13 @@ START , 100000,,, 1
 STOP
 EndInput
 
-Page: Input
+Page: Run
 plotengine: Gnuplot
 
 # Run information
 Run: <default>
 	Last:     1
-	Status:   3
-	StartRun: 1724075800.3893087
+	StartRun: 1724080124.5820093
 	open:     1
 End
 Geometry: Geometry
@@ -172,43 +171,49 @@ Geometry: Geometry
 End
 
 # Plots information
-Plot: Red
-	Type: Geometry
-	basisu: 0 0 1
-	basisv: -1 0 0
-	coord: Z-X
-	extends: 52.193856655290084 20.735999999999994
-	grid: 0
-	layer: Lattice
-	open: 1
-	origin: -3.10934 0 87.7635
-End
-Plot: Green
-	Type: Geometry
-	basisu: -0.408813 -0.342434 -0.845938
-	basisv: -0.831174 0.522476 0.190181
-	extends: 62.56188741440096 24.855095610060314
-	layer: 3D
-	open: 1
-	origin: 19.5288 15.1999 0.700272
-End
 Plot: Blue
 	Type: Geometry
 	basisu: 0.0974125 0.401403 0.910706
 	basisv: 0.936842 -0.345831 0.0522207
 	extends: 30.4711372530429 12.08516291052888
 	grid: 0
+	group: Geometry
 	layer: 3D
 	open: 1
 	origin: 1.32727 2.93531 -0.272911
 End
+Plot: Green
+	Type: Geometry
+	basisu: -0.408813 -0.342434 -0.845938
+	basisv: -0.831174 0.522476 0.190181
+	extends: 75.07426489728115 29.826114732072373
+	grid: 0
+	group: Geometry
+	layer: 3D
+	open: 1
+	origin: 15.636 30.8165 22.2322
+End
+Plot: Red
+	Type: Geometry
+	basisu: 0 0 1
+	basisv: -1 0 0
+	coord: Z-X
+	extends: 14.566347490835525 5.787037037037028
+	grid: 0
+	group: Geometry
+	layer: Lattice
+	open: 1
+	origin: 0.409932 0 99.1602
+End
 Plot: Magenta
 	Type: Geometry
 	coord: X-Y
-	extends: 21.835683257812775 8.660254037844389
+	extends: 31.44338389125039 12.470765814495918
 	grid: 0
+	group: Geometry
 	layer: Media
 	open: 1
+	origin: -0.429904 -1.66751 0
 End
 Plot: bnct_22_plot
 	Type: USRBIN
@@ -217,9 +222,9 @@ Plot: bnct_22_plot
 	datafile: bnct_22.bnn
 	grid: 0
 	hist: 2D Projection
-	int: 0.48315543652991477
-	max: 1.13037437E-04
-	min: 1.27385611E-11
+	int: 0.29695111097812976
+	max: 5.74361882E-04
+	min: 1.60879417E-11
 	open: 1
 	proj: X
 	title: USRBIN bnct 22
@@ -231,9 +236,9 @@ Plot: bnct_23_plot
 	datafile: bnct_23.bnn
 	grid: 0
 	hist: 2D Projection
-	int: 4.2739158770156594E-003
-	max: 8.00498965E-05
-	min: 5.05226749E-10
+	int: 4.4267958647026949E-005
+	max: 1.32310539E-04
+	min: 5.84959366E-07
 	open: 1
 	proj: Y
 	title: USRBIN bnct 23
@@ -243,13 +248,7 @@ Plot: bnct_24_plot
 	cblog: 1
 	cbtics: 1
 	datafile: bnct_24.bnn
-	grid: 0
-	hist: 2D Projection
-	int: 5.4143580274905920
-	max: 0.117937915
-	min: 3.83332428E-12
 	open: 1
-	proj: Y
 	title: USRBIN bnct 24
 End
 Plot: bnct_25_plot
@@ -262,7 +261,6 @@ Plot: bnct_25_plot
 End
 Plot: bnct_31_plot
 	Type: USR-1D
-	cbtics: 1
 	file.0: bnct_31_tab.lis
 	lc.0: red
 	lw.0: 2
@@ -277,7 +275,6 @@ Plot: bnct_31_plot
 End
 Plot: bnct_32_plot
 	Type: USR-1D
-	cbtics: 1
 	file.0: bnct_32_tab.lis
 	lc.0: red
 	lw.0: 2
@@ -292,7 +289,6 @@ Plot: bnct_32_plot
 End
 Plot: bnct_33_plot
 	Type: USR-1D
-	cbtics: 1
 	file.0: bnct_33_tab.lis
 	lc.0: red
 	lw.0: 2
@@ -307,7 +303,6 @@ Plot: bnct_33_plot
 End
 Plot: bnct_34_plot
 	Type: USR-1D
-	cbtics: 1
 	file.0: bnct_34_tab.lis
 	lc.0: red
 	lw.0: 2
@@ -322,8 +317,8 @@ Plot: bnct_34_plot
 End
 Plot: bnct_41_plot
 	Type: USR-1D
-	cbtics: 1
 	file.0: bnct_41_tab.lis
+	grid: 0
 	lc.0: red
 	lw.0: 2
 	name.0: Detector 1
