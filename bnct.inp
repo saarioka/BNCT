@@ -13,8 +13,8 @@ PHYSICS            3                                                  EVAPORAT
 EMF
 USRBIN            10   NEUTRON       -22        50        50        50det
 USRBIN           -50       -50       -25         1      1000      1000 &
-USRBIN            10   NEUTRON       -23        50        50        70det2
-USRBIN           -50       -50       -10      1000         1      1000 &
+USRBIN            10   NEUTRON       -23         5         5        15det2
+USRBIN            -5        -5         9      1000         1      1000 &
 USRBIN            10    PROTON       -24        10         2        20det3
 USRBIN           -10        -2       -10      1000         1      1000 &
 USRBIN            11    ENERGY       -25        10         0        20det1

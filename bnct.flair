@@ -2,7 +2,7 @@
 Version: 300
 Mode: fluka
 Title: Beryllium neutron source
-md5: 87ec874a35134f9d679de5441cfbe14e
+md5: 1930709a0d261204d60950a55904a45f
 Input:
 TITLE
 	Neutron source
@@ -18,7 +18,7 @@ PHYSICS COALESCE 1
 PHYSICS EVAPORAT 3
 EMF
 USRBIN det 10 NEUTRON -22 50 50 50 -50 -50 -25 1 1000 1000
-USRBIN det2 10 NEUTRON -23 50 50 70 -50 -50 -10 1000 1 1000
+USRBIN det2 10 NEUTRON -23 5 5 15 -5 -5 9 1000 1 1000
 USRBIN det3 10 PROTON -24 10 2 20 -10 -2 -10 1000 1 1000
 USRBIN det1 11 ENERGY -25 10 0 20 0 0 -10 100 1 200
 USRBDX fluencbdx1 111 NEUTRON -31 DUMP DET 78.5398 0.03 0 100
@@ -85,7 +85,6 @@ REGION DET_AM 5
 	+mod1 -PLAN7 +PLAN8 
 REGION tube_o 5
 	+tubeOut -tube -mod1 -TRG_DET 
-	@select=1
 REGION tube_o1 5
 	+tube -mod1 -TRG_DET  
 END
@@ -115,14 +114,132 @@ START , 100000,,, 1
 STOP
 EndInput
 
-Page: Input
+Page: Run
 plotengine: Gnuplot
 
 # Run information
 Run: <default>
 	Last:     1
-	Status:   3
-	StartRun: 1724072485.837647
+	StartRun: 1724074709.9291637
+	open:     1
+End
+Run: bnct_01
+	Rnd:      377747
+	Parent:   <default>
+	open:     1
+End
+Run: bnct_02
+	Rnd:      377748
+	Last:     1
+	Parent:   <default>
+	open:     1
+End
+Run: bnct_03
+	Rnd:      377749
+	Last:     1
+	Parent:   <default>
+	open:     1
+End
+Run: bnct_04
+	Rnd:      377750
+	Last:     1
+	Parent:   <default>
+	open:     1
+End
+Run: bnct_05
+	Rnd:      377751
+	Last:     1
+	Parent:   <default>
+	open:     1
+End
+Run: bnct_06
+	Rnd:      377752
+	Last:     1
+	Parent:   <default>
+	open:     1
+End
+Run: bnct_07
+	Rnd:      377753
+	Last:     1
+	Parent:   <default>
+	open:     1
+End
+Run: bnct_08
+	Rnd:      377754
+	Last:     1
+	Parent:   <default>
+	open:     1
+End
+Run: bnct_09
+	Rnd:      377755
+	Last:     1
+	Parent:   <default>
+	open:     1
+End
+Run: bnct_10
+	Rnd:      377756
+	Last:     1
+	Parent:   <default>
+	open:     1
+End
+Run: bnct_11
+	Rnd:      377757
+	Last:     1
+	Parent:   <default>
+	open:     1
+End
+Run: bnct_12
+	Rnd:      377758
+	Last:     1
+	Parent:   <default>
+	open:     1
+End
+Run: bnct_13
+	Rnd:      377759
+	Last:     1
+	Parent:   <default>
+	open:     1
+End
+Run: bnct_14
+	Rnd:      377760
+	Last:     1
+	Parent:   <default>
+	open:     1
+End
+Run: bnct_15
+	Rnd:      377761
+	Last:     1
+	Parent:   <default>
+	open:     1
+End
+Run: bnct_16
+	Rnd:      377762
+	Last:     1
+	Parent:   <default>
+	open:     1
+End
+Run: bnct_17
+	Rnd:      377763
+	Last:     1
+	Parent:   <default>
+	open:     1
+End
+Run: bnct_18
+	Rnd:      377764
+	Last:     1
+	Parent:   <default>
+	open:     1
+End
+Run: bnct_19
+	Rnd:      377765
+	Last:     1
+	Parent:   <default>
+	open:     1
+End
+Run: bnct_20
+	Rnd:      377766
+	Last:     1
+	Parent:   <default>
 	open:     1
 End
 Geometry: Geometry
@@ -195,17 +312,19 @@ Plot: Red
 	Type: Geometry
 	basisv: 0 0 1
 	coord: X-Z
-	extends: 19.380694444444135 12.659969758064314
+	extends: 13.458815586419542 8.791645665322443
 	grid: 0
 	layer: Lattice
-	origin: -1.04314 2.13918 2.99235
+	open: 1
+	origin: -0.67845 2.13918 5.81002
 End
 Plot: Green
 	Type: Geometry
-	basisu: 0.726362 0.350444 -0.59126
+	basisu: 0.726362 0.350444 -0.591259
 	basisv: -0.507139 0.853899 -0.116908
 	extends: 29.417764711583008 19.24230639277166
 	layer: 3D
+	open: 1
 	origin: 8.17966 6.76157 19.7798
 End
 Plot: Blue
@@ -213,134 +332,141 @@ Plot: Blue
 	basisu: 0 0 1
 	basisv: 1 0 0
 	coord: Z-X
-	extends: 19.380694444444135 12.659969758064314
+	extends: 13.458815586419542 8.791645665322443
+	grid: 0
 	layer: 3D
-	origin: -1.04314 2.13918 2.99235
+	open: 1
+	origin: -0.67845 2.13918 5.81002
 End
 Plot: Magenta
 	Type: Geometry
 	coord: X-Y
-	extends: 19.354645123954292 12.659969758064314
+	extends: 13.440725780523817 8.791645665322443
+	grid: 0
 	layer: Media
-	origin: 0 2.13918 -4
+	open: 1
+	origin: -0.67845 2.13918 5.81002
 End
-Plot: fission_3_22_plot
+Plot: bnct_22_plot
 	Type: USRBIN
 	cblog: 1
 	cbtics: 1
-	datafile: fission_3_22.bnn
+	datafile: bnct_22.bnn
 	grid: 0
 	hist: 2D Projection
-	int: 0.48808968509082606
-	max: 1.29310138E-04
-	min: 4.88389147E-12
+	int: 0.48315543652991477
+	max: 1.13037437E-04
+	min: 1.27385611E-11
+	open: 1
 	proj: X
-	title: USRBIN fission 3 22
+	title: USRBIN bnct 22
 End
-Plot: fission_3_23_plot
+Plot: bnct_23_plot
 	Type: USRBIN
 	cblog: 1
 	cbtics: 1
-	datafile: fission_3_23.bnn
+	datafile: bnct_23.bnn
 	grid: 0
 	hist: 2D Projection
-	int: 0.44669927104446078
-	max: 7.38477975E-05
-	min: 1.86803160E-11
+	int: 3.7135496853207858E-003
+	max: 6.13518758E-04
+	min: 5.05953013E-09
+	open: 1
 	proj: Y
-	title: USRBIN fission 3 23
+	title: USRBIN bnct 23
 End
-Plot: fission_3_24_plot
+Plot: bnct_24_plot
 	Type: USRBIN
 	cblog: 1
 	cbtics: 1
-	datafile: fission_3_24.bnn
+	datafile: bnct_24.bnn
 	grid: 0
 	hist: 2D Projection
-	int: 5.4146500607941865
-	max: 0.125854671
-	min: 1.53079149E-08
+	int: 5.4148002406342730
+	max: 0.126846611
+	min: 3.84753989E-08
+	open: 1
 	proj: Y
-	title: USRBIN fission 3 24
+	title: USRBIN bnct 24
 End
-Plot: fission_3_25_plot
+Plot: bnct_25_plot
 	Type: USRBIN
 	cblog: 1
 	cbtics: 1
-	datafile: fission_3_25.bnn
-	grid: 0
-	hist: 2D Projection
-	int: 2.9797653087572974E-002
-	max: 3.84478234E-02
-	min: 1.38721738E-12
-	proj: Y
-	title: USRBIN fission 3 25
+	datafile: bnct_25.bnn
+	open: 1
+	title: USRBIN bnct 25
 End
-Plot: fission_3_31_plot
+Plot: bnct_31_plot
 	Type: USR-1D
-	file.0: fission_3_31_tab.lis
-	grid: 0
+	cbtics: 1
+	file.0: bnct_31_tab.lis
 	lc.0: red
 	lw.0: 2
 	name.0: Detector 1
 	ndetectors: 1
-	title: USR-1D fission 3 31
+	open: 1
+	title: USR-1D bnct 31
 	x.0: 2
 	xlog: 1
 	y.0: 0
 	ylog: 1
 End
-Plot: fission_3_32_plot
+Plot: bnct_32_plot
 	Type: USR-1D
-	file.0: fission_3_32_tab.lis
-	grid: 0
+	cbtics: 1
+	file.0: bnct_32_tab.lis
 	lc.0: red
 	lw.0: 2
 	name.0: Detector 1
 	ndetectors: 1
-	title: USR-1D fission 3 32
+	open: 1
+	title: USR-1D bnct 32
 	x.0: 2
 	xlog: 1
 	y.0: 0
 	ylog: 1
 End
-Plot: fission_3_33_plot
+Plot: bnct_33_plot
 	Type: USR-1D
-	file.0: fission_3_33_tab.lis
-	grid: 0
+	cbtics: 1
+	file.0: bnct_33_tab.lis
 	lc.0: red
 	lw.0: 2
 	name.0: Detector 1
 	ndetectors: 1
-	title: USR-1D fission 3 33
+	open: 1
+	title: USR-1D bnct 33
 	x.0: 2
 	xlog: 1
 	y.0: 0
 	ylog: 1
 End
-Plot: fission_3_34_plot
+Plot: bnct_34_plot
 	Type: USR-1D
-	file.0: fission_3_34_tab.lis
-	grid: 0
+	cbtics: 1
+	file.0: bnct_34_tab.lis
 	lc.0: red
 	lw.0: 2
 	name.0: Detector 1
 	ndetectors: 1
-	title: USR-1D fission 3 34
+	open: 1
+	title: USR-1D bnct 34
 	x.0: 2
 	xlog: 1
 	y.0: 0
 	ylog: 1
 End
-Plot: fission_3_41_plot
+Plot: bnct_41_plot
 	Type: USR-1D
-	file.0: fission_3_41_tab.lis
-	grid: 0
+	cbtics: 1
+	file.0: bnct_41_tab.lis
 	lc.0: red
 	lw.0: 2
 	name.0: Detector 1
 	ndetectors: 1
-	title: USR-1D fission 3 41
+	open: 1
+	title: USR-1D bnct 41
 	x.0: 2
 	xlog: 1
 	y.0: 0
