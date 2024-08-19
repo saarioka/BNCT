@@ -1,0 +1,348 @@
+# flair project file
+Version: 300
+Mode: fluka
+Title: Beryllium neutron source
+md5: 87ec874a35134f9d679de5441cfbe14e
+Input:
+TITLE
+	Neutron source
+RADDECAY , 2
+* Set the defaults for precision simulations
+DEFAULTS PRECISIO
+* Define the beam characteristics
+BEAM PROTON -0.03 -0.004 -1.7 -2.0 -1.0 1.0
+* Define the beam position
+BEAMPOS , 0 0 -15 0 0
+PHOTONUC ELECTNUC 1
+PHYSICS COALESCE 1
+PHYSICS EVAPORAT 3
+EMF
+USRBIN det 10 NEUTRON -22 50 50 50 -50 -50 -25 1 1000 1000
+USRBIN det2 10 NEUTRON -23 50 50 70 -50 -50 -10 1000 1 1000
+USRBIN det3 10 PROTON -24 10 2 20 -10 -2 -10 1000 1 1000
+USRBIN det1 11 ENERGY -25 10 0 20 0 0 -10 100 1 200
+USRBDX fluencbdx1 111 NEUTRON -31 DUMP DET 78.5398 0.03 0 100
+USRBDX bfrmod2 111 NEUTRON -34 DET_BM MOD 78.5398 0.03 0 100,,, 3
+USRBDX bfrmod 108 NEUTRON -32 DET_BM MOD 78.5398 0.03 0.001 500,,, 3
+USRBDX aftrmod 108 NEUTRON -33 MOD DET_AM 78.5398 0.03 0.001 500,,, 3
+USRTRACK flnvlm,, NEUTRON -41 DET_AM 78.5398 100 0.03 0.001
+IONTRANS , -2
+!IRRPROFI , 3600 3.1E+12
+LOW-NEUT , 260 42,, 0,, 4
+PHYSICS DECAYS 3,,,, NEUTRON 1000
+PHYSICS PEATHRES 1
+PHYSICS EM-DISSO 4
+PHYSICS DPMTHRES
+EVENTYPE DPMJET,,, 1
+EVENTYPE DPMJET,,, 2
+PART-THR , -1E-14,, NEUTRON
+LOW-DOWN
+GEOBEGIN COMBNAME
+YZP ref1P 0
+YZP ref2P 40
+XZP clip 6
+YZP ref3P -40
+* Black body
+SPH blkbody 0.0 0.0 0.0 100000.0
+* Void sphere
+SPH air 0.0 0.0 0.0 10000.0
+RPP tube -5 5 -6 6 -5 15
+RPP tubeOut -6 6 -7 7 -5 15
+$start_translat ,, -33
+XYP PLAN5 42
+XYP PLAN6 43
+XYP PLAN7 47
+XYP PLAN8 48
+RCC mod1,,, 42 0 0 6 5
+$end_translat
+ROT-DEFI rot 301 84
+ROT-DEFI n_rot 302,,,,, -20
+$start_transform n_rot
+XYP PLAN1 15
+XYP PLAN2 15.52
+XYP PLAN3 16.52
+XYP PLAN4 17.52
+RCC TRG_DET,, 0 15 0 0 2.52 5
+$end_transform
+END
+* Black hole
+REGION BLKBODY 5
+	+blkbody -air
+* Void around
+REGION Air 5
+	+air  -TRG_DET -mod1  -tube -tubeOut        
+REGION Target 5
+	+TRG_DET -PLAN1 +PLAN2 
+REGION DUMP 5
+	+TRG_DET -PLAN2 +PLAN3
+REGION DET 5
+	+TRG_DET -PLAN3 +PLAN4 
+REGION DET_BM 5
+	+mod1 -PLAN5 +PLAN6 
+REGION MOD 5
+	+mod1 -PLAN6 +PLAN7 
+REGION DET_AM 5
+	+mod1 -PLAN7 +PLAN8 
+REGION tube_o 5
+	+tubeOut -tube -mod1 -TRG_DET 
+	@select=1
+REGION tube_o1 5
+	+tube -mod1 -TRG_DET  
+END
+GEOEND
+MATERIAL LITHIUM 3,, 0.534
+MATERIAL FLUORINE 9,, 0.001696
+*Lithium fluoride Li_F
+MATERIAL LiF,,, 2.635
+COMPOUND LiF -0.267585 LITHIUM -0.732415 FLUORINE
+MAT-PROP ,,, 94.0 LiF
+STERNHEI LiF 3.1667 0.0171 2.7049 0.07593 3.7478
+* ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
+ASSIGNMA , BLCKHOLE BLKBODY
+ASSIGNMA , VACUUM Air
+ASSIGNMA , VACUUM DET_BM
+ASSIGNMA , PMMA MOD
+ASSIGNMA , VACUUM DET_AM
+ASSIGNMA , LiF Target
+ASSIGNMA , ALUMINUM DUMP
+ASSIGNMA , VACUUM DET
+ASSIGNMA , VACUUM tube_o1
+ASSIGNMA , VACUUM tube_o
+* Set the random number seed
+RANDOMIZ , 1.0 377746
+* Set the number of primary histories to be simulated in the run
+START , 100000,,, 1
+STOP
+EndInput
+
+Page: Input
+plotengine: Gnuplot
+
+# Run information
+Run: <default>
+	Last:     1
+	Status:   3
+	StartRun: 1724072485.837647
+	open:     1
+End
+Geometry: Geometry
+	Synchronize: 1
+	Layer: Borders
+		Palette: 1
+		Palette._visible: 1
+		Show.color: None
+		Usrbin: 1
+		Usrbin._visible: 1
+		Usrbin.alpha: 97
+		Usrbin.file: fission_3_27.bnn
+	End
+	Layer: Media
+		Palette: 1
+		Palette._visible: 1
+		Usrbin.alpha: 97
+		Usrbin.file: fission_3_27.bnn
+	End
+	Layer: 3D
+		3D: 1
+		3D._visible: 1
+		3D.ambient: 141
+		3D.clip.0: clip
+		3D.clipnegative.0: 1
+		3D.edgedetect: 1
+		3D.fov: 65.4
+		Beam: 1
+		Beam._visible: 1
+		Options.viewport: 0
+		Palette: 1
+		Palette._visible: 1
+		Show.label: Material
+		Show.lattice: 1
+		Show.palette: Palette4
+		Show.voxel: 1
+		Usrbin._visible: 1
+		Usrbin.alpha: 28
+		Usrbin.file: fission_3_28.bnn
+		Usrbin.norm: 100000
+		Usrbin.prompt: 1
+	End
+	Layer: Lattice
+		Palette: 1
+		Palette._visible: 1
+		Show.lattice: 2
+		Show.voxel: 2
+		Usrbin._visible: 1
+		Usrbin.file: fission_3_27.bnn
+		Usrbin.prompt: 1
+	End
+	Layer: Layer 01
+		Palette: 1
+		Palette._visible: 1
+		Usrbin.alpha: 28
+		Usrbin.file: fission_3_28.bnn
+		Usrbin.norm: 100000
+		Usrbin.prompt: 1
+	End
+	Layer: Layer 02
+		Palette: 1
+		Palette._visible: 1
+		Usrbin: 1
+		Usrbin._visible: 1
+	End
+End
+
+# Plots information
+Plot: Red
+	Type: Geometry
+	basisv: 0 0 1
+	coord: X-Z
+	extends: 19.380694444444135 12.659969758064314
+	grid: 0
+	layer: Lattice
+	origin: -1.04314 2.13918 2.99235
+End
+Plot: Green
+	Type: Geometry
+	basisu: 0.726362 0.350444 -0.59126
+	basisv: -0.507139 0.853899 -0.116908
+	extends: 29.417764711583008 19.24230639277166
+	layer: 3D
+	origin: 8.17966 6.76157 19.7798
+End
+Plot: Blue
+	Type: Geometry
+	basisu: 0 0 1
+	basisv: 1 0 0
+	coord: Z-X
+	extends: 19.380694444444135 12.659969758064314
+	layer: 3D
+	origin: -1.04314 2.13918 2.99235
+End
+Plot: Magenta
+	Type: Geometry
+	coord: X-Y
+	extends: 19.354645123954292 12.659969758064314
+	layer: Media
+	origin: 0 2.13918 -4
+End
+Plot: fission_3_22_plot
+	Type: USRBIN
+	cblog: 1
+	cbtics: 1
+	datafile: fission_3_22.bnn
+	grid: 0
+	hist: 2D Projection
+	int: 0.48808968509082606
+	max: 1.29310138E-04
+	min: 4.88389147E-12
+	proj: X
+	title: USRBIN fission 3 22
+End
+Plot: fission_3_23_plot
+	Type: USRBIN
+	cblog: 1
+	cbtics: 1
+	datafile: fission_3_23.bnn
+	grid: 0
+	hist: 2D Projection
+	int: 0.44669927104446078
+	max: 7.38477975E-05
+	min: 1.86803160E-11
+	proj: Y
+	title: USRBIN fission 3 23
+End
+Plot: fission_3_24_plot
+	Type: USRBIN
+	cblog: 1
+	cbtics: 1
+	datafile: fission_3_24.bnn
+	grid: 0
+	hist: 2D Projection
+	int: 5.4146500607941865
+	max: 0.125854671
+	min: 1.53079149E-08
+	proj: Y
+	title: USRBIN fission 3 24
+End
+Plot: fission_3_25_plot
+	Type: USRBIN
+	cblog: 1
+	cbtics: 1
+	datafile: fission_3_25.bnn
+	grid: 0
+	hist: 2D Projection
+	int: 2.9797653087572974E-002
+	max: 3.84478234E-02
+	min: 1.38721738E-12
+	proj: Y
+	title: USRBIN fission 3 25
+End
+Plot: fission_3_31_plot
+	Type: USR-1D
+	file.0: fission_3_31_tab.lis
+	grid: 0
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	title: USR-1D fission 3 31
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: fission_3_32_plot
+	Type: USR-1D
+	file.0: fission_3_32_tab.lis
+	grid: 0
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	title: USR-1D fission 3 32
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: fission_3_33_plot
+	Type: USR-1D
+	file.0: fission_3_33_tab.lis
+	grid: 0
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	title: USR-1D fission 3 33
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: fission_3_34_plot
+	Type: USR-1D
+	file.0: fission_3_34_tab.lis
+	grid: 0
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	title: USR-1D fission 3 34
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: fission_3_41_plot
+	Type: USR-1D
+	file.0: fission_3_41_tab.lis
+	grid: 0
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	title: USR-1D fission 3 41
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End

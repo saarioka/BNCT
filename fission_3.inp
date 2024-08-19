@@ -1,0 +1,108 @@
+TITLE
+Neutron source
+RADDECAY           2
+* Set the defaults for precision simulations
+DEFAULTS                                                              PRECISIO
+* Define the beam characteristics
+BEAM           -0.03    -0.004      -1.7      -2.0      -1.0       1.0PROTON
+* Define the beam position
+BEAMPOS            0         0       -15         0         0
+PHOTONUC           1                                                  ELECTNUC
+PHYSICS            1                                                  COALESCE
+PHYSICS            3                                                  EVAPORAT
+EMF
+USRBIN            10   NEUTRON       -22        50        50        50det
+USRBIN           -50       -50       -25         1      1000      1000 &
+USRBIN            10   NEUTRON       -23        50        50        70det2
+USRBIN           -50       -50       -10      1000         1      1000 &
+USRBIN            10    PROTON       -24        10         2        20det3
+USRBIN           -10        -2       -10      1000         1      1000 &
+USRBIN            11    ENERGY       -25        10         0        20det1
+USRBIN             0         0       -10       100         1       200 &
+USRBDX           111   NEUTRON       -31      DUMP       DET   78.5398fluencbdx1
+USRBDX          0.03         0       100                               &
+USRBDX           111   NEUTRON       -34    DET_BM       MOD   78.5398bfrmod2
+USRBDX          0.03         0       100                             3 &
+USRBDX           108   NEUTRON       -32    DET_BM       MOD   78.5398bfrmod
+USRBDX          0.03     0.001       500                             3 &
+USRBDX           108   NEUTRON       -33       MOD    DET_AM   78.5398aftrmod
+USRBDX          0.03     0.001       500                             3 &
+USRTRACK               NEUTRON       -41    DET_AM   78.5398       100flnvlm
+USRTRACK        0.03     0.001                                         &
+IONTRANS          -2
+*IRRPROFI        3600   3.1E+12
+LOW-NEUT         260        42                   0                   4
+PHYSICS            3                                 NEUTRON      1000DECAYS
+PHYSICS            1                                                  PEATHRES
+PHYSICS            4                                                  EM-DISSO
+PHYSICS                                                               DPMTHRES
+EVENTYPE                               1                              DPMJET
+EVENTYPE                               2                              DPMJET
+PART-THR      -1E-14             NEUTRON
+LOW-DOWN
+ROT-DEFI         301        84                                        rot
+ROT-DEFI         302                                               -20n_rot
+GEOBEGIN                                                              COMBNAME
+    0    0          
+YZP ref1P      0
+YZP ref2P      40
+XZP clip       6
+YZP ref3P      -40
+* Black body
+SPH blkbody    0.0 0.0 0.0 100000.0
+* Void sphere
+SPH air        0.0 0.0 0.0 10000.0
+RPP tube       -5 5 -6 6 -5 15
+RPP tubeOut    -6 6 -7 7 -5 15
+$start_translat 0.0 0.0 -33
+XYP PLAN5      42
+XYP PLAN6      43
+XYP PLAN7      47
+XYP PLAN8      48
+RCC mod1       0.0 0.0 42 0 0 6 5
+$end_translat
+$start_transform n_rot
+XYP PLAN1      15
+XYP PLAN2      15.52
+XYP PLAN3      16.52
+XYP PLAN4      17.52
+RCC TRG_DET    0.0 0 15 0 0 2.52 5
+$end_transform
+END
+* Black hole
+BLKBODY      5 +blkbody -air
+* Void around
+Air          5 +air  -TRG_DET -mod1  -tube -tubeOut
+Target       5 +TRG_DET -PLAN1 +PLAN2
+DUMP         5 +TRG_DET -PLAN2 +PLAN3
+DET          5 +TRG_DET -PLAN3 +PLAN4
+DET_BM       5 +mod1 -PLAN5 +PLAN6
+MOD          5 +mod1 -PLAN6 +PLAN7
+DET_AM       5 +mod1 -PLAN7 +PLAN8
+tube_o       5 +tubeOut -tube -mod1 -TRG_DET
+tube_o1      5 +tube -mod1 -TRG_DET
+END
+GEOEND
+MATERIAL           3               0.534                              LITHIUM
+MATERIAL           9            0.001696                              FLUORINE
+*Lithium fluoride Li_F
+MATERIAL                           2.635                              LiF
+COMPOUND   -0.267585   LITHIUM -0.732415  FLUORINE                    LiF
+MAT-PROP                            94.0       LiF
+STERNHEI      3.1667    0.0171    2.7049   0.07593    3.7478          LiF
+* ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
+ASSIGNMA    BLCKHOLE   BLKBODY
+ASSIGNMA      VACUUM       Air
+ASSIGNMA      VACUUM    DET_BM
+ASSIGNMA        PMMA       MOD
+ASSIGNMA      VACUUM    DET_AM
+ASSIGNMA         LiF    Target
+ASSIGNMA    ALUMINUM      DUMP
+ASSIGNMA      VACUUM       DET
+ASSIGNMA      VACUUM   tube_o1
+ASSIGNMA      VACUUM    tube_o
+* Set the random number seed
+RANDOMIZ         1.0    377746
+* Set the number of primary histories to be simulated in the run
+START         100000                             1
+STOP
