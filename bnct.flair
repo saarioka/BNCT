@@ -1,11 +1,11 @@
 # flair project file
 Version: 300
 Mode: fluka
-Title: Beryllium neutron source
-md5: 1930709a0d261204d60950a55904a45f
+Title: LiF neutron source
+md5: 973759234f3a44df5c6a2f08bce09e28
 Input:
 TITLE
-	Neutron source
+	LiF neutron source
 RADDECAY , 2
 * Set the defaults for precision simulations
 DEFAULTS PRECISIO
@@ -22,9 +22,9 @@ USRBIN det2 10 NEUTRON -23 5 5 15 -5 -5 9 1000 1 1000
 USRBIN det3 10 PROTON -24 10 2 20 -10 -2 -10 1000 1 1000
 USRBIN det1 11 ENERGY -25 10 0 20 0 0 -10 100 1 200
 USRBDX fluencbdx1 111 NEUTRON -31 DUMP DET 78.5398 0.03 0 100
-USRBDX bfrmod2 111 NEUTRON -34 DET_BM MOD 78.5398 0.03 0 100,,, 3
-USRBDX bfrmod 108 NEUTRON -32 DET_BM MOD 78.5398 0.03 0.001 500,,, 3
-USRBDX aftrmod 108 NEUTRON -33 MOD DET_AM 78.5398 0.03 0.001 500,,, 3
+USRBDX bfrmod2 111 NEUTRON -34 DET_BM MODSTART 78.5398 0.03 0 100,,, 3
+USRBDX bfrmod 108 NEUTRON -32 DET_BM MODSTART 78.5398 0.03 0.001 500,,, 3
+USRBDX aftrmod 108 NEUTRON -33 MODSTART DET_AM 78.5398 0.03 0.001 500,,, 3
 USRTRACK flnvlm,, NEUTRON -41 DET_AM 78.5398 100 0.03 0.001
 IONTRANS , -2
 !IRRPROFI , 3600 3.1E+12
@@ -38,55 +38,39 @@ EVENTYPE DPMJET,,, 2
 PART-THR , -1E-14,, NEUTRON
 LOW-DOWN
 GEOBEGIN COMBNAME
-YZP ref1P 0
-YZP ref2P 40
-XZP clip 6
-YZP ref3P -40
-* Black body
-SPH blkbody 0.0 0.0 0.0 100000.0
-* Void sphere
-SPH air 0.0 0.0 0.0 10000.0
-RPP tube -5 5 -6 6 -5 15
-RPP tubeOut -6 6 -7 7 -5 15
-$start_translat ,, -33
-XYP PLAN5 42
-XYP PLAN6 43
-XYP PLAN7 47
-XYP PLAN8 48
-RCC mod1,,, 42 0 0 6 5
-$end_translat
-ROT-DEFI rot 301 84
-ROT-DEFI n_rot 302,,,,, -20
-$start_transform n_rot
-XYP PLAN1 15
-XYP PLAN2 15.52
-XYP PLAN3 16.52
-XYP PLAN4 17.52
-RCC TRG_DET,, 0 15 0 0 2.52 5
-$end_transform
+SPH blkbody,, 0.0 0.0 100000.0
+*
+SPH air,, 0.0 0.0 10000.0
+RCC tubeIn,,, -10,,, 12 5
+RCC tubeOut,,, -10,,, 12 6
+XYP LiFStart 0
+XYP LiFEnd 1
+XYP DumpEnd 2
+XYP modStart 26
+XYP modEnd 106
+	@select=1
+RCC mod,,, 25,,, 82 5
 END
 * Black hole
 REGION BLKBODY 5
 	+blkbody -air
 * Void around
-REGION Air 5
-	+air  -TRG_DET -mod1  -tube -tubeOut        
-REGION Target 5
-	+TRG_DET -PLAN1 +PLAN2 
+REGION AIR 5
+	+air -mod -tubeOut        
+REGION TUBE 5
+	+tubeOut -tubeIn 
+REGION TUBEHOLE 5
+	+tubeIn +LiFStart
 REGION DUMP 5
-	+TRG_DET -PLAN2 +PLAN3
-REGION DET 5
-	+TRG_DET -PLAN3 +PLAN4 
-REGION DET_BM 5
-	+mod1 -PLAN5 +PLAN6 
+	+tubeIn -LiFEnd +DumpEnd 
+REGION TARGET 5
+	+tubeIn -LiFStart +LiFEnd 
+REGION MODSTART 5
+	+mod +modStart
 REGION MOD 5
-	+mod1 -PLAN6 +PLAN7 
-REGION DET_AM 5
-	+mod1 -PLAN7 +PLAN8 
-REGION tube_o 5
-	+tubeOut -tube -mod1 -TRG_DET 
-REGION tube_o1 5
-	+tube -mod1 -TRG_DET  
+	+mod -modStart +modEnd
+REGION MODEND 5
+	+mod -modEnd
 END
 GEOEND
 MATERIAL LITHIUM 3,, 0.534
@@ -98,15 +82,14 @@ MAT-PROP ,,, 94.0 LiF
 STERNHEI LiF 3.1667 0.0171 2.7049 0.07593 3.7478
 * ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
 ASSIGNMA , BLCKHOLE BLKBODY
-ASSIGNMA , VACUUM Air
-ASSIGNMA , VACUUM DET_BM
-ASSIGNMA , PMMA MOD
-ASSIGNMA , VACUUM DET_AM
-ASSIGNMA , LiF Target
+ASSIGNMA , AIR AIR
+ASSIGNMA , ALUMINUM TUBE
+ASSIGNMA , AIR TUBEHOLE
 ASSIGNMA , ALUMINUM DUMP
-ASSIGNMA , VACUUM DET
-ASSIGNMA , VACUUM tube_o1
-ASSIGNMA , VACUUM tube_o
+ASSIGNMA , LiF TARGET
+ASSIGNMA , AIR MODSTART
+ASSIGNMA , PMMA MOD
+ASSIGNMA , AIR MODEND
 * Set the random number seed
 RANDOMIZ , 1.0 377746
 * Set the number of primary histories to be simulated in the run
@@ -114,136 +97,17 @@ START , 100000,,, 1
 STOP
 EndInput
 
-Page: Run
+Page: Input
 plotengine: Gnuplot
 
 # Run information
 Run: <default>
 	Last:     1
-	StartRun: 1724074709.9291637
-	open:     1
-End
-Run: bnct_01
-	Rnd:      377747
-	Parent:   <default>
-	open:     1
-End
-Run: bnct_02
-	Rnd:      377748
-	Last:     1
-	Parent:   <default>
-	open:     1
-End
-Run: bnct_03
-	Rnd:      377749
-	Last:     1
-	Parent:   <default>
-	open:     1
-End
-Run: bnct_04
-	Rnd:      377750
-	Last:     1
-	Parent:   <default>
-	open:     1
-End
-Run: bnct_05
-	Rnd:      377751
-	Last:     1
-	Parent:   <default>
-	open:     1
-End
-Run: bnct_06
-	Rnd:      377752
-	Last:     1
-	Parent:   <default>
-	open:     1
-End
-Run: bnct_07
-	Rnd:      377753
-	Last:     1
-	Parent:   <default>
-	open:     1
-End
-Run: bnct_08
-	Rnd:      377754
-	Last:     1
-	Parent:   <default>
-	open:     1
-End
-Run: bnct_09
-	Rnd:      377755
-	Last:     1
-	Parent:   <default>
-	open:     1
-End
-Run: bnct_10
-	Rnd:      377756
-	Last:     1
-	Parent:   <default>
-	open:     1
-End
-Run: bnct_11
-	Rnd:      377757
-	Last:     1
-	Parent:   <default>
-	open:     1
-End
-Run: bnct_12
-	Rnd:      377758
-	Last:     1
-	Parent:   <default>
-	open:     1
-End
-Run: bnct_13
-	Rnd:      377759
-	Last:     1
-	Parent:   <default>
-	open:     1
-End
-Run: bnct_14
-	Rnd:      377760
-	Last:     1
-	Parent:   <default>
-	open:     1
-End
-Run: bnct_15
-	Rnd:      377761
-	Last:     1
-	Parent:   <default>
-	open:     1
-End
-Run: bnct_16
-	Rnd:      377762
-	Last:     1
-	Parent:   <default>
-	open:     1
-End
-Run: bnct_17
-	Rnd:      377763
-	Last:     1
-	Parent:   <default>
-	open:     1
-End
-Run: bnct_18
-	Rnd:      377764
-	Last:     1
-	Parent:   <default>
-	open:     1
-End
-Run: bnct_19
-	Rnd:      377765
-	Last:     1
-	Parent:   <default>
-	open:     1
-End
-Run: bnct_20
-	Rnd:      377766
-	Last:     1
-	Parent:   <default>
+	Status:   3
+	StartRun: 1724075800.3893087
 	open:     1
 End
 Geometry: Geometry
-	Synchronize: 1
 	Layer: Borders
 		Palette: 1
 		Palette._visible: 1
@@ -310,42 +174,41 @@ End
 # Plots information
 Plot: Red
 	Type: Geometry
-	basisv: 0 0 1
-	coord: X-Z
-	extends: 13.458815586419542 8.791645665322443
+	basisu: 0 0 1
+	basisv: -1 0 0
+	coord: Z-X
+	extends: 52.193856655290084 20.735999999999994
 	grid: 0
 	layer: Lattice
 	open: 1
-	origin: -0.67845 2.13918 5.81002
+	origin: -3.10934 0 87.7635
 End
 Plot: Green
 	Type: Geometry
-	basisu: 0.726362 0.350444 -0.591259
-	basisv: -0.507139 0.853899 -0.116908
-	extends: 29.417764711583008 19.24230639277166
+	basisu: -0.408813 -0.342434 -0.845938
+	basisv: -0.831174 0.522476 0.190181
+	extends: 62.56188741440096 24.855095610060314
 	layer: 3D
 	open: 1
-	origin: 8.17966 6.76157 19.7798
+	origin: 19.5288 15.1999 0.700272
 End
 Plot: Blue
 	Type: Geometry
-	basisu: 0 0 1
-	basisv: 1 0 0
-	coord: Z-X
-	extends: 13.458815586419542 8.791645665322443
+	basisu: 0.0974125 0.401403 0.910706
+	basisv: 0.936842 -0.345831 0.0522207
+	extends: 30.4711372530429 12.08516291052888
 	grid: 0
 	layer: 3D
 	open: 1
-	origin: -0.67845 2.13918 5.81002
+	origin: 1.32727 2.93531 -0.272911
 End
 Plot: Magenta
 	Type: Geometry
 	coord: X-Y
-	extends: 13.440725780523817 8.791645665322443
+	extends: 21.835683257812775 8.660254037844389
 	grid: 0
 	layer: Media
 	open: 1
-	origin: -0.67845 2.13918 5.81002
 End
 Plot: bnct_22_plot
 	Type: USRBIN
@@ -368,9 +231,9 @@ Plot: bnct_23_plot
 	datafile: bnct_23.bnn
 	grid: 0
 	hist: 2D Projection
-	int: 3.7135496853207858E-003
-	max: 6.13518758E-04
-	min: 5.05953013E-09
+	int: 4.2739158770156594E-003
+	max: 8.00498965E-05
+	min: 5.05226749E-10
 	open: 1
 	proj: Y
 	title: USRBIN bnct 23
@@ -382,9 +245,9 @@ Plot: bnct_24_plot
 	datafile: bnct_24.bnn
 	grid: 0
 	hist: 2D Projection
-	int: 5.4148002406342730
-	max: 0.126846611
-	min: 3.84753989E-08
+	int: 5.4143580274905920
+	max: 0.117937915
+	min: 3.83332428E-12
 	open: 1
 	proj: Y
 	title: USRBIN bnct 24

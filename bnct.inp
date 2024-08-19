@@ -1,5 +1,5 @@
 TITLE
-Neutron source
+LiF neutron source
 RADDECAY           2
 * Set the defaults for precision simulations
 DEFAULTS                                                              PRECISIO
@@ -21,11 +21,11 @@ USRBIN            11    ENERGY       -25        10         0        20det1
 USRBIN             0         0       -10       100         1       200 &
 USRBDX           111   NEUTRON       -31      DUMP       DET   78.5398fluencbdx1
 USRBDX          0.03         0       100                               &
-USRBDX           111   NEUTRON       -34    DET_BM       MOD   78.5398bfrmod2
+USRBDX           111   NEUTRON       -34    DET_BM  MODSTART   78.5398bfrmod2
 USRBDX          0.03         0       100                             3 &
-USRBDX           108   NEUTRON       -32    DET_BM       MOD   78.5398bfrmod
+USRBDX           108   NEUTRON       -32    DET_BM  MODSTART   78.5398bfrmod
 USRBDX          0.03     0.001       500                             3 &
-USRBDX           108   NEUTRON       -33       MOD    DET_AM   78.5398aftrmod
+USRBDX           108   NEUTRON       -33  MODSTART    DET_AM   78.5398aftrmod
 USRBDX          0.03     0.001       500                             3 &
 USRTRACK               NEUTRON       -41    DET_AM   78.5398       100flnvlm
 USRTRACK        0.03     0.001                                         &
@@ -40,47 +40,31 @@ EVENTYPE                               1                              DPMJET
 EVENTYPE                               2                              DPMJET
 PART-THR      -1E-14             NEUTRON
 LOW-DOWN
-ROT-DEFI         301        84                                        rot
-ROT-DEFI         302                                               -20n_rot
 GEOBEGIN                                                              COMBNAME
     0    0          
-YZP ref1P      0
-YZP ref2P      40
-XZP clip       6
-YZP ref3P      -40
-* Black body
 SPH blkbody    0.0 0.0 0.0 100000.0
-* Void sphere
+*
 SPH air        0.0 0.0 0.0 10000.0
-RPP tube       -5 5 -6 6 -5 15
-RPP tubeOut    -6 6 -7 7 -5 15
-$start_translat 0.0 0.0 -33
-XYP PLAN5      42
-XYP PLAN6      43
-XYP PLAN7      47
-XYP PLAN8      48
-RCC mod1       0.0 0.0 42 0 0 6 5
-$end_translat
-$start_transform n_rot
-XYP PLAN1      15
-XYP PLAN2      15.52
-XYP PLAN3      16.52
-XYP PLAN4      17.52
-RCC TRG_DET    0.0 0 15 0 0 2.52 5
-$end_transform
+RCC tubeIn     0.0 0.0 -10 0.0 0.0 12 5
+RCC tubeOut    0.0 0.0 -10 0.0 0.0 12 6
+XYP LiFStart   0
+XYP LiFEnd     1
+XYP DumpEnd    2
+XYP modStart   26
+XYP modEnd     106
+RCC mod        0.0 0.0 25 0.0 0.0 82 5
 END
 * Black hole
 BLKBODY      5 +blkbody -air
 * Void around
-Air          5 +air  -TRG_DET -mod1  -tube -tubeOut
-Target       5 +TRG_DET -PLAN1 +PLAN2
-DUMP         5 +TRG_DET -PLAN2 +PLAN3
-DET          5 +TRG_DET -PLAN3 +PLAN4
-DET_BM       5 +mod1 -PLAN5 +PLAN6
-MOD          5 +mod1 -PLAN6 +PLAN7
-DET_AM       5 +mod1 -PLAN7 +PLAN8
-tube_o       5 +tubeOut -tube -mod1 -TRG_DET
-tube_o1      5 +tube -mod1 -TRG_DET
+AIR          5 +air -mod -tubeOut
+TUBE         5 +tubeOut -tubeIn
+TUBEHOLE     5 +tubeIn +LiFStart
+DUMP         5 +tubeIn -LiFEnd +DumpEnd
+TARGET       5 +tubeIn -LiFStart +LiFEnd
+MODSTART     5 +mod +modStart
+MOD          5 +mod -modStart +modEnd
+MODEND       5 +mod -modEnd
 END
 GEOEND
 MATERIAL           3               0.534                              LITHIUM
@@ -92,15 +76,14 @@ MAT-PROP                            94.0       LiF
 STERNHEI      3.1667    0.0171    2.7049   0.07593    3.7478          LiF
 * ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
 ASSIGNMA    BLCKHOLE   BLKBODY
-ASSIGNMA      VACUUM       Air
-ASSIGNMA      VACUUM    DET_BM
-ASSIGNMA        PMMA       MOD
-ASSIGNMA      VACUUM    DET_AM
-ASSIGNMA         LiF    Target
+ASSIGNMA         AIR       AIR
+ASSIGNMA    ALUMINUM      TUBE
+ASSIGNMA         AIR  TUBEHOLE
 ASSIGNMA    ALUMINUM      DUMP
-ASSIGNMA      VACUUM       DET
-ASSIGNMA      VACUUM   tube_o1
-ASSIGNMA      VACUUM    tube_o
+ASSIGNMA         LiF    TARGET
+ASSIGNMA         AIR  MODSTART
+ASSIGNMA        PMMA       MOD
+ASSIGNMA         AIR    MODEND
 * Set the random number seed
 RANDOMIZ         1.0    377746
 * Set the number of primary histories to be simulated in the run
