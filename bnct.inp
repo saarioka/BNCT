@@ -12,14 +12,14 @@ PHOTONUC           1                                                  ELECTNUC
 PHYSICS            1                                                  COALESCE
 PHYSICS            3                                                  EVAPORAT
 EMF
-USRBIN            10   NEUTRON       -22        20        20       110Noverview
-USRBIN           -20       -20        -5         1      1000      1000 &
-USRBIN            10   NEUTRON       -23         5         5       110Nmoderator
-USRBIN            -5        -5       102         1      1000      1000 &
-USRBIN            11   NEUTRON       -24        30                 112NRZ
-USRBIN                                -5      1000         1      1000 &
-USRBIN            11    ENERGY       -25        30         0       112ERZ
-USRBIN             0         0        -5      1000         1      1000 &
+*USRBIN            10   NEUTRON       -22        20        20       110Noverview
+*USRBIN           -20       -20        -5         1      1000      1000 &
+*USRBIN            10   NEUTRON       -23         5         5       110Nmoderator
+*USRBIN            -5        -5       102         1      1000      1000 &
+*USRBIN            11   NEUTRON       -24        30                 112NRZ
+*USRBIN                                -5      1000         1      1000 &
+*USRBIN            11    ENERGY       -25        30         0       112ERZ
+*USRBIN             0         0        -5      1000         1      1000 &
 USRBIN            10   NEUTRON       -26        50        50      20.3NScorer
 USRBIN           -50       -50      20.2       200       200         1 &
 USRBDX           111   NEUTRON       -31    TARGET      DUMP   78.5398fTarget
