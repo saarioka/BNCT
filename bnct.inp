@@ -1,6 +1,7 @@
 TITLE
 LiF neutron source
-RADDECAY           2                           303                   1
+*RADDECAY           2                           303                   1
+RADDECAY           2                             0                   1
 * Set the defaults for precision simulations
 DEFAULTS                                                              PRECISIO
 * Define the beam characteristics
@@ -34,22 +35,22 @@ USRBDX                   1E-14       500                             3 &
 USRBDX             8   NEUTRON       -37      MOD4    MODEND   78.5398I5
 USRBDX                   1E-14       500                             3 &
 USRBDX             1   NEUTRON       -38    TARGET      DUMP   78.5398ETarget1
-USRBDX          0.01     1E-14       300                               &
+USRBDX          0.01     1E-14       200                               &
 USRBDX             1   NEUTRON       -39    TARGET  PIPEHOLE   78.5398ETarget2
-USRBDX          0.01     1E-14       300                               &
+USRBDX          0.01     1E-14       200                               &
 *USRTRACK               NEUTRON       -41    DET_AM   78.5398       100flnvlm
 *USRTRACK                 0.001                                         &
-IONTRANS          -2
+*IONTRANS          -2
 *IRRPROFI        3600   3.1E+12
-LOW-NEUT         260        42      0.02         0                   4
+*LOW-NEUT         260        42      0.02         0                   4
 PHYSICS            3                                 NEUTRON      1000DECAYS
-PHYSICS            1                                                  PEATHRES
-PHYSICS            4                                                  EM-DISSO
-PHYSICS                                                               DPMTHRES
-EVENTYPE                               1                              DPMJET
-EVENTYPE                               2                              DPMJET
-PART-THR      -1E-14             NEUTRON
-LOW-DOWN
+*PHYSICS            1                                                  PEATHRES
+*PHYSICS            4                                                  EM-DISSO
+*PHYSICS                                                               DPMTHRES
+*EVENTYPE                               1                              DPMJET
+*EVENTYPE                               2                              DPMJET
+*PART-THR      -1E-14             NEUTRON
+*LOW-DOWN
 GEOBEGIN                                                              COMBNAME
     0    0          
 SPH blkbody    0.0 0.0 0.0 100000.0
@@ -58,8 +59,8 @@ SPH air        0.0 0.0 0.0 10000.0
 RCC tubeIn     0.0 0.0 -10 0.0 0.0 12 5
 RCC tubeOut    0.0 0.0 -10 0.0 0.0 12 6
 XYP LiFStart   0
-XYP LiFEnd     1
-XYP DumpEnd    2
+XYP LiFEnd     0.3
+XYP DumpEnd    1.3
 XYP modStart   102
 XYP mod1End    104
 XYP mod2End    106
@@ -74,6 +75,7 @@ BLKBODY      5 +blkbody -air
 AIR          5 +air -mod -tubeOut
 PIPE         5 +tubeOut -tubeIn
 PIPEHOLE     5 +tubeIn +LiFStart
+PIPEH2       5 +tubeIn -DumpEnd
 DUMP         5 +tubeIn -LiFEnd +DumpEnd
 TARGET       5 +tubeIn -LiFStart +LiFEnd
 MODSTART     5 +mod +modStart
@@ -89,13 +91,13 @@ MATERIAL           9            0.001696                              FLUORINE
 *Lithium fluoride Li_F
 MATERIAL                           2.635                              LiF
 COMPOUND   -0.267585   LITHIUM -0.732415  FLUORINE                    LiF
-MAT-PROP                            94.0       LiF
-STERNHEI      3.1667    0.0171    2.7049   0.07593    3.7478          LiF
-* ..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
+*MAT-PROP                            94.0       LiF
+*STERNHEI      3.1667    0.0171    2.7049   0.07593    3.7478          LiF
 ASSIGNMA    BLCKHOLE   BLKBODY
 ASSIGNMA         AIR       AIR
 ASSIGNMA    ALUMINUM      PIPE
 ASSIGNMA      VACUUM  PIPEHOLE
+ASSIGNMA         AIR    PIPEH2
 ASSIGNMA    ALUMINUM      DUMP
 ASSIGNMA         LiF    TARGET
 ASSIGNMA         AIR  MODSTART
@@ -107,5 +109,5 @@ ASSIGNMA         AIR    MODEND
 * Set the random number seed
 RANDOMIZ         1.0    377746
 * Set the number of primary histories to be simulated in the run
-START         100000                             1
+START        1000000                             1
 STOP
