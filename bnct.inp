@@ -20,6 +20,8 @@ USRBIN            11   NEUTRON       -24        30                 112NRZ
 USRBIN                                -5      1000         1      1000 &
 USRBIN            11    ENERGY       -25        30         0       112ERZ
 USRBIN             0         0        -5      1000         1      1000 &
+USRBIN            10   NEUTRON       -26        50        50      20.3NScorer
+USRBIN           -50       -50      20.2       200       200         1 &
 USRBDX           111   NEUTRON       -31    TARGET      DUMP   78.5398fTarget
 USRBDX                       0       100                               &
 USRBDX           111   NEUTRON       -32      DUMP       AIR   78.5398fDump
@@ -37,6 +39,8 @@ USRBDX                   1E-14       500                             3 &
 USRBDX             1   NEUTRON       -38    TARGET      DUMP   78.5398ETarget1
 USRBDX          0.01     1E-14       200                               &
 USRBDX             1   NEUTRON       -39    TARGET  PIPEHOLE   78.5398ETarget2
+USRBDX          0.01     1E-14       200                               &
+USRBDX             1   NEUTRON       -40   SCORER1   SCORER2   7853.98NScorer
 USRBDX          0.01     1E-14       200                               &
 *USRTRACK               NEUTRON       -41    DET_AM   78.5398       100flnvlm
 *USRTRACK                 0.001                                         &
@@ -68,11 +72,13 @@ XYP mod3End    108
 XYP mod4End    110
 XYP modEnd     111
 RCC mod        0.0 0.0 101 0.0 0.0 10 10
+XYP scorerp    20.3
+RCC scorer     0.0 0.0 20 0.0 0.0 1 50
 END
 * Black hole
 BLKBODY      5 +blkbody -air
 * Void around
-AIR          5 +air -mod -tubeOut
+AIR          5 +air -mod -tubeOut -scorer
 PIPE         5 +tubeOut -tubeIn
 PIPEHOLE     5 +tubeIn +LiFStart
 PIPEH2       5 +tubeIn -DumpEnd
@@ -84,6 +90,8 @@ MOD2         5 +mod -mod1End +mod2End
 MOD3         5 +mod -mod2End +mod3End
 MOD4         5 +mod -mod3End +mod4End
 MODEND       5 +mod -mod4End +modEnd
+SCORER1      5 +scorer +scorerp
+SCORER2      5 +scorer -scorerp
 END
 GEOEND
 MATERIAL           3               0.534                              LITHIUM
@@ -94,11 +102,15 @@ COMPOUND   -0.267585   LITHIUM -0.732415  FLUORINE                    LiF
 *MAT-PROP                            94.0       LiF
 *STERNHEI      3.1667    0.0171    2.7049   0.07593    3.7478          LiF
 ASSIGNMA    BLCKHOLE   BLKBODY
-ASSIGNMA         AIR       AIR
-ASSIGNMA    ALUMINUM      PIPE
+*ASSIGNMA         AIR       AIR
+ASSIGNMA      VACUUM       AIR
+*ASSIGNMA    ALUMINUM      PIPE
+ASSIGNMA      VACUUM      PIPE
 ASSIGNMA      VACUUM  PIPEHOLE
-ASSIGNMA         AIR    PIPEH2
-ASSIGNMA    ALUMINUM      DUMP
+*ASSIGNMA         AIR    PIPEH2
+ASSIGNMA      VACUUM    PIPEH2
+*ASSIGNMA    ALUMINUM      DUMP
+ASSIGNMA      VACUUM      DUMP
 ASSIGNMA         LiF    TARGET
 ASSIGNMA         AIR  MODSTART
 ASSIGNMA        PMMA      MOD1
@@ -106,6 +118,8 @@ ASSIGNMA        PMMA      MOD2
 ASSIGNMA        PMMA      MOD3
 ASSIGNMA        PMMA      MOD4
 ASSIGNMA         AIR    MODEND
+ASSIGNMA      VACUUM   SCORER1
+ASSIGNMA    BLCKHOLE   SCORER2
 * Set the random number seed
 RANDOMIZ         1.0    377746
 * Set the number of primary histories to be simulated in the run

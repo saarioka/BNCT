@@ -2,7 +2,7 @@
 Version: 300
 Mode: fluka
 Title: LiF neutron source
-md5: f786b038f57e8301911861b3ff1d5922
+md5: 9ec544a839fbd935f1628cc7e5dbaf53
 Input:
 TITLE
 	LiF neutron source
@@ -22,6 +22,7 @@ USRBIN Noverview 10 NEUTRON -22 20 20 110 -20 -20 -5 1 1000 1000
 USRBIN Nmoderator 10 NEUTRON -23 5 5 110 -5 -5 102 1 1000 1000
 USRBIN NRZ 11 NEUTRON -24 30,, 112,,, -5 1000 1 1000
 USRBIN ERZ 11 ENERGY -25 30 0 112 0 0 -5 1000 1 1000
+USRBIN NScorer 10 NEUTRON -26 50 50 20.3 -50 -50 20.2 200 200 1
 USRBDX fTarget 111 NEUTRON -31 TARGET DUMP 78.5398,, 0 100
 USRBDX fDump 111 NEUTRON -32 DUMP AIR 78.5398,, 0 100,,, 3
 USRBDX I1 8 NEUTRON -33 MODSTART MOD1 78.5398,, 1E-14 500,,, 3
@@ -31,6 +32,7 @@ USRBDX I4 8 NEUTRON -36 MOD3 MOD4 78.5398,, 1E-14 500,,, 3
 USRBDX I5 8 NEUTRON -37 MOD4 MODEND 78.5398,, 1E-14 500,,, 3
 USRBDX ETarget1 1 NEUTRON -38 TARGET DUMP 78.5398 0.01 1E-14 200
 USRBDX ETarget2 1 NEUTRON -39 TARGET PIPEHOLE 78.5398 0.01 1E-14 200
+USRBDX NScorer 1 NEUTRON -40 SCORER1 SCORER2 7853.98 0.01 1E-14 200
 !USRTRACK flnvlm,, NEUTRON -41 DET_AM 78.5398 100,, 0.001
 !IONTRANS , -2
 !IRRPROFI , 3600 3.1E+12
@@ -52,7 +54,6 @@ RCC tubeOut,,, -10,,, 12 6
 XYP LiFStart 0
 XYP LiFEnd 0.3
 XYP DumpEnd 1.3
-	@select=1
 XYP modStart 102
 XYP mod1End 104
 XYP mod2End 106
@@ -60,13 +61,16 @@ XYP mod3End 108
 XYP mod4End 110
 XYP modEnd 111
 RCC mod,,, 101,,, 10 10
+XYP scorerp 20.3
+RCC scorer,,, 20,,, 1 50
+	@select=1
 END
 * Black hole
 REGION BLKBODY 5
 	+blkbody -air
 * Void around
 REGION AIR 5
-	+air -mod -tubeOut        
+	+air -mod -tubeOut -scorer       
 REGION PIPE 5
 	+tubeOut -tubeIn 
 REGION PIPEHOLE 5
@@ -89,6 +93,10 @@ REGION MOD4 5
 	+mod -mod3End +mod4End
 REGION MODEND 5
 	+mod -mod4End +modEnd
+REGION SCORER1 5
+	+scorer +scorerp
+REGION SCORER2 5
+	+scorer -scorerp
 END
 GEOEND
 MATERIAL LITHIUM 3,, 0.534
@@ -99,11 +107,15 @@ COMPOUND LiF -0.267585 LITHIUM -0.732415 FLUORINE
 !MAT-PROP ,,, 94.0 LiF
 !STERNHEI LiF 3.1667 0.0171 2.7049 0.07593 3.7478
 ASSIGNMA , BLCKHOLE BLKBODY
-ASSIGNMA , AIR AIR
-ASSIGNMA , ALUMINUM PIPE
+!ASSIGNMA , AIR AIR
+ASSIGNMA , VACUUM AIR
+!ASSIGNMA , ALUMINUM PIPE
+ASSIGNMA , VACUUM PIPE
 ASSIGNMA , VACUUM PIPEHOLE
-ASSIGNMA , AIR PIPEH2
-ASSIGNMA , ALUMINUM DUMP
+!ASSIGNMA , AIR PIPEH2
+ASSIGNMA , VACUUM PIPEH2
+!ASSIGNMA , ALUMINUM DUMP
+ASSIGNMA , VACUUM DUMP
 ASSIGNMA , LiF TARGET
 ASSIGNMA , AIR MODSTART
 ASSIGNMA , PMMA MOD1
@@ -111,6 +123,8 @@ ASSIGNMA , PMMA MOD2
 ASSIGNMA , PMMA MOD3
 ASSIGNMA , PMMA MOD4
 ASSIGNMA , AIR MODEND
+ASSIGNMA , VACUUM SCORER1
+ASSIGNMA , BLCKHOLE SCORER2
 * Set the random number seed
 RANDOMIZ , 1.0 377746
 * Set the number of primary histories to be simulated in the run
@@ -118,13 +132,14 @@ START , 1000000,,, 1
 STOP
 EndInput
 
-Page: Run
+Page: Input
 plotengine: Gnuplot
 
 # Run information
 Run: <default>
 	Exe:      <flukadpm>
-	Status:   2
+	Last:     1
+	Status:   4
 	StartRun: 1724080557.247529
 	open:     1
 
@@ -149,6 +164,12 @@ Run: <default>
 	# USRxxx data file: bnct_25.bnn
 	Data: \I_\U\e
 		Unit: 25
+		Type: usrbin
+	End
+
+	# USRxxx data file: bnct_26.bnn
+	Data: \I_\U\e
+		Unit: 26
 		Type: usrbin
 	End
 
@@ -205,156 +226,162 @@ Run: <default>
 		Unit: 39
 		Type: usrbdx
 	End
+
+	# USRxxx data file: bnct_40.bnx
+	Data: \I_\U\e
+		Unit: 40
+		Type: usrbdx
+	End
 End
 Run: bnct_01
 	Rnd:      377747
-	Status:   2
-	Pid:      634666
-	StartRun: 1724152874.7674856
+	Last:     1
+	Status:   4
+	StartRun: 1724156616.3962004
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_02
 	Rnd:      377748
-	Status:   2
-	Pid:      634719
-	StartRun: 1724152874.8304257
+	Last:     1
+	Status:   4
+	StartRun: 1724156616.4566972
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_03
 	Rnd:      377749
-	Status:   2
-	Pid:      634775
-	StartRun: 1724152874.9039266
+	Last:     1
+	Status:   4
+	StartRun: 1724156616.5270092
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_04
 	Rnd:      377750
-	Status:   2
-	Pid:      634827
-	StartRun: 1724152874.9749224
+	Last:     1
+	Status:   4
+	StartRun: 1724156616.5966494
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_05
 	Rnd:      377751
-	Status:   2
-	Pid:      634879
-	StartRun: 1724152875.0475354
+	Last:     1
+	Status:   4
+	StartRun: 1724156616.6666057
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_06
 	Rnd:      377752
-	Status:   2
-	Pid:      634931
-	StartRun: 1724152875.11287
+	Last:     1
+	Status:   4
+	StartRun: 1724156616.735098
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_07
 	Rnd:      377753
-	Status:   2
-	Pid:      634983
-	StartRun: 1724152875.1789412
+	Last:     1
+	Status:   4
+	StartRun: 1724156616.8043618
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_08
 	Rnd:      377754
-	Status:   2
-	Pid:      635032
-	StartRun: 1724152875.2441425
+	Last:     1
+	Status:   4
+	StartRun: 1724156616.873038
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_09
 	Rnd:      377755
-	Status:   2
-	Pid:      635095
-	StartRun: 1724152875.3090448
+	Last:     1
+	Status:   4
+	StartRun: 1724156616.9590583
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_10
 	Rnd:      377756
-	Status:   2
-	Pid:      635149
-	StartRun: 1724152875.398129
+	Last:     1
+	Status:   4
+	StartRun: 1724156617.036141
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_11
 	Rnd:      377757
-	Status:   2
-	Pid:      635201
-	StartRun: 1724152875.478683
+	Last:     1
+	Status:   4
+	StartRun: 1724156617.1245708
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_12
 	Rnd:      377758
-	Status:   2
-	Pid:      635253
-	StartRun: 1724152875.5554075
+	Last:     1
+	Status:   4
+	StartRun: 1724156617.2117014
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_13
 	Rnd:      377759
-	Status:   2
-	Pid:      635321
-	StartRun: 1724152875.6444376
+	Last:     1
+	Status:   4
+	StartRun: 1724156617.3030987
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_14
 	Rnd:      377760
-	Status:   2
-	Pid:      635374
-	StartRun: 1724152875.730339
+	Last:     1
+	Status:   4
+	StartRun: 1724156617.3921335
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_15
 	Rnd:      377761
-	Status:   2
-	Pid:      635426
-	StartRun: 1724152875.8165345
+	Last:     1
+	Status:   4
+	StartRun: 1724156617.482928
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_16
 	Rnd:      377762
-	Status:   2
-	Pid:      635469
-	StartRun: 1724152875.906516
+	Last:     1
+	Status:   4
+	StartRun: 1724156617.574992
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_17
 	Rnd:      377763
-	Status:   2
-	Pid:      635530
-	StartRun: 1724152875.9924593
+	Last:     1
+	Status:   4
+	StartRun: 1724156617.667445
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_18
 	Rnd:      377764
-	Status:   2
-	Pid:      635582
-	StartRun: 1724152876.0831797
+	Last:     1
+	Status:   4
+	StartRun: 1724156617.7648296
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_19
 	Rnd:      377765
-	Status:   2
-	Pid:      635634
-	StartRun: 1724152876.1730933
+	Last:     1
+	Status:   3
+	StartRun: 1724156617.861335
 	Parent:   <default>
 	open:     1
 End
@@ -421,24 +448,45 @@ Geometry: Geometry
 		Usrbin._visible: 1
 	End
 End
+Pet: pet
+	angle: 180.0
+	axisux: 0.0
+	axisuy: 0.0
+	axisuz: 1.0
+	centrx: 0.0
+	centry: 0.0
+	centrz: 0.0
+	da: 0.4
+	dr: 2.
+	dz: 0.6
+	material: GSO
+	modules: 28
+	na: 22
+	nz: 29
+	radius: 43.2
+	region: MODEND
+	sa: 0.021428
+	sr: 0.
+	sz: 0.021428
+End
 
 # Plots information
 Plot: Blue
 	Type: Geometry
 	basisu: 0 0 1
 	coord: Z-Y
-	extends: 15.973999968531139 15.664825775591826
+	extends: 13.311666640442617 6.91368642705797
 	grid: 0
 	group: Geometry
 	layer: Lattice
 	open: 1
-	origin: 0 0.499385 5.19789
+	origin: 0 -0.998745 0.721409
 End
 Plot: Green
 	Type: Geometry
-	basisu: -0.689439 -0.571427 0.445134
-	basisv: -0.637235 0.770666 0.00234807
-	extends: 36.20479595740791 35.65860291494701
+	basisu: -0.678549 -0.558644 0.476957
+	basisv: -0.626935 0.778808 0.020275
+	extends: 36.20479595740791 18.847533004461745
 	grid: 0
 	group: Geometry
 	layer: 3D
@@ -450,17 +498,17 @@ Plot: Red
 	basisu: 0 0 1
 	basisv: -1 0 0
 	coord: Z-X
-	extends: 20.975540386803143 20.614670874772123
+	extends: 20.975540386803132 10.91947017714933
 	grid: 0
 	group: Geometry
 	layer: Lattice
 	open: 1
-	origin: -0.0728378 0 3.61999
+	origin: 1.50059 0 2.58206
 End
 Plot: Magenta
 	Type: Geometry
 	coord: X-Y
-	extends: 21.835683257812768 21.45920596026427
+	extends: 21.835683257812768 11.340808859081934
 	grid: 0
 	group: Geometry
 	layer: Media
@@ -474,9 +522,9 @@ Plot: bnct_22_plot
 	datafile: bnct_22.bnn
 	grid: 0
 	hist: 2D Projection
-	int: 4.7364965066023492E-003
-	max: 1.50796768E-06
-	min: 2.83575958E-14
+	int: 3.4752037226637878E-003
+	max: 1.27861699E-06
+	min: 5.48113563E-14
 	open: 1
 	proj: X
 	title: USRBIN bnct 22
@@ -488,9 +536,9 @@ Plot: bnct_23_plot
 	datafile: bnct_23.bnn
 	grid: 0
 	hist: 2D Projection
-	int: 2.5234015555468039E-006
-	max: 8.04024467E-07
-	min: 4.00471279E-12
+	int: 3.1604121592747584E-006
+	max: 1.67483847E-06
+	min: 1.62182941E-12
 	open: 1
 	proj: X
 	title: USRBIN bnct 23
@@ -502,9 +550,9 @@ Plot: bnct_24_plot
 	datafile: bnct_24.bnn
 	grid: 0
 	hist: 2D Projection
-	int: 6.0119897579204908E-003
-	max: 1.10247975E-05
-	min: 9.01905859E-15
+	int: 4.4066467605724724E-003
+	max: 7.31740829E-06
+	min: 2.56928776E-14
 	open: 1
 	proj: Y
 	title: USRBIN bnct 24
@@ -516,12 +564,26 @@ Plot: bnct_25_plot
 	datafile: bnct_25.bnn
 	grid: 0
 	hist: 2D Projection
-	int: 4.9978842141203987E-003
-	max: 5.84312016E-04
-	min: 1.98251896E-20
+	int: 1.4374318876959559E-003
+	max: 1.75428315E-04
+	min: 8.87056598E-19
 	open: 1
 	proj: Y
 	title: USRBIN bnct 25
+End
+Plot: bnct_26_plot
+	Type: USRBIN
+	cblog: 1
+	cbtics: 1
+	datafile: bnct_26.bnn
+	geo: -No-
+	grid: 0
+	hist: 2D Projection
+	int: 8.5638895837490519E-006
+	max: 1.02232871E-05
+	min: 5.29852724E-11
+	open: 1
+	title: USRBIN bnct 26
 End
 Plot: bnct_31_plot
 	Type: USR-1D
@@ -653,6 +715,19 @@ Plot: bnct_39_plot
 	ndetectors: 1
 	open: 1
 	title: USR-1D bnct 39
+	x.0: 2
+	y.0: 0
+End
+Plot: bnct_40_plot
+	Type: USR-1D
+	file.0: bnct_40_tab.lis
+	grid: 0
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 40
 	x.0: 2
 	y.0: 0
 End
