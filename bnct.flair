@@ -63,7 +63,6 @@ XYP modEnd 111
 RCC mod,,, 101,,, 10 10
 XYP scorerp 20.3
 RCC scorer,,, 20,,, 1 50
-	@select=1
 END
 * Black hole
 REGION BLKBODY 5
@@ -132,15 +131,14 @@ START , 1000000,,, 1
 STOP
 EndInput
 
-Page: Input
+Page: Plot
 plotengine: Gnuplot
 
 # Run information
 Run: <default>
 	Exe:      <flukadpm>
-	Prev:     109
-	Last:     500
-	Status:   4
+	Last:     1000
+	Status:   3
 	StartRun: 1724080557.247529
 	open:     1
 
@@ -236,172 +234,153 @@ Run: <default>
 End
 Run: bnct_01
 	Rnd:      377747
-	Prev:     109
-	Last:     500
-	Status:   4
-	StartRun: 1724160297.5001125
+	Last:     1000
+	Status:   3
+	StartRun: 1724160623.3051353
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_02
 	Rnd:      377748
-	Prev:     109
-	Last:     500
-	Status:   4
-	StartRun: 1724160297.5620134
+	Last:     1000
+	Status:   3
+	StartRun: 1724160623.3726277
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_03
 	Rnd:      377749
-	Prev:     109
-	Last:     500
-	Status:   4
-	StartRun: 1724160297.6408904
+	Last:     1000
+	Status:   3
+	StartRun: 1724160623.4441416
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_04
 	Rnd:      377750
-	Prev:     109
-	Last:     500
-	Status:   4
-	StartRun: 1724160297.7184308
+	Last:     1000
+	Status:   3
+	StartRun: 1724160623.5176167
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_05
 	Rnd:      377751
-	Prev:     109
-	Last:     500
-	Status:   4
-	StartRun: 1724160297.7963686
+	Last:     1000
+	Status:   3
+	StartRun: 1724160623.590319
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_06
 	Rnd:      377752
-	Prev:     109
-	Last:     500
-	Status:   4
-	StartRun: 1724160297.8742042
+	Last:     1000
+	Status:   3
+	StartRun: 1724160623.6614485
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_07
 	Rnd:      377753
-	Prev:     109
-	Last:     500
-	Status:   4
-	StartRun: 1724160297.9510949
+	Last:     1000
+	Status:   3
+	StartRun: 1724160623.7330287
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_08
 	Rnd:      377754
-	Prev:     109
-	Last:     500
-	Status:   4
-	StartRun: 1724160298.0434048
+	Last:     1000
+	Status:   3
+	StartRun: 1724160623.8144035
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_09
 	Rnd:      377755
-	Prev:     109
-	Last:     500
-	Status:   4
-	StartRun: 1724160298.1292167
+	Last:     1000
+	Status:   3
+	StartRun: 1724160623.8945625
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_10
 	Rnd:      377756
-	Prev:     109
-	Last:     500
-	Status:   4
-	StartRun: 1724160298.229529
+	Last:     1000
+	Status:   3
+	StartRun: 1724160623.9834776
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_11
 	Rnd:      377757
-	Prev:     109
-	Last:     500
-	Status:   4
-	StartRun: 1724160298.328107
+	Last:     1000
+	Status:   3
+	StartRun: 1724160624.071822
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_12
 	Rnd:      377758
-	Prev:     109
-	Last:     500
-	Status:   4
-	StartRun: 1724160298.4284434
+	Last:     1000
+	Status:   3
+	StartRun: 1724160624.1638966
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_13
 	Rnd:      377759
-	Prev:     109
-	Last:     500
-	Status:   4
-	StartRun: 1724160298.532747
+	Last:     1000
+	Status:   3
+	StartRun: 1724160624.2552822
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_14
 	Rnd:      377760
-	Prev:     109
-	Last:     500
-	Status:   4
-	StartRun: 1724160298.639462
+	Last:     1000
+	Status:   3
+	StartRun: 1724160624.3479273
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_15
 	Rnd:      377761
-	Prev:     109
-	Last:     500
-	Status:   4
-	StartRun: 1724160298.7490256
+	Last:     1000
+	Status:   3
+	StartRun: 1724160624.4454403
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_16
 	Rnd:      377762
-	Prev:     109
-	Last:     500
-	Status:   4
-	StartRun: 1724160298.8618271
+	Last:     1000
+	Status:   3
+	StartRun: 1724160624.5423179
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_17
 	Rnd:      377763
-	Prev:     109
-	Last:     500
-	Status:   4
-	StartRun: 1724160298.9684727
+	Last:     1000
+	Status:   3
+	StartRun: 1724160624.639553
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_18
 	Rnd:      377764
-	Prev:     109
-	Last:     500
-	Status:   4
-	StartRun: 1724160299.0778666
+	Last:     1000
+	Status:   3
+	StartRun: 1724160624.7448695
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_19
 	Rnd:      377765
-	Prev:     109
-	Last:     500
-	Status:   4
-	StartRun: 1724160299.1881506
+	Last:     1000
+	Status:   3
+	StartRun: 1724160624.842007
 	Parent:   <default>
 	open:     1
 End
@@ -495,18 +474,18 @@ Plot: Blue
 	Type: Geometry
 	basisu: 0 0 1
 	coord: Z-Y
-	extends: 13.311666640442617 8.546905739894214
+	extends: 15.973999968531142 10.434629011701793
 	grid: 0
 	group: Geometry
 	layer: Lattice
 	open: 1
-	origin: 0 -0.998745 0.721409
+	origin: 0 -0.720197 -5.16963
 End
 Plot: Green
 	Type: Geometry
 	basisu: -0.678549 -0.558644 0.476957
 	basisv: -0.626935 0.778808 0.020275
-	extends: 36.20479595740791 23.296122189864143
+	extends: 36.20479595740791 23.681737328802484
 	grid: 0
 	group: Geometry
 	layer: 3D
@@ -518,7 +497,7 @@ Plot: Red
 	basisu: 0 0 1
 	basisv: -1 0 0
 	coord: Z-X
-	extends: 52.19385665528987 33.58434787568791
+	extends: 52.19385665528987 34.09437410547161
 	grid: 0
 	group: Geometry
 	layer: Lattice
@@ -528,7 +507,7 @@ End
 Plot: Magenta
 	Type: Geometry
 	coord: X-Y
-	extends: 21.835683257812768 14.019846771381179
+	extends: 21.835683257812768 14.282829156523562
 	grid: 0
 	group: Geometry
 	layer: Media
@@ -751,6 +730,23 @@ Plot: bnct_40_plot
 	x.0: 2
 	y.0: 0
 End
+Plot: bnct40
+	Type: USR-1D
+	file.0: bnct40_tab.lis
+	grid: 0
+	lc.0: red
+	lw.0: 2
+	name.0: Same geometry as MCNP
+	ndetectors: 1
+	norm.0: 1000000000
+	open: 1
+	title: Counts per 1 billion beam particles, 10 MeV proton energy
+	x.0: 2
+	xlabel: E (keV)
+	xnorm.0: 1/keV
+	y.0: 0
+	ylabel: Counts
+End
 Plot: Ecombined
 	Type: USR-1D
 	file.0: bnct_38_tab.lis
@@ -775,4 +771,63 @@ Plot: Ecombined
 	y.1: 0
 	ylabel: Counts
 	ymin: 0
+End
+Plot: Ecombined2
+	Type: USR-1D
+	file.0: bnct38_tab.lis
+	file.1: bnct39_tab.lis
+	file.2: bnct40_tab.lis
+	grid: 0
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: Forwards from LiF
+	name.1: Backwards from LiF
+	name.2: Same as MCNP
+	ndetectors: 3
+	norm.0: 78.5398
+	norm.1: 78.5398
+	norm.2: 7853.98
+	open: 1
+	title: 10 MeV proton energy
+	with.0: histogram
+	with.1: histogram
+	with.2: histogram
+	x.2: 2
+	xlabel: E (keV)
+	xnorm.0: 1/keV
+	xnorm.1: 1/keV
+	xnorm.2: 1/keV
+	y.0: 0
+	y.1: 0
+	y.2: 0
+	ylabel: Counts
+End
+Plot: Ecombined2Err
+	Type: USR-1D
+	file.0: bnct38_tab.lis
+	file.1: bnct39_tab.lis
+	file.2: bnct40_tab.lis
+	grid: 0
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: Forwards from LiF
+	name.1: Backwards from LiF
+	name.2: Same as MCNP
+	ndetectors: 3
+	norm.0: 78.5398*10000
+	norm.1: 78.5398*10000
+	norm.2: 7853.98*10000
+	open: 1
+	title: 10 MeV proton energy
+	x.2: 2
+	xlabel: E (keV)
+	xnorm.0: 1/keV
+	xnorm.1: 1/keV
+	xnorm.2: 1/keV
+	y.0: 0
+	y.1: 0
+	y.2: 0
+	ylabel: Counts
 End
