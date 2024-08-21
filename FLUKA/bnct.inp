@@ -1,0 +1,129 @@
+TITLE
+LiF neutron source
+*RADDECAY           2                           303                   1
+RADDECAY           2                             0                   1
+* Set the defaults for precision simulations
+DEFAULTS                                                              PRECISIO
+* Define the beam characteristics
+BEAM           -0.01         0   10001.0       2.0       2.0       1.0PROTON
+* Define the beam position
+BEAMPOS            0         0        -5         0         0
+PHOTONUC           1                                                  ELECTNUC
+PHYSICS            1                                                  COALESCE
+PHYSICS            3                                                  EVAPORAT
+EMF
+*USRBIN            10   NEUTRON       -22        20        20       110Noverview
+*USRBIN           -20       -20        -5         1      1000      1000 &
+*USRBIN            10   NEUTRON       -23         5         5       110Nmoderator
+*USRBIN            -5        -5       102         1      1000      1000 &
+*USRBIN            11   NEUTRON       -24        30                 112NRZ
+*USRBIN                                -5      1000         1      1000 &
+*USRBIN            11    ENERGY       -25        30         0       112ERZ
+*USRBIN             0         0        -5      1000         1      1000 &
+USRBIN            10   NEUTRON       -26        50        50      20.3ScorerNH
+USRBIN             0         0      20.2       100       100         1 &
+USRBDX           111   NEUTRON       -31    TARGET      DUMP   78.5398TargetF
+USRBDX                       0       100                               &
+USRBDX           111   NEUTRON       -32      DUMP       AIR   78.5398DumpF
+USRBDX                       0       100                             3 &
+USRBDX             8   NEUTRON       -33  MODSTART      MOD1   78.5398I1
+USRBDX                   1E-14       500                             3 &
+USRBDX             8   NEUTRON       -34      MOD1      MOD2   78.5398I2
+USRBDX                   1E-14       500                             3 &
+USRBDX             8   NEUTRON       -35      MOD2      MOD3   78.5398I3
+USRBDX                   1E-14       500                             3 &
+USRBDX             8   NEUTRON       -36      MOD3      MOD4   78.5398I4
+USRBDX                   1E-14       500                             3 &
+USRBDX             8   NEUTRON       -37      MOD4    MODEND   78.5398I5
+USRBDX                   1E-14       500                             3 &
+USRBDX             1   NEUTRON       -38    TARGET      DUMP   78.5398ETarget1
+USRBDX          0.01     1E-14       200                               &
+USRBDX             1   NEUTRON       -39    TARGET  PIPEHOLE   78.5398ETarget2
+USRBDX          0.01     1E-14       200                               &
+USRBDX             1   NEUTRON       -40   SCORER1   SCORER2   7853.98NScorerI
+USRBDX          0.01     1E-14       200                               &
+USRBDX           101   NEUTRON       -41   SCORER1   SCORER2   7853.98NScorerF
+USRBDX          0.01     1E-14       200                               &
+*USRTRACK               NEUTRON       -41    DET_AM   78.5398       100flnvlm
+*USRTRACK                 0.001                                         &
+*IONTRANS          -2
+*IRRPROFI        3600   3.1E+12
+*LOW-NEUT         260        42      0.02         0                   4
+PHYSICS            3                                 NEUTRON      1000DECAYS
+*PHYSICS            1                                                  PEATHRES
+*PHYSICS            4                                                  EM-DISSO
+*PHYSICS                                                               DPMTHRES
+*EVENTYPE                               1                              DPMJET
+*EVENTYPE                               2                              DPMJET
+*PART-THR      -1E-14             NEUTRON
+*LOW-DOWN
+GEOBEGIN                                                              COMBNAME
+    0    0          
+SPH blkbody    0.0 0.0 0.0 100000.0
+*
+SPH air        0.0 0.0 0.0 10000.0
+RCC tubeIn     0.0 0.0 -10 0.0 0.0 12 5
+RCC tubeOut    0.0 0.0 -10 0.0 0.0 12 6
+XYP LiFStart   0
+XYP LiFEnd     0.3
+XYP DumpEnd    1.3
+XYP modStart   102
+XYP mod1End    104
+XYP mod2End    106
+XYP mod3End    108
+XYP mod4End    110
+XYP modEnd     111
+RCC mod        0.0 0.0 101 0.0 0.0 10 10
+XYP scorerp    20.3
+RCC scorer     0.0 0.0 20 0.0 0.0 1 50
+END
+* Black hole
+BLKBODY      5 +blkbody -air
+* Void around
+AIR          5 +air -mod -tubeOut -scorer
+PIPE         5 +tubeOut -tubeIn
+PIPEHOLE     5 +tubeIn +LiFStart
+PIPEH2       5 +tubeIn -DumpEnd
+DUMP         5 +tubeIn -LiFEnd +DumpEnd
+TARGET       5 +tubeIn -LiFStart +LiFEnd
+MODSTART     5 +mod +modStart
+MOD1         5 +mod -modStart +mod1End
+MOD2         5 +mod -mod1End +mod2End
+MOD3         5 +mod -mod2End +mod3End
+MOD4         5 +mod -mod3End +mod4End
+MODEND       5 +mod -mod4End +modEnd
+SCORER1      5 +scorer +scorerp
+SCORER2      5 +scorer -scorerp
+END
+GEOEND
+MATERIAL           3               0.534                              LITHIUM
+MATERIAL           9            0.001696                              FLUORINE
+*Lithium fluoride Li_F
+MATERIAL                           2.635                              LiF
+COMPOUND   -0.267585   LITHIUM -0.732415  FLUORINE                    LiF
+*MAT-PROP                            94.0       LiF
+*STERNHEI      3.1667    0.0171    2.7049   0.07593    3.7478          LiF
+ASSIGNMA    BLCKHOLE   BLKBODY
+*ASSIGNMA         AIR       AIR
+ASSIGNMA      VACUUM       AIR
+*ASSIGNMA    ALUMINUM      PIPE
+ASSIGNMA      VACUUM      PIPE
+ASSIGNMA      VACUUM  PIPEHOLE
+*ASSIGNMA         AIR    PIPEH2
+ASSIGNMA      VACUUM    PIPEH2
+*ASSIGNMA    ALUMINUM      DUMP
+ASSIGNMA      VACUUM      DUMP
+ASSIGNMA         LiF    TARGET
+ASSIGNMA         AIR  MODSTART
+ASSIGNMA        PMMA      MOD1
+ASSIGNMA        PMMA      MOD2
+ASSIGNMA        PMMA      MOD3
+ASSIGNMA        PMMA      MOD4
+ASSIGNMA         AIR    MODEND
+ASSIGNMA      VACUUM   SCORER1
+ASSIGNMA    BLCKHOLE   SCORER2
+* Set the random number seed
+RANDOMIZ         1.0    377746
+* Set the number of primary histories to be simulated in the run
+START       10000000                             1
+STOP

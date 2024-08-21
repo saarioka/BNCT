@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+    <!--
+        A short steel beam pipe segment, with a LiF target in the end. The pipe has a flange in the end.
+        Diam. 50 mm, at flange diam 60 mm. Thickness of the target 3 mm. Thickness of steel parts 5 mm.
+        Length of the world is 50.0mm, with a 0.001 mm detector in the end, so pipe is shorther and everything is offset by the detector thickness
+
+
+    -->
+    <define>
+        <constant name="DetT"  value="0.001" />
+        <!-- These are inside beam pipe logical volume -->
+        <position name="PipePos" unit="mm" x="0.0" y="0.0" z="1.25 + DetT" />
+        <position name="FlangePos" unit="mm" x="0.0" y="0.0" z="-21.25 + DetT" />
+        <position name="TargetPos"  unit="mm" x="0.0" y="0.0" z="-21 + DetT" />
+        <position name="BeamDetPos"  unit="mm" x="0.0" y="0.0" z="-25.0 + DetT/2" />
+        <position name="CapPos" unit="mm" x="0.0" y="0.0" z="-23.75 + DetT" />
+
+    </define>
+
+    <solids>
+        <tube name  =  "sPipeWorld"  rmin="0.0" rmax="30.0" z="50" deltaphi="360" startphi="0.0" aunit="deg"  lunit= "mm"/>
+        <tube name  =  "sBeamPipe"  rmin="22.5" rmax="27.5" z="47.5 - DetT" deltaphi="360" startphi="0.0" aunit="deg"  lunit= "mm"/>
+        <tube name  =  "sFlange"  rmin="25.0" rmax="30.0" z="2.5" deltaphi="360" startphi="0.0" aunit="deg"  lunit= "mm"/>
+        <tube name  =  "sTarget"  rmin="0.0" rmax="22.5" z="3.0" deltaphi="360" startphi="0.0" aunit="deg"  lunit= "mm"/>
+        <tube name  =  "sCap"  rmin="0.0" rmax="30.0" z="2.5" deltaphi="360" startphi="0.0" aunit="deg"  lunit= "mm"/>
+        <tube name  =  "sBeamDetector"  rmin="0.0" rmax="30" z="DetT" deltaphi="360" startphi="0.0" aunit="deg"  lunit= "mm"/>
+    </solids>
+
+    <structure>
+        <volume name="lvBeamDetector" >
+            <materialref ref="G4_Galactic" />
+            <solidref ref="sBeamDetector" />
+            <auxiliary auxtype="Type" auxvalue="LocDet" />
+            <auxiliary auxtype="Name" auxvalue="BeamDet" />
+            <auxiliary auxtype="Scale" auxvalue="1000." />
+            <auxiliary auxtype="NumCh" auxvalue="1" />
+            <auxiliary auxtype="isDouble" auxvalue="1" />
+            <auxiliary auxtype="Window" auxvalue="10000" />
+        </volume>
+
+        <volume name="lvTarget" >
+            <materialref ref="LiF" />
+            <solidref ref="sTarget" />
+        </volume>
+
+        <volume name="lvBeamPipe" >
+            <materialref ref="G4_STAINLESS-STEEL" />
+            <solidref ref="sBeamPipe" />
+        </volume>
+
+        <volume name="lvFlange" >
+            <materialref ref="G4_STAINLESS-STEEL" />
+            <solidref ref="sFlange" />
+        </volume>
+
+        <volume name="lvCap" >
+            <materialref ref="G4_STAINLESS-STEEL" />
+            <solidref ref="sCap" />
+        </volume>
+
+        <volume name="lvPipeWorldVol" >
+            <materialref ref="G4_Galactic" />
+            <solidref ref="sPipeWorld" />
+            <physvol>
+                <volumeref ref="lvBeamPipe" />
+                <positionref ref="PipePos"/>
+            </physvol>
+            <physvol>
+                <volumeref ref="lvFlange" />
+                <positionref ref="FlangePos"/>
+            </physvol>
+            <physvol>
+                <volumeref ref="lvCap" />
+                <positionref ref="CapPos"/>
+            </physvol>
+            <physvol>
+                <volumeref ref="lvTarget" />
+                <positionref ref="TargetPos"/>
+            </physvol>
+            <physvol>
+                <volumeref ref="lvBeamDetector" />
+                <positionref ref="BeamDetPos"/>
+            </physvol>
+        </volume>
+    </structure>
+    <setup name="PipeWorld" version="1.0" >
+        <world ref="lvPipeWorldVol" />
+    </setup>
+</gdml>
+

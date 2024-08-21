@@ -1,0 +1,177 @@
+# Source is a simulated neutron beam from LiF target shot by 10 MeV protons, on height of {beamz}.
+# The distribution was calculated by shooting 1e9 protons to the target getting, in total, 338957 neutrons
+# out of the target (in forward direction). Hence 33895700 events approximates 1e11 protons. This is roughly equal to one second in a 0.2 uA beam.
+
+# the beam spot is centered at the origin. Length of the beam pipe is 50mm, so half length of 25 is used when rotating.
+
+/control/multiply zoff 25.0 {rotx}
+/control/subtract zfix {beamz} {zoff}
+
+/gps/pos/type Plane
+/control/execute {src}
+/gps/pos/shape Circle
+/gps/pos/centre 0. 0. {zfix} mm
+/gps/pos/rot1 {rotx} {roty} {rotz} # Stupid! need to calculate sin and cos of the angle by hand.
+/gps/pos/radius 25. mm
+/gps/ang/rot1 {rotx} {roty} {rotz}
+/gps/ang/type iso
+/gps/ang/mintheta 81 deg
+/gps/ang/maxtheta 90 deg
+
+/gps/ene/type Arb
+/gps/hist/type arb
+/control/execute scripts/emitters/bnct5_E3_histo1.mac
+/gps/hist/inter Lin
+/gps/source/intensity 0.00965314184395071
+
+# next theta bin
+/gps/source/add 0.0675896942680045
+/gps/pos/type Plane
+/control/execute {src}
+/gps/pos/shape Circle
+/gps/pos/centre 0.0 0. {zfix} mm
+/gps/pos/rot1 {rotx} {roty} {rotz}
+/gps/pos/radius 25.0 mm
+/gps/ang/rot1 {rotx} {roty} {rotz}
+/gps/ang/type iso
+/gps/ang/mintheta 72 deg
+/gps/ang/maxtheta 81 deg
+/gps/ene/type Arb
+/gps/hist/type arb
+/control/execute scripts/emitters/bnct5_E3_histo2.mac
+/gps/hist/inter Lin
+
+/gps/source/add 0.119298318075744
+/gps/pos/type Plane
+/control/execute {src}
+/gps/pos/shape Circle
+/gps/pos/centre 0.0 0. {zfix} mm
+/gps/pos/rot1 {rotx} {roty} {rotz}
+/gps/pos/radius 25.0 mm
+/gps/ang/rot1 {rotx} {roty} {rotz}
+/gps/ang/type iso
+/gps/ang/mintheta 63 deg
+/gps/ang/maxtheta 72 deg
+/gps/ene/type Arb
+/gps/hist/type arb
+/control/execute scripts/emitters/bnct5_E3_histo3.mac
+/gps/hist/inter Lin
+
+/gps/source/add 0.1519986310948
+/gps/pos/type Plane
+/control/execute {src}
+/gps/pos/shape Circle
+/gps/pos/centre 0.0 0. {zfix} mm
+/gps/pos/rot1 {rotx} {roty} {rotz}
+/gps/pos/radius 25.0 mm
+/gps/ang/rot1 {rotx} {roty} {rotz}
+/gps/ang/type iso
+/gps/ang/mintheta 54 deg
+/gps/ang/maxtheta 63 deg
+/gps/ene/type Arb
+/gps/hist/type arb
+/control/execute scripts/emitters/bnct5_E3_histo4.mac
+/gps/hist/inter Lin
+
+/gps/source/add 0.163483863734928
+/gps/pos/type Plane
+/control/execute {src}
+/gps/pos/shape Circle
+/gps/pos/centre 0.0 0. {zfix} mm
+/gps/pos/rot1 {rotx} {roty} {rotz}
+/gps/pos/radius 25.0 mm
+/gps/ang/rot1 {rotx} {roty} {rotz}
+/gps/ang/type iso
+/gps/ang/mintheta 45 deg
+/gps/ang/maxtheta 54 deg
+/gps/ene/type Arb
+/gps/hist/type arb
+/control/execute scripts/emitters/bnct5_E3_histo5.mac
+/gps/hist/inter Lin
+
+/gps/source/add 0.157444749629009
+/gps/pos/type Plane
+/control/execute {src}
+/gps/pos/shape Circle
+/gps/pos/centre 0.0 0. {zfix} mm
+/gps/pos/rot1 {rotx} {roty} {rotz}
+/gps/pos/radius 25.0 mm
+/gps/ang/rot1 {rotx} {roty} {rotz}
+/gps/ang/type iso
+/gps/ang/mintheta 36 deg
+/gps/ang/maxtheta 45 deg
+/gps/ene/type Arb
+/gps/hist/type arb
+/control/execute scripts/emitters/bnct5_E3_histo6.mac
+/gps/hist/inter Lin
+
+/gps/source/add 0.116517613873129
+/gps/pos/type Plane
+/control/execute {src}
+/gps/pos/shape Circle
+/gps/pos/centre 0.0 0. {zfix} mm
+/gps/pos/rot1 {rotx} {roty} {rotz}
+/gps/pos/radius 25.0 mm
+/gps/ang/rot1 {rotx} {roty} {rotz}
+/gps/ang/type iso
+/gps/ang/mintheta 27 deg
+/gps/ang/maxtheta 36 deg
+/gps/ene/type Arb
+/gps/hist/type arb
+/control/execute scripts/emitters/bnct5_E3_histo7.mac
+/gps/hist/inter Lin
+
+/gps/source/add 0.137495316515074
+/gps/pos/type Plane
+/control/execute {src}
+/gps/pos/shape Circle
+/gps/pos/centre 0.0 0. {zfix} mm
+/gps/pos/rot1 {rotx} {roty} {rotz}
+/gps/pos/radius 25.0 mm
+/gps/ang/rot1 {rotx} {roty} {rotz}
+/gps/ang/type iso
+/gps/ang/mintheta 18 deg
+/gps/ang/maxtheta 27 deg
+/gps/ene/type Arb
+/gps/hist/type arb
+/control/execute scripts/emitters/bnct5_E3_histo8.mac
+/gps/hist/inter Lin
+
+/gps/source/add 0.0651823092604667
+/gps/pos/type Plane
+/control/execute {src}
+/gps/pos/shape Circle
+/gps/pos/centre 0.0 0. {zfix} mm
+/gps/pos/rot1 {rotx} {roty} {rotz}
+/gps/pos/radius 25.0 mm
+/gps/ang/rot1 {rotx} {roty} {rotz}
+/gps/ang/type iso
+/gps/ang/mintheta 9 deg
+/gps/ang/maxtheta 18 deg
+/gps/ene/type Arb
+/gps/hist/type arb
+/control/execute scripts/emitters/bnct5_E3_histo9.mac
+/gps/hist/inter Lin
+
+/gps/source/add 0.0219054334325593
+/gps/pos/type Plane
+/control/execute {src}
+/gps/pos/shape Circle
+/gps/pos/centre 0.0 0. {zfix} mm
+/gps/pos/rot1 {rotx} {roty} {rotz}
+/gps/pos/radius 25.0 mm
+/gps/ang/rot1 {rotx} {roty} {rotz}
+/gps/ang/type iso
+/gps/ang/mintheta 0 deg
+/gps/ang/maxtheta 9 deg
+/gps/ene/type Arb
+/gps/hist/type arb
+/control/execute scripts/emitters/bnct5_E3_histo10.mac
+/gps/hist/inter Lin
+
+/gps/source/list
+#/gps/source/show
+
+
+
+

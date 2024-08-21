@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+    <!--
+    Simple model of bertholdi neutron detector. Comes with a plane for flux detector.
+
+    The world size is 250 x 250 x 300 mm3
+
+    -->
+  
+  <define>
+    <constant name="WorldW"  value="360.0" />
+    <constant name="ModeratorT"  value="250" />
+    <constant name="HalfThickness"  value="150" />
+
+    <constant name="DetectorT"  value="0.001" />
+
+    <position name="DetPos"  unit="mm" x="0.0" y="0." z="HalfThickness - DetectorT/2" />
+    <position name="ActivePos"  unit="mm" x="0.0" y="0." z="HalfThickness - DetectorT - ModeratorT/2" />
+
+  </define>
+  
+  <materials>
+    <isotope name="He3" Z="2" N="3">
+      <atom type="A" value="3.0160293"/>
+    </isotope>
+
+    <element name="Helium3">
+      <fraction n="1.0" ref="He3" />
+    </element>
+
+    <material name="Methane" >
+      <D value="0.001955"/>
+      <composite n="1" ref="Carbon"/>
+      <composite n="4" ref="Hydrogen"/>
+    </material>
+
+    <!-- Measurement gas at 3 atm. Arbitrarish -->
+    <material formula="MeasurementGas" name="MeasGas" state="gas" >
+      <D value="0.0005263"/>
+      <fraction n="0.9" ref="Helium3" />
+      <fraction n="0.1" ref="Methane" />
+    </material>
+
+    <!-- Moderator has 2% carbon -->
+    <material formula="PE+C" name="ModeratorMat" state="solid" >
+      <D value="0.95"/>
+      <fraction n="0.98" ref="Polyethylene" />
+      <fraction n="0.02" ref="Carbon" />
+    </material>
+
+  </materials>
+
+  <solids>
+    <box name  =  "sDetWorld"  x="250.0" y="250" z="300" lunit= "mm"/>
+
+    <sphere name  =  "sModerator" rmin="0" rmax="125" deltaphi="360" startphi="0.0" deltatheta="180" starttheta="0.0"
+            aunit="deg" lunit= "mm"/>
+    <box name  =  "sFluxDet"  x="250.0" y="250" z="DetectorT" lunit= "mm"/>
+    <tube name  =  "sTube"  rmin="0.0" rmax="21" z="100" deltaphi="360" startphi="0.0" aunit="deg"  lunit= "mm"/>
+    <tube name  =  "sHe3"  rmin="0.0" rmax="20" z="98"  deltaphi="360" startphi="0.0" aunit="deg"  lunit= "mm"/>
+    <tube name  =  "sActive"  rmin="0.0" rmax="20" z="40"  deltaphi="360" startphi="0.0" aunit="deg"  lunit= "mm"/>
+
+  </solids>
+  
+  <structure>
+
+    <volume name="lvFluxDet" >
+      <materialref ref="G4_AIR" />
+      <solidref ref="sFluxDet" />
+      <auxiliary auxtype="Type" auxvalue="LocDet" />
+      <auxiliary auxtype="Name" auxvalue="Flux_Det" />
+      <auxiliary auxtype="Scale" auxvalue="1000." />
+      <auxiliary auxtype="NumCh" auxvalue="1" />
+      <auxiliary auxtype="isDouble" auxvalue="1" />
+      <auxiliary auxtype="Window" auxvalue="10000" />
+    </volume>
+
+    <volume name="lvActive" >
+      <materialref ref="MeasGas" />
+      <solidref ref="sActive" />
+      <auxiliary auxtype="Type" auxvalue="BasicDet" />
+      <auxiliary auxtype="Name" auxvalue="He3_Det" />
+      <auxiliary auxtype="Scale" auxvalue="1000." />
+      <auxiliary auxtype="NumCh" auxvalue="1" />
+      <auxiliary auxtype="isDouble" auxvalue="1" />
+      <auxiliary auxtype="Window" auxvalue="10000" />
+    </volume>
+
+    <volume name="lvHe3" >
+      <materialref ref="MeasGas" />
+      <solidref ref="sHe3" />
+      <physvol>
+        <volumeref ref="lvActive" />
+      </physvol>
+    </volume>
+
+    <volume name="lvTube" >
+      <materialref ref="G4_STAINLESS-STEEL" />
+      <solidref ref="sTube" />
+      <physvol>
+        <volumeref ref="lvHe3" />
+      </physvol>
+    </volume>
+
+    <volume name="lvModerator" >
+      <materialref ref="ModeratorMat" />
+      <solidref ref="sModerator" />
+      <physvol>
+        <volumeref ref="lvTube" />
+      </physvol>
+    </volume>
+
+    <volume name="lvDetWorld" >
+      <materialref ref="G4_AIR" />
+      <solidref ref="sDetWorld" />
+
+      <physvol>
+        <volumeref ref="lvFluxDet" />
+        <positionref ref="DetPos"/>
+      </physvol>
+
+      <physvol>
+        <volumeref ref="lvModerator" />
+        <positionref ref="ActivePos"/>
+      </physvol>
+
+    </volume>
+  </structure>
+  
+  <setup name="World" version="1.0" >
+    <world ref="lvDetWorld" />
+  </setup>
+</gdml>

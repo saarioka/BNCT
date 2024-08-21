@@ -1,0 +1,70 @@
+# Macro file for gSim
+#
+/random/setSeeds {random_seed1} {random_seed2} # The seeds are defined by the script
+
+# set paths for macro file search
+#/control/macroPath scripts/sources:scripts/emitters:scripts/runs:scripts/viz
+
+# set production cut - whether a particle is created or not. In units of length in medium for its energy.
+/run/setCut 0.005 mm
+
+# Minimum E for production of a particle even if cut would yield lower value
+/cuts/setLowEdge 500 eV # default is 990 eV
+
+/control/echo Entering EM process init
+# EM PROCESSES
+# minimum energy for tracking electron before adding all to edep. Default 1 keV or 100 eV for Low E lists
+/process/em/lowestElectronEnergy 250 eV
+#Cross section model used for pixe. -> Empirical/ECPSSR_FormFactor/ECPSSR_Analytical
+/process/em/pixeXSmodel Empirical
+# cross section model used for pixe for electrons in Low Em physics -> Livermore/Penelope or one from above
+/process/em/pixeElecXSmodel Penelope
+# set where de-exitation is allowed per region (region, fluo, auger, pixe)
+#/process/em/deexcitation DefaultRegionForTheWorld true true true
+# set global de-exitation flags
+/process/em/fluo true
+/process/em/auger true
+/process/em/pixe true
+# wether production cuts are ignored for fluorescence and auger
+/process/em/deexcitationIgnoreCut true
+
+/control/echo Entering hadron process init
+/process/verbose 1
+
+/control/echo Verbosity setup
+# verbosity setup
+/control/verbose 0
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+/process/verbose 0
+/gps/verbose 0
+
+/run/initialize
+
+#run Viz
+/control/execute {visualization}
+
+# Meant to be used if no sources are defined in the gdml
+
+# Set some neutron stuff, this is only relevant when a HP physics list is selected. Will also affect ParticleHP.
+# prevents using the cross sections of similar elements, which give nonsense results for low E neutrons
+/control/echo Skipping missing isotopes
+/process/had/particle_hp/skip_missing_isotopes true
+
+# May cause violations of energy conservation, but gives proper gamma lines and ensures that mean values stay ok.
+# have not compared with false
+/control/echo do not adjust
+/process/had/particle_hp/do_not_adjust_final_state true
+
+# generate photons instead of tabulated end-state in neutron capture (used to be good with Gd, which does not have gammas in the tables)
+# again, not checked how it compares with true
+/control/echo no photo-evaporation
+/process/had/particle_hp/use_photo_evaporation false
+
+#Run source definition:
+/gps/particle neutron
+/control/execute {em}
+
+/run/beamOn {events}
+

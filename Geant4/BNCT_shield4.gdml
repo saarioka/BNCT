@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+    <!--
+        A simple LiF target beam pipe. A moderator + detector setup "bnct_detector" can be added at "distance" of the beam pipe at
+        negative side of the world. The beam monitor is offset a bit so that the incoming flux can be
+        reliably measured.
+
+        There is an extra Acrylic moderator plane just in front of the beam pipe. Width is 100 mm and thickness is "extra".
+        It is always aligned with the detector
+
+        Rotation of the detector is modelled by rotating the beam pipe. It is no longer centered after rotation though. Rotated
+        beam pipe (along x axis) needs "angle" in degrees, as well as rotation matrix components "rotx", "roty", "rotz". Use
+        "x_shift" and "z_shift" to center the emitter after rotation.
+        rotx = cos(angle), rotz = -sin(angle). x_shift = 25 *sin(angle), z_shift = 25*(1-cos(angle))
+
+        Rotation might not work properly right now.
+
+    -->
+  
+  <define>
+    <!-- Beam production and shaping -->
+
+    <constant name="WorldL"  value="2300.0" />
+    <constant name="WorldW"  value="360.0" />
+    <constant name="ExtraT"  value="{extra}" />
+
+    <constant name="DetectorT"  value="0.001" />
+    <constant name="PipeL"  value="50.0" />
+
+    <position name="PipePos" unit="mm" x="{x_shift}" y="0.0" z="PipeL/2 + {z_shift}" />
+    <!-- Moderator offset by 50mm to leave space for beam pipe rotation -->
+    <position name="ExtraPos" unit="mm" x="0.0" y="0.0" z="-50" />
+    <!-- detector volume is 300 mm in z-direction -->
+    <position name="DetectorPos"  unit="mm" x="0.0" y="0.0" z="-{distance} - 150" />
+
+    <rotation name="TargetRot" unit="deg" x="{angle}" y="0.0" z="0.0" />
+  </define>
+  
+  <materials>
+    <element name="Fluorine" formula="F" Z="9">
+      <atom value="18.998"/>
+    </element>
+
+    <!-- Isotopic hydrogen for nuclear reactions -->
+    <isotope name="H1" Z="1" N="1">
+      <atom type="A" value="1.007825"/>
+    </isotope>
+
+    <isotope name="H2" Z="1" N="2">
+      <atom type="A" value="2.014102"/>
+    </isotope>
+
+    <element name="Hydrogen" >
+      <fraction ref="H1" n="0.999855" />
+      <fraction ref="H2" n="0.000145" />
+    </element>
+
+    <!-- Isotopic carbon for nuclear reactions -->
+    <isotope name="C12" Z="6" N="12">
+      <atom type="A" value="12.0"/>
+    </isotope>
+
+    <isotope name="C13" Z="6" N="13">
+      <atom type="A" value="13.003355"/>
+    </isotope>
+
+    <element name="Carbon" >
+      <D value="2.0" />
+      <fraction ref="C12" n="0.9894" />
+      <fraction ref="C13" n="0.0106" />
+    </element>
+
+    <!-- Lithium fluoride -->
+    <isotope name="Li6" Z="3" N="6">
+      <atom type="A" value="6.015"/>
+    </isotope>
+
+    <isotope name="Li7" Z="3" N="7">
+      <atom type="A" value="7.016"/>
+    </isotope>
+
+    <element name="Isotopic_Lithium" >
+      <fraction ref="Li6" n="0.0485" />
+      <fraction ref="Li7" n="0.9515" />
+    </element>
+
+    <material formula="LiF" name="LiF" >
+      <D value="2.635"/>
+      <composite n="1" ref="Isotopic_Lithium" />
+      <composite n="1" ref="Fluorine" />
+    </material>
+
+    <material formula="Li2CO3+H2O" name="Lithium_plastic"  state="solid">
+      <D value="1.42"/>
+      <fraction n="0.0695" ref="Hydrogen" />
+      <fraction n="0.0712" ref="Isotopic_Lithium" />
+      <fraction n="0.0616" ref="Carbon" />
+      <fraction n="0.7977" ref="O" />
+    </material>
+
+
+    <!-- Gadolinium -->
+    <isotope name="Gd152" Z="64" N="152">
+      <atom type="A" value="157.25"/>
+    </isotope>
+
+    <isotope name="Gd154" Z="64" N="154">
+      <atom type="A" value="157.25"/>
+    </isotope>
+
+    <isotope name="Gd155" Z="64" N="155">
+      <atom type="A" value="157.25"/>
+    </isotope>
+
+    <isotope name="Gd156" Z="64" N="156">
+      <atom type="A" value="157.25"/>
+    </isotope>
+
+    <isotope name="Gd157" Z="64" N="157">
+      <atom type="A" value="157.25"/>
+    </isotope>
+
+    <isotope name="Gd158" Z="64" N="158">
+      <atom type="A" value="157.25"/>
+    </isotope>
+
+    <isotope name="Gd160" Z="64" N="160">
+      <atom type="A" value="157.25"/>
+    </isotope>
+
+    <element name="Isotopic_Gadolinium" >
+      <fraction ref="Gd152" n="0.002" />
+      <fraction ref="Gd154" n="0.0218" />
+      <fraction ref="Gd155" n="0.148" />
+      <fraction ref="Gd156" n="0.205" />
+      <fraction ref="Gd157" n="0.157" />
+      <fraction ref="Gd158" n="0.248" />
+      <fraction ref="Gd160" n="0.219" />
+    </element>
+
+    <material formula="Gd" name="Gadolinium" state="solid">
+      <D value="7.899" />
+      <composite n="1" ref="Isotopic_Gadolinium" />
+    </material>
+
+    <isotope name="W180" Z="74" N="180">
+      <atom type="A" value="179.9467"/>
+    </isotope>
+
+    <isotope name="W182" Z="74" N="182">
+      <atom type="A" value="181.9482"/>
+    </isotope>
+
+    <isotope name="W183" Z="74" N="183">
+      <atom type="A" value="182.9502"/>
+    </isotope>
+
+    <isotope name="W184" Z="74" N="184">
+      <atom type="A" value="183.9509"/>
+    </isotope>
+
+    <isotope name="W186" Z="74" N="186">
+      <atom type="A" value="185.9544"/>
+    </isotope>
+
+    <element name="Isotopic_Tungsten" >
+      <fraction ref="W180" n="0.0012" />
+      <fraction ref="W182" n="0.265" />
+      <fraction ref="W183" n="0.143" />
+      <fraction ref="W184" n="0.306" />
+      <fraction ref="W186" n="0.284" />
+    </element>
+
+    <material name="O" Z="8.0" >
+      <D value="0.001429" />
+      <atom value="15.999" />
+    </material>
+
+    <material name="B-10" Z="5.0" >
+      <D value="2.08" />
+      <atom value="10.806" />
+    </material>
+
+    <material formula="C20H42" name="Paraffin"  state="solid">
+      <D value="0.9"/>
+      <composite n="20" ref="Carbon" />
+      <composite n="42" ref="Hydrogen" />
+    </material>
+
+    <material formula="C2H4" name="Polyethylene"  state="solid">
+      <D value="0.96"/>
+      <composite n="2" ref="Carbon" />
+      <composite n="4" ref="Hydrogen" />
+    </material>
+
+    <!-- Polymethyl metacrylate: C5H8O2 -->
+    <material formula="PMMA" name="Polymethyl_metacrylate" state="solid">
+      <D value="1.190"/>
+      <composite n="5" ref="Carbon" />
+      <composite n="8" ref="Hydrogen" />
+      <composite n="2" ref="O" />
+    </material>
+
+    <material formula="C_sp2" name="Graphite"  state="solid">
+      <D value="2.1"/>
+      <composite n="1" ref="Carbon" />
+    </material>
+
+    <material formula="Tungsten" name="Tungsten"  state="solid">
+      <D value="19.254" />
+      <composite n="1" ref="Isotopic_Tungsten" />
+    </material>
+
+  </materials>
+  
+  <solids>
+    <tube name  =  "sWorld"  rmin="0.0" rmax="WorldW" z="WorldL" deltaphi="360" startphi="0.0" aunit="deg"  lunit= "mm"/>
+    <box name  =  "sExtraModerator" x="100" y="100" z="ExtraT" lunit= "mm"/>
+
+  </solids>
+  
+  <structure>
+
+    <volume name="lvExtraModerator" >
+      <materialref ref="Polymethyl_metacrylate" />
+      <solidref ref="sExtraModerator" />
+    </volume>
+
+    <volume name="worldVol" >
+      <materialref ref="G4_AIR" />
+      <solidref ref="sWorld" />
+
+      <physvol>
+        <file name="scripts/geometry/BNCT_target5.gdml" />
+        <positionref ref="PipePos"/>
+        <rotationref ref="TargetRot" />
+      </physvol>
+
+      <physvol>
+        <volumeref ref="lvExtraModerator" />
+        <positionref ref="ExtraPos"/>
+      </physvol>
+
+      <physvol>
+        <file name="{bnct_detector}" />
+        <positionref ref="DetectorPos"/>
+      </physvol>
+    </volume>
+  </structure>
+  
+  <setup name="World" version="1.0" >
+    <world ref="worldVol" />
+  </setup>
+</gdml>
