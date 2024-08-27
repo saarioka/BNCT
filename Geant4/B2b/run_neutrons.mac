@@ -1,0 +1,13 @@
+/run/numberOfThreads 4
+/run/initialize
+
+/run/verbose 1
+/event/verbose 0
+/hits/verbose 1
+/tracking/verbose 0
+
+/control/execute neutrons.mac
+/run/beamOn 50000
+
+/score/drawProjection cylinderMesh_1 current defaultLinearColorMap 100
+/score/dumpAllQuantitiesToFile cylinderMesh_1 asd.csv
