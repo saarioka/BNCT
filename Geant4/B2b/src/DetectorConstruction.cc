@@ -130,19 +130,18 @@ void DetectorConstruction::DefineMaterials()
   //G4Material* natural_lithium = new G4Material("Lithium", 2.635*g/cm3, ncomponents=2, kStateSolid, 293.15*kelvin, 1*atmosphere);
   //natural_lithium->AddElement(Li, natoms=1);
 
-  /*
-  G4Isotope* Li7 = new G4Isotope("Li7", 3, 7);  
-  G4Element* Li = new G4Element("Lithium", "Li", ncomponents=1);
-  Li->AddIsotope(Li7, 100.*perCent);
-  G4Material* natural_lithium = new G4Material("Lithium", 2.635*g/cm3, ncomponents=2, kStateSolid, 293.15*kelvin, 1*atmosphere);
-  */
-
-  //G4Element* Li = new G4Element("Lithium", "Li", 3., 6.941*g/mole);
   G4Element* Li = new G4Element("Lithium", "Li", 1);
   G4Isotope* Li7 = new G4Isotope("Li7", Z=3, A=7);  
   Li->AddIsotope(Li7, 100.*perCent);
   G4Material* natural_lithium = new G4Material("Lithium", 2.635*g/cm3, ncomponents=1, kStateSolid, 293.15*kelvin, 1*atmosphere);
   natural_lithium->AddElement(Li, natoms=1);
+
+  G4Element* F = new G4Element("Fluorine", "F", 1);
+  G4Isotope* F19 = new G4Isotope("F19", Z=9, A=19);
+  F->AddIsotope(F19, 100*perCent);
+  G4Material* LiF = new G4Material("LiF", 2.635*g/cm3, ncomponents=2, kStateSolid, 293.15*kelvin, 1*atmosphere);
+  LiF->AddElement(Li, natoms=1);
+  LiF->AddElement(F, natoms=1);
 
   // heavy water
   G4Element* O  = new G4Element("Oxygen", "O", 8., 16.00*g/mole);
@@ -164,7 +163,7 @@ void DetectorConstruction::DefineMaterials()
   graphite->AddElement(C, natoms=1);    
 
 
-  fTargetMaterial  = nistManager->FindOrBuildMaterial("Lithium");
+  fTargetMaterial  = nistManager->FindOrBuildMaterial("LiF");
   //fTargetMaterial  = graphite;
   //fTargetMaterial  = graphite;
 
