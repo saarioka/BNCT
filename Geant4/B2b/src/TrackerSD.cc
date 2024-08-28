@@ -67,10 +67,16 @@ void TrackerSD::Initialize(G4HCofThisEvent* hce)
 G4bool TrackerSD::ProcessHits(G4Step* aStep,
                                      G4TouchableHistory*)
 {
-  // energy deposit
-  G4double edep = aStep->GetTotalEnergyDeposit();
+  G4int touchable = aStep->GetPostStepPoint()->GetTouchable()->GetReplicaNumber();
+  if (touchable != 0) return false;
 
-  if (edep==0.) return false;
+  auto particleType = aStep->GetTrack()->GetParticleDefinition()->GetParticleName();
+  if (particleType != "neutron") return false;
+
+  //G4cout << "Particle type: " << particleType << G4endl;
+
+  G4double edep = aStep->GetTotalEnergyDeposit();
+  //if (edep==0.) return false;
 
   auto newHit = new TrackerHit();
 
@@ -91,8 +97,11 @@ G4bool TrackerSD::ProcessHits(G4Step* aStep,
 
 void TrackerSD::EndOfEvent(G4HCofThisEvent*)
 {
+  G4int nofHits = fHitsCollection->entries();
+  if ( nofHits > 0 ) {
+    //G4cout << nofHits << " hits" << G4endl;
+  }
   if ( verboseLevel>1 ) {
-     G4int nofHits = fHitsCollection->entries();
      G4cout << G4endl
             << "-------->Hits Collection: in this event they are " << nofHits
             << " hits in the tracker chambers: " << G4endl;

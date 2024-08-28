@@ -169,7 +169,7 @@ void DetectorConstruction::DefineMaterials()
   //fTargetMaterial  = graphite;
 
   //fChamberMaterial = nistManager->FindOrBuildMaterial("Plexiglass");
-  fChamberMaterial = nistManager->FindOrBuildMaterial("G4_AIR");
+  fChamberMaterial = nistManager->FindOrBuildMaterial("G4_Galactic");
   //fChamberMaterial = D2O;
 
   // Print materials
@@ -181,8 +181,8 @@ void DetectorConstruction::DefineMaterials()
 G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 {
   //G4Material* air  = G4Material::GetMaterial("G4_AIR");
-  //G4Material* vacuum  = G4Material::GetMaterial("G4_Galactic");
-  G4Material* vacuum = new G4Material("Galactic", 1, 1.01*g/mole, universe_mean_density, kStateGas, 2.73*kelvin, 3.e-18*pascal);
+  //G4Material* vacuum = new G4Material("Galactic", 1, 1.01*g/mole, universe_mean_density, kStateGas, 2.73*kelvin, 3.e-18*pascal);
+  G4Material* vacuum  = G4Material::GetMaterial("G4_Galactic");
 
   // Sizes of the principal geometrical components (solids)
 
@@ -196,7 +196,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 
   G4double worldLength = 1.2 * (2*targetLength + trackerLength);
 
-  G4double targetRadius  = 5.0*cm;   // Radius of Target
+  G4double targetRadius  = 1.0*cm;   // Radius of Target
   targetLength = 0.5*targetLength;             // Half length of the Target
   G4double trackerSize   = 0.5*trackerLength;  // Half length of the Tracker
 

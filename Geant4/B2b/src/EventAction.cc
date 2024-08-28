@@ -56,7 +56,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
   // periodic printing
 
   G4int eventID = event->GetEventID();
-  if ( eventID < 100 || eventID % 100 == 0) {
+  if ( eventID % 1000000 == 0) {
     G4cout << ">>> Event: " << eventID  << G4endl;
     if ( trajectoryContainer ) {
       G4cout << "    " << n_trajectories

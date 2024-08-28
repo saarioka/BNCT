@@ -1,13 +1,20 @@
-/run/numberOfThreads 4
+/run/numberOfThreads 20
 /run/initialize
 
-/run/verbose 1
+/run/verbose 0
 /event/verbose 0
 /hits/verbose 1
 /tracking/verbose 0
 
 /control/execute neutrons.mac
-/run/beamOn 50000
+/run/beamOn 1000000
 
-/score/drawProjection cylinderMesh_1 current defaultLinearColorMap 100
-/score/dumpAllQuantitiesToFile cylinderMesh_1 asd.csv
+/score/drawProjection cylinderMesh_1 nOfTrackNeutron defaultLinearColorMap 111
+
+/score/dumpQuantityToFile cylinderMesh_1 currentNeutron current.csv 
+/score/dumpQuantityToFile cylinderMesh_1 fluxNeutron flux.csv 
+/score/dumpQuantityToFile cylinderMesh_1 nOfStepNeutron nofstep.csv 
+/score/dumpQuantityToFile cylinderMesh_1 nOfTrackNeutron noftrack.csv 
+/score/dumpQuantityToFile cylinderMesh_1 trackLengthNeutron tracklength.csv 
+
+/score/dumpAllQuantitiesToFile cylinderMesh_1 all.csv

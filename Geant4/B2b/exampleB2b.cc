@@ -71,12 +71,14 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new B2b::DetectorConstruction());
 
   //G4VModularPhysicsList* physicsList = new QGSP_BIC_HP;
-  G4VModularPhysicsList* physicsList = new QGSP_BIC_HP;
+  G4VModularPhysicsList* physicsList = new QGSP_BIC_AllHP;
   physicsList->RegisterPhysics(new G4StepLimiterPhysics());
   runManager->SetUserInitialization(physicsList);
 
   G4ParticleHPManager::GetInstance()->SetSkipMissingIsotopes(true);
-  G4ParticleHPManager::GetInstance()->SetDoNotAdjustFinalState(true);
+  //G4ParticleHPManager::GetInstance()->SetDoNotAdjustFinalState(true);
+  //G4ParticleHPManager::GetInstance()->SetProduceFissionFragments(true);
+  //G4ParticleHPManager::GetInstance()->SetUseOnlyPhotoEvaporation(true);
 
   // Set user action classes
   runManager->SetUserInitialization(new B2::ActionInitialization());
@@ -101,8 +103,6 @@ int main(int argc,char** argv)
   }
   else {
     // interactive mode
-    UImanager->ApplyCommand("/process/had/particle_hp/skip_missing_isotope true");
-    UImanager->ApplyCommand("/process/had/particle_hp/do_not_adjust_final_state true");
     UImanager->ApplyCommand("/control/execute init_vis.mac");
     if (ui->IsGUI()) {
       UImanager->ApplyCommand("/control/execute gui.mac");

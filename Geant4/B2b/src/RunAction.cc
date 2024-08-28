@@ -39,8 +39,7 @@ namespace B2
 
 RunAction::RunAction()
 {
-  // set printing event number per each 100 events
-  G4RunManager::GetRunManager()->SetPrintProgress(1000);
+  G4RunManager::GetRunManager()->SetPrintProgress(1000000);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

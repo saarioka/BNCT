@@ -4,8 +4,11 @@
 /score/mesh/nBin 30 1 30
 /score/mesh/translate/xyz 0. 0. 20. cm
 
-/score/quantity/flatSurfaceCurrent current 1
+/score/quantity/flatSurfaceCurrent currentNeutron 1
+/score/quantity/flatSurfaceFlux fluxNeutron 1
 /score/quantity/nOfStep nOfStepNeutron
+/score/quantity/nOfTrack nOfTrackNeutron
+/score/quantity/trackLength trackLengthNeutron
 /score/filter/particle neutronFilter neutron
 
 /score/close
