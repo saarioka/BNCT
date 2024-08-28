@@ -46,9 +46,8 @@ set(EXAMPLEB2B_SCRIPTS
   exampleB2.in
   gui.mac
   init_vis.mac
-  run1.mac
-  run2.mac
-  run_neutrons.mac
+  run.mac
+  run_scorer.mac
   neutrons.mac
   vis.mac
   )

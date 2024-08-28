@@ -33,8 +33,6 @@ def main():
     print(flux)
     print(flux['total(value)[percm2]'].sum())
 
-    ax1 = plt.contourf(
-
 
 if __name__ == '__main__':
     main()

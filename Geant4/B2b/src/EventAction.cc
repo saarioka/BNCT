@@ -34,6 +34,10 @@
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
 #include "G4ios.hh"
+#include "G4AnalysisManager.hh"
+#include "G4SystemOfUnits.hh"
+
+#include "TrackerHit.hh"
 
 namespace B2
 {
@@ -65,6 +69,40 @@ void EventAction::EndOfEventAction(const G4Event* event)
     G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(0);
     G4cout << "    "
            << hc->GetSize() << " hits stored in this event" << G4endl;
+  }
+
+  G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(0);
+  G4int nHit = hc->GetSize();
+  if (nHit > 0) {
+    G4cout << "    " << nHit << " hits stored in this event" << G4endl;
+
+    auto analysisManager = G4AnalysisManager::Instance();
+
+    for (G4int i=0; i<nHit; i++){
+      auto hit = dynamic_cast<TrackerHit*>(hc->GetHit(i));
+      G4double E = hit->GetE();
+      G4double Edep = hit->GetEdep();
+      G4ThreeVector pos = hit->GetPos();
+
+      /*
+      G4cout << "EventAction:    Edep: " << Edep / keV
+             << ", E: " << E / keV
+             << ", x: " << pos.x() / cm
+             << ", y: " << pos.y() / cm
+             << ", z: " << pos.z() / cm
+             << G4endl;
+      */
+
+      analysisManager->FillH1(0, E / keV);
+      analysisManager->FillH1(1, pos.x() / cm);
+
+      analysisManager->FillNtupleDColumn(0, E / keV);
+      analysisManager->FillNtupleDColumn(1, Edep / keV);
+      analysisManager->FillNtupleDColumn(2, pos.x() / cm);
+      analysisManager->FillNtupleDColumn(3, pos.y() / cm);
+      analysisManager->FillNtupleDColumn(4, pos.x() / cm);
+      analysisManager->AddNtupleRow();
+    }
   }
 }
 

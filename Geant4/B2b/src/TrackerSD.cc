@@ -33,6 +33,7 @@
 #include "G4ThreeVector.hh"
 #include "G4SDManager.hh"
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 
 namespace B2
 {
@@ -52,13 +53,11 @@ void TrackerSD::Initialize(G4HCofThisEvent* hce)
 {
   // Create hits collection
 
-  fHitsCollection
-    = new TrackerHitsCollection(SensitiveDetectorName, collectionName[0]);
+  fHitsCollection = new TrackerHitsCollection(SensitiveDetectorName, collectionName[0]);
 
   // Add this collection in hce
 
-  G4int hcID
-    = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
+  G4int hcID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
   hce->AddHitsCollection( hcID, fHitsCollection );
 }
 
@@ -76,15 +75,26 @@ G4bool TrackerSD::ProcessHits(G4Step* aStep,
   //G4cout << "Particle type: " << particleType << G4endl;
 
   G4double edep = aStep->GetTotalEnergyDeposit();
+  G4double e = aStep->GetPreStepPoint()->GetKineticEnergy();
   //if (edep==0.) return false;
 
   auto newHit = new TrackerHit();
 
   newHit->SetTrackID  (aStep->GetTrack()->GetTrackID());
-  newHit->SetChamberNb(aStep->GetPreStepPoint()->GetTouchableHandle()
-                                               ->GetCopyNumber());
+  newHit->SetChamberNb(aStep->GetPreStepPoint()->GetTouchableHandle()->GetCopyNumber());
   newHit->SetEdep(edep);
+  newHit->SetE(e);
   newHit->SetPos (aStep->GetPostStepPoint()->GetPosition());
+
+  /*
+  G4cout
+  << "TrackerSD:    Edep: " << newHit->GetEdep()
+  << ", E: " << newHit->GetE()
+  << ", x: " << newHit->GetPos().x()
+  << ", y: " << newHit->GetPos().y()
+  << ", z: " << newHit->GetPos().z()
+  << G4endl;
+  */
 
   fHitsCollection->insert( newHit );
 

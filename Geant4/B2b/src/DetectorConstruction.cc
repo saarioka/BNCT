@@ -122,27 +122,6 @@ void DetectorConstruction::DefineMaterials()
   plexiglass->AddElement(elO,0.32);
   */
 
-  //G4Isotope* Li6 = new G4Isotope("Li6", 3, 6);  
-  //G4Isotope* Li7 = new G4Isotope("Li7", 3, 7);  
-  //G4Element* Li = new G4Element("Lithium", "Li", ncomponents=2);
-  //Li->AddIsotope(Li6, 4.85*perCent);
-  //Li->AddIsotope(Li7, 95.15*perCent);
-  //G4Material* natural_lithium = new G4Material("Lithium", 2.635*g/cm3, ncomponents=2, kStateSolid, 293.15*kelvin, 1*atmosphere);
-  //natural_lithium->AddElement(Li, natoms=1);
-
-  G4Element* Li = new G4Element("Lithium", "Li", 1);
-  G4Isotope* Li7 = new G4Isotope("Li7", Z=3, A=7);  
-  Li->AddIsotope(Li7, 100.*perCent);
-  G4Material* natural_lithium = new G4Material("Lithium", 2.635*g/cm3, ncomponents=1, kStateSolid, 293.15*kelvin, 1*atmosphere);
-  natural_lithium->AddElement(Li, natoms=1);
-
-  G4Element* F = new G4Element("Fluorine", "F", 1);
-  G4Isotope* F19 = new G4Isotope("F19", Z=9, A=19);
-  F->AddIsotope(F19, 100*perCent);
-  G4Material* LiF = new G4Material("LiF", 2.635*g/cm3, ncomponents=2, kStateSolid, 293.15*kelvin, 1*atmosphere);
-  LiF->AddElement(Li, natoms=1);
-  LiF->AddElement(F, natoms=1);
-
   // heavy water
   G4Element* O  = new G4Element("Oxygen", "O", 8., 16.00*g/mole);
   G4Isotope* H2 = new G4Isotope("H2",1,2);
@@ -162,14 +141,27 @@ void DetectorConstruction::DefineMaterials()
                          kStateSolid, 293*kelvin, 1*atmosphere);
   graphite->AddElement(C, natoms=1);    
 
+  //LiF
+  G4Element* Li = new G4Element("Lithium", "Li", 2);
+  G4Isotope* Li6 = new G4Isotope("Li6", Z=3, A=6);
+  G4Isotope* Li7 = new G4Isotope("Li7", Z=3, A=7);
+  Li->AddIsotope(Li6, 4.85*perCent);
+  Li->AddIsotope(Li7, 95.15*perCent);
+  //G4Material* natural_lithium = new G4Material("Lithium", 2.635*g/cm3, ncomponents=1, kStateSolid, 293.15*kelvin, 1*atmosphere);
+  //natural_lithium->AddElement(Li, natoms=1);
+
+  G4Element* F = new G4Element("Fluorine", "F", 1);
+  G4Isotope* F19 = new G4Isotope("F19", Z=9, A=19);
+  F->AddIsotope(F19, 100*perCent);
+
+  G4Material* LiF = new G4Material("LiF", 2.635*g/cm3, ncomponents=2, kStateSolid, 293.15*kelvin, 1*atmosphere);
+  LiF->AddElement(Li, natoms=1);
+  LiF->AddElement(F, natoms=1);
 
   fTargetMaterial  = nistManager->FindOrBuildMaterial("LiF");
-  //fTargetMaterial  = graphite;
-  //fTargetMaterial  = graphite;
 
   //fChamberMaterial = nistManager->FindOrBuildMaterial("Plexiglass");
   fChamberMaterial = nistManager->FindOrBuildMaterial("G4_Galactic");
-  //fChamberMaterial = D2O;
 
   // Print materials
   //G4cout << *(G4Material::GetMaterialTable()) << G4endl;
@@ -193,9 +185,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 
   G4double trackerLength = (NbOfChambers+1)*chamberSpacing;
 
-  G4double worldLength = 1.2 * (2*targetLength + trackerLength);
-
-  G4double targetRadius  = 1.0*cm;   // Radius of Target
+  G4double targetRadius  = 5.0*mm;   // Radius of Target
   targetLength = 0.5*targetLength;             // Half length of the Target
   G4double trackerSize   = 0.5*trackerLength;  // Half length of the Tracker
 
@@ -203,14 +193,13 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 
   // World
 
-  G4GeometryManager::GetInstance()->SetWorldMaximumExtent(worldLength);
+  G4GeometryManager::GetInstance()->SetWorldMaximumExtent(2*m);
 
   G4cout << "Computed tolerance = "
          << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()/mm
          << " mm" << G4endl;
 
-  auto worldS = new G4Box("world",                       // its name
-    worldLength / 2, worldLength / 2, worldLength / 2 + 130 * cm);  // its size
+  auto worldS = new G4Box("world", 60*cm, 60*cm, 150*cm);  // its size
   auto worldLV = new G4LogicalVolume(worldS,             // its solid
     vacuum,                                                 // its material
     "World");                                            // its name
@@ -248,7 +237,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 
   G4ThreeVector positionTracker = G4ThreeVector(0,0,100*cm);
 
-  auto trackerS = new G4Tubs("tracker", 0, trackerSize, trackerSize, 0. * deg, 360. * deg);
+  auto trackerS = new G4Tubs("tracker", 0, 50*cm, trackerSize, 0. * deg, 360. * deg);
   auto trackerLV = new G4LogicalVolume(trackerS, vacuum, "Tracker", nullptr, nullptr, nullptr);
   new G4PVPlacement(nullptr,  // no rotation
     positionTracker,          // at (x,y,z)
