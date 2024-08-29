@@ -103,7 +103,6 @@ void DetectorConstruction::DefineMaterials()
   G4double Z;  // atomic number
   G4double d;  // density
 
-  /*
   A = 1.01*g/mole;
   G4Element* elH = new G4Element ("Hydrogen","H",Z = 1.,A);
 
@@ -119,7 +118,6 @@ void DetectorConstruction::DefineMaterials()
   plexiglass->AddElement(elH,0.08);
   plexiglass->AddElement(elC,0.60);
   plexiglass->AddElement(elO,0.32);
-  */
 
   // heavy water
   G4Element* O  = new G4Element("Oxygen", "O", 8., 16.00*g/mole);
@@ -155,32 +153,45 @@ void DetectorConstruction::DefineMaterials()
   LiF->AddElement(Li, natoms=1);
   LiF->AddElement(F, natoms=1);
 
-  fTargetMaterial  = nistManager->FindOrBuildMaterial("LiF");
+  // Al
+  G4Isotope* Al27 = new G4Isotope("Al27", Z=13, A=27);
+  G4Element* Al = new G4Element("Aluminum", "Al", ncomponents=1);
+  Al->AddIsotope(Al27, 100*perCent);
+  G4Material* aluminum = new G4Material("Aluminum", 2.699*g/cm3, ncomponents=1, kStateSolid, 293.15*kelvin, 1*atmosphere);
+  aluminum->AddElement(Al, natoms=1);
 
-  //fChamberMaterial = nistManager->FindOrBuildMaterial("Plexiglass");
-  fChamberMaterial = nistManager->FindOrBuildMaterial("G4_Galactic");
+
+  fTargetMaterial  = nistManager->FindOrBuildMaterial("LiF");
+  fFlangeMaterial  = nistManager->FindOrBuildMaterial("Aluminum");
+  fChamberMaterial = nistManager->FindOrBuildMaterial("Plexiglass");
+  nistManager->FindOrBuildMaterial("G4_Galactic");
+  nistManager->FindOrBuildMaterial("G4_AIR");
 
   // Print materials
-  //G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 {
-  //G4Material* air  = G4Material::GetMaterial("G4_AIR");
-  G4Material* vacuum  = G4Material::GetMaterial("G4_Galactic");
+  G4Material* worldMat  = G4Material::GetMaterial("G4_AIR");
+  //G4Material* worldMat  = G4Material::GetMaterial("G4_Galactic");
 
   // Sizes of the principal geometrical components (solids)
 
-  G4double chamberLength = 0.1*cm; // half length of the chamber
-  G4double chamberRadius = 50.0*cm; // radius of the chamber
-
   G4double targetLength =  1.5*mm; // half length of Target
-  G4double targetRadius  = 5.0*mm;   // Radius of Target
+  G4double targetRadius  = 38.1*mm / 2;   // Radius of Target
 
-  G4ThreeVector positionTarget = G4ThreeVector(0,0,-targetLength);
-  G4ThreeVector positionTracker = G4ThreeVector(0,0,20*cm + chamberLength);
+  G4double flangeLength = 5*mm / 2; // half length of the flange
+  G4double flangeRadius = targetRadius + 5*mm; // radius of the flange
+
+  G4double chamberLength = 8*cm / 2; // half length of the chamber
+  G4double chamberRadius = 25.0*cm / 2; // radius of the chamber
+
+  G4ThreeVector positionTarget = G4ThreeVector(0,0,-targetLength - 2*flangeLength);
+  G4ThreeVector positionFlange = G4ThreeVector(0,0,-flangeLength);
+  G4ThreeVector positionTracker = G4ThreeVector(0,0,100*cm + chamberLength);
 
   // Definitions of Solids, Logical Volumes, Physical Volumes
 
@@ -192,9 +203,9 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
          << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()/mm
          << " mm" << G4endl;
 
-  auto worldS = new G4Box("world", 60*cm, 60*cm, 30*cm);  // its size
+  auto worldS = new G4Box("world", 60*cm, 60*cm, 120*cm);  // its size
   auto worldLV = new G4LogicalVolume(worldS,             // its solid
-    vacuum,                                                 // its material
+    worldMat,                                                 // its material
     "World");                                            // its name
 
   auto worldPV = new G4PVPlacement(nullptr,  // no rotation
@@ -220,13 +231,32 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     fCheckOverlaps);          // checking overlaps
 
   G4cout << "Target is " << fTargetMaterial->GetName() << ", "
-         << 2*targetLength/cm << " cm long and has radius of"
+         << 2*targetLength/cm << " cm long and has radius of "
          << targetRadius/cm << " cm"
+         << G4endl;
+
+  // Flange
+
+  auto flangeS = new G4Tubs("flange", 0., flangeRadius, flangeLength, 0. * deg, 360. * deg);
+  fLogicFlange = new G4LogicalVolume(flangeS, fFlangeMaterial, "Flange", nullptr, nullptr, nullptr);
+  new G4PVPlacement(nullptr,  // no rotation
+    positionFlange,           // at (x,y,z)
+    fLogicFlange,             // its logical volume
+    "Flange",                 // its name
+    worldLV,                  // its mother volume
+    false,                    // no boolean operations
+    0,                        // copy number
+    fCheckOverlaps);          // checking overlaps
+
+  G4cout << "Flange is " << fFlangeMaterial->GetName() << ", "
+         << 2*flangeLength/cm << " cm long and has radius of "
+         << flangeRadius/cm << " cm"
          << G4endl;
 
   // Tracker
 
-  auto chamberS = new G4Tubs("chamber", 0, chamberRadius, chamberLength, 0.*deg, 360.*deg);
+  //auto chamberS = new G4Tubs("chamber", 0, chamberRadius, chamberLength, 0.*deg, 360.*deg);
+  auto chamberS = new G4Box("chamber", chamberRadius, chamberRadius, chamberLength);
   fLogicChamber = new G4LogicalVolume(chamberS, fChamberMaterial, "Chamber", nullptr, nullptr, nullptr);
 
   new G4PVPlacement(nullptr,  // no rotation
@@ -239,15 +269,17 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     fCheckOverlaps);          // checking overlaps
 
   G4cout << "Tracker is " << fChamberMaterial->GetName() << ", "
-         << 2*trackerLength/cm << " cm long and has radius of"
-         << trackerRadius/cm << " cm"
+         << 2*chamberLength/cm << " cm long and has radius of "
+         << chamberRadius/cm << " cm"
          << G4endl;
 
   // Visualization attributes
 
   auto boxVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
   worldLV   ->SetVisAttributes(boxVisAtt);
-  fLogicTarget ->SetVisAttributes(boxVisAtt);
+
+  auto targetVisAtt = new G4VisAttributes(G4Colour(1.0, 0, 0));
+  fLogicTarget ->SetVisAttributes(targetVisAtt);
 
   auto chamberVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 0.0));
   fLogicChamber->SetVisAttributes(chamberVisAtt);

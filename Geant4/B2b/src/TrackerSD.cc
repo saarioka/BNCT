@@ -30,6 +30,7 @@
 #include "TrackerSD.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4Step.hh"
+#include "G4VProcess.hh"
 #include "G4ThreeVector.hh"
 #include "G4SDManager.hh"
 #include "G4ios.hh"
@@ -66,13 +67,19 @@ void TrackerSD::Initialize(G4HCofThisEvent* hce)
 G4bool TrackerSD::ProcessHits(G4Step* aStep,
                                      G4TouchableHistory*)
 {
-  G4int touchable = aStep->GetPostStepPoint()->GetTouchable()->GetReplicaNumber();
-  if (touchable != 0) return false;
+  G4int chamberNb = aStep->GetPreStepPoint()->GetTouchableHandle()->GetCopyNumber();
+  if (chamberNb != 0) return false;
 
   auto particleType = aStep->GetTrack()->GetParticleDefinition()->GetParticleName();
+  //G4cout << "Particle type: " << particleType << G4endl;
+
   if (particleType != "neutron") return false;
 
-  //G4cout << "Particle type: " << particleType << G4endl;
+  //auto postStep = aStep->GetPostStepPoint();
+  //auto stepProcess = ((G4VProcess*)postStep->GetProcessDefinedStep())->GetProcessName();
+  //G4cout << "Process: " << stepProcess << G4endl;
+
+  G4ThreeVector parentPos = aStep->GetPreStepPoint()->GetTouchableHandle()->GetTranslation();
 
   G4double edep = aStep->GetTotalEnergyDeposit();
   G4double e = aStep->GetPreStepPoint()->GetKineticEnergy();
@@ -80,11 +87,11 @@ G4bool TrackerSD::ProcessHits(G4Step* aStep,
 
   auto newHit = new TrackerHit();
 
-  newHit->SetTrackID  (aStep->GetTrack()->GetTrackID());
-  newHit->SetChamberNb(aStep->GetPreStepPoint()->GetTouchableHandle()->GetCopyNumber());
+  newHit->SetTrackID(aStep->GetTrack()->GetTrackID());
+  newHit->SetChamberNb(chamberNb);
   newHit->SetEdep(edep);
   newHit->SetE(e);
-  newHit->SetPos (aStep->GetPostStepPoint()->GetPosition());
+  newHit->SetPos(parentPos - aStep->GetPostStepPoint()->GetPosition());
 
   /*
   G4cout

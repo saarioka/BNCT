@@ -60,8 +60,11 @@ void RunAction::BeginOfRunAction(const G4Run* run)
   analysisManager->OpenFile(fileName);
 
   // Hists
-  analysisManager->CreateH1("E", "Energy (keV)", 200, 0, 10000);
-  analysisManager->CreateH1("X", "X-coordinate (cm)", 100, -50, 50);
+  analysisManager->CreateH1("E", "Incoming energy (keV)", 200, 0, 10000);
+  analysisManager->CreateH1("Edep", "Deposited energy (keV)", 200, 0, 10000);
+  analysisManager->CreateH1("X", "X-coordinate (cm)", 100, -20, 20);
+  analysisManager->CreateH1("Y", "Y-coordinate (cm)", 100, -20, 20);
+  analysisManager->CreateH1("Z", "Z-coordinate (cm)", 100, -10, 10);
 
   // Ntuples
   analysisManager->CreateNtuple("Ntuple", "Ntuple");

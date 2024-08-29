@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import yaml
 
 def read_csv(file_name):
     print('Reading file: ', file_name)
@@ -17,23 +18,30 @@ def read_csv(file_name):
             l += 1
     df = pd.read_csv(file_name, skiprows=l)
 
-    print('Title:', title)
-    print('Bins:', bins)
-    print('Lower:', lower)
-    print('Upper:', upper)
-    print('Underflow:', df['entries'].iloc[0])
-    print('Overflow:', df['entries'].iloc[-1])
-    print('Entries:', df['entries'].sum())
+    info = {
+        'Bins:': bins,
+        'Lower lim:': lower,
+        'Upper lim:': upper,
+        'Underflow:': df['entries'].iloc[0],
+        'Overflow:': df['entries'].iloc[-1],
+        'Total entries:': df['entries'].sum()
+    }
+    info_str = '\n'.join([f'{k} {v}' for k, v in info.items()])
+
+    x = np.linspace(float(lower), float(upper), int(bins))
 
     plt.figure(figsize=(10, 6))
     plt.title(title)
-    x = np.linspace(float(lower), float(upper), int(bins))
-    plt.step(x, df['entries'][1:-1])
+    plt.step(x, df['entries'][1:-1], label='Entries per bin')
+    plt.legend(title=info_str)
     plt.savefig(file_name.replace('.csv', '.pdf'))
 
 def main():
     read_csv('Run0_h1_E.csv')
+    read_csv('Run0_h1_Edep.csv')
     read_csv('Run0_h1_X.csv')
+    read_csv('Run0_h1_Y.csv')
+    read_csv('Run0_h1_Z.csv')
     plt.show()
 
 if __name__ == '__main__':

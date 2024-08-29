@@ -74,9 +74,11 @@ class DetectorConstruction : public G4VUserDetectorConstruction
                                          // magnetic field messenger
     // data members
     G4LogicalVolume*  fLogicTarget = nullptr;  // pointer to the logical Target
+    G4LogicalVolume*  fLogicFlange = nullptr;  // pointer to the logical Target
     G4LogicalVolume*  fLogicChamber = nullptr; // pointer to the logical Chamber
 
     G4Material*       fTargetMaterial = nullptr;  // pointer to the target  material
+    G4Material*       fFlangeMaterial = nullptr;  // pointer to the target  material
     G4Material*       fChamberMaterial = nullptr; // pointer to the chamber material
 
     G4UserLimits* fStepLimit = nullptr; // pointer to user step limits

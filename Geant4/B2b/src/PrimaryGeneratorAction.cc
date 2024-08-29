@@ -38,6 +38,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
 
 namespace B2
 {
@@ -90,6 +91,14 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // Note that this particular case of starting a primary particle on the world boundary
   // requires shooting in a direction towards inside the world.
   //fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., -worldZHalfLength));
+
+  // sample random x and y so they are within a circle of 2 cm diameter
+  G4double r = G4UniformRand()*19*mm;
+  G4double angle = G4UniformRand()*2*pi;
+  G4double x = r*cos(angle);
+  G4double y = r*sin(angle);
+  
+  fParticleGun->SetParticlePosition(G4ThreeVector(x, y, -1*cm));
 
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }

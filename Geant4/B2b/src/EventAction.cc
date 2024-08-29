@@ -73,6 +73,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
 
   G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(0);
   G4int nHit = hc->GetSize();
+  bool firstHit = true;
   if (nHit > 0) {
     //G4cout << "    " << nHit << " hits stored in this event" << G4endl;
 
@@ -84,19 +85,17 @@ void EventAction::EndOfEventAction(const G4Event* event)
       G4double Edep = hit->GetEdep();
       G4ThreeVector pos = hit->GetPos();
 
-      /*
-      G4cout << "EventAction:    Edep: " << Edep / keV
-             << ", E: " << E / keV
-             << ", x: " << pos.x() / cm
-             << ", y: " << pos.y() / cm
-             << ", z: " << pos.z() / cm
-             << G4endl;
-      */
+      if (firstHit){
+        analysisManager->FillH1(0, E / keV);
+        analysisManager->FillNtupleDColumn(0, E / keV);
+        firstHit = false;
+      } 
 
-      analysisManager->FillH1(0, E / keV);
-      analysisManager->FillH1(1, pos.x() / cm);
+      analysisManager->FillH1(1, Edep / keV);
+      analysisManager->FillH1(2, pos.x() / cm);
+      analysisManager->FillH1(3, pos.y() / cm);
+      analysisManager->FillH1(4, pos.z() / cm);
 
-      analysisManager->FillNtupleDColumn(0, E / keV);
       analysisManager->FillNtupleDColumn(1, Edep / keV);
       analysisManager->FillNtupleDColumn(2, pos.x() / cm);
       analysisManager->FillNtupleDColumn(3, pos.y() / cm);
