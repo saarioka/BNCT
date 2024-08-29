@@ -37,6 +37,7 @@
 
 #include "G4Box.hh"
 #include "G4Tubs.hh"
+#include "G4Sphere.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVParameterised.hh"
@@ -119,25 +120,6 @@ void DetectorConstruction::DefineMaterials()
   plexiglass->AddElement(elC,0.60);
   plexiglass->AddElement(elO,0.32);
 
-  // heavy water
-  G4Element* O  = new G4Element("Oxygen", "O", 8., 16.00*g/mole);
-  G4Isotope* H2 = new G4Isotope("H2",1,2);
-  G4Element* D  = new G4Element("TS_D_of_Heavy_Water", "D", 1);
-  D->AddIsotope(H2, 100*perCent);  
-  G4Material* D2O = new G4Material("HeavyWater", 1.11*g/cm3, ncomponents=2,
-                        kStateLiquid, 293.15*kelvin, 1*atmosphere);
-  D2O->AddElement(D, natoms=2);
-  D2O->AddElement(O, natoms=1);
-
-  // graphite
-  G4Isotope* C12 = new G4Isotope("C12", 6, 12);  
-  G4Element* C   = new G4Element("TS_C_of_Graphite","C", ncomponents=1);
-  C->AddIsotope(C12, 100.*perCent);
-  G4Material* graphite = 
-  new G4Material("graphite", 2.27*g/cm3, ncomponents=1,
-                         kStateSolid, 293*kelvin, 1*atmosphere);
-  graphite->AddElement(C, natoms=1);    
-
   //LiF
   G4Element* Li = new G4Element("Lithium", "Li", 2);
   G4Isotope* Li6 = new G4Isotope("Li6", Z=3, A=6);
@@ -186,12 +168,8 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
   G4double flangeLength = 5*mm / 2; // half length of the flange
   G4double flangeRadius = targetRadius + 5*mm; // radius of the flange
 
-  G4double chamberLength = 8*cm / 2; // half length of the chamber
-  G4double chamberRadius = 25.0*cm / 2; // radius of the chamber
-
   G4ThreeVector positionTarget = G4ThreeVector(0,0,-targetLength - 2*flangeLength);
   G4ThreeVector positionFlange = G4ThreeVector(0,0,-flangeLength);
-  G4ThreeVector positionTracker = G4ThreeVector(0,0,100*cm + chamberLength);
 
   // Definitions of Solids, Logical Volumes, Physical Volumes
 
@@ -255,8 +233,45 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 
   // Tracker
 
-  //auto chamberS = new G4Tubs("chamber", 0, chamberRadius, chamberLength, 0.*deg, 360.*deg);
-  auto chamberS = new G4Box("chamber", chamberRadius, chamberRadius, chamberLength);
+  const char* cfg = std::getenv("CONFIGURATION");
+  G4CSGSolid* chamberS = nullptr;
+  G4double chamberLength = 0; // half length of the chamber
+  G4double chamberRadius = 0; // radius of the chamber
+
+  G4ThreeVector positionTracker = G4ThreeVector(0,0,0);
+
+  if (cfg != NULL) {
+    if (strcmp(cfg, "berthold") == 0) {
+      G4cout << "Configuration: berthold" << G4endl;
+
+      chamberRadius = 25.0*cm / 2;
+      chamberLength = chamberRadius; // just for printout
+
+      positionTracker = G4ThreeVector(0,0,100*cm + chamberRadius);
+
+      chamberS = new G4Sphere("chamber", 0, chamberRadius, 0.*deg, 360.*deg, 0.*deg, 360.*deg);
+    } else if (strcmp(cfg,"cylinder") == 0) {
+      G4cout << "Configuration: cylinder" << G4endl;
+
+      chamberLength = 8*cm / 2;
+      chamberRadius = 25.0*cm / 2;
+
+      positionTracker = G4ThreeVector(0,0,100*cm + chamberLength);
+
+      chamberS = new G4Tubs("chamber", 0, chamberRadius, chamberLength, 0.*deg, 360.*deg);
+    } else if (strcmp(cfg,"moderators") == 0) {
+      G4cout << "Configuration: moderators" << G4endl;
+
+      chamberLength = 8*cm / 2; // half length of the chamber
+      chamberRadius = 25.0*cm / 2; // radius of the chamber
+
+      positionTracker = G4ThreeVector(0,0,100*cm + chamberLength);
+      chamberS = new G4Box("chamber", chamberRadius, chamberRadius, chamberLength);
+    } else {
+      throw std::runtime_error("Invalid configuration! Choices are: berthold, moderators, cylinder");
+    }
+  }
+
   fLogicChamber = new G4LogicalVolume(chamberS, fChamberMaterial, "Chamber", nullptr, nullptr, nullptr);
 
   new G4PVPlacement(nullptr,  // no rotation
