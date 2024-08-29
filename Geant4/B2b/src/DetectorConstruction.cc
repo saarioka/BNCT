@@ -177,29 +177,26 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 
   // Sizes of the principal geometrical components (solids)
 
-  G4int NbOfChambers = 4;
-  G4double chamberSpacing = 10*cm; // from chamber center to center!
+  G4double chamberLength = 0.1*cm; // half length of the chamber
+  G4double chamberRadius = 50.0*cm; // radius of the chamber
 
-  G4double chamberWidth = 10.0*cm; // width of the chambers
-  G4double targetLength =  3.0*mm; // full length of Target
-
-  G4double trackerLength = (NbOfChambers+1)*chamberSpacing;
-
+  G4double targetLength =  1.5*mm; // half length of Target
   G4double targetRadius  = 5.0*mm;   // Radius of Target
-  targetLength = 0.5*targetLength;             // Half length of the Target
-  G4double trackerSize   = 0.5*trackerLength;  // Half length of the Tracker
+
+  G4ThreeVector positionTarget = G4ThreeVector(0,0,-2*targetLength);
+  G4ThreeVector positionTracker = G4ThreeVector(0,0,20*cm + chamberLength);
 
   // Definitions of Solids, Logical Volumes, Physical Volumes
 
   // World
 
-  G4GeometryManager::GetInstance()->SetWorldMaximumExtent(2*m);
+  G4GeometryManager::GetInstance()->SetWorldMaximumExtent(1.1*m);
 
   G4cout << "Computed tolerance = "
          << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()/mm
          << " mm" << G4endl;
 
-  auto worldS = new G4Box("world", 60*cm, 60*cm, 150*cm);  // its size
+  auto worldS = new G4Box("world", 60*cm, 60*cm, 30*cm);  // its size
   auto worldLV = new G4LogicalVolume(worldS,             // its solid
     vacuum,                                                 // its material
     "World");                                            // its name
@@ -217,8 +214,6 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 
   // Target
 
-  G4ThreeVector positionTarget = G4ThreeVector(0,0,0);
-
   auto targetS = new G4Tubs("target", 0., targetRadius, targetLength, 0. * deg, 360. * deg);
   fLogicTarget = new G4LogicalVolume(targetS, fTargetMaterial, "Target", nullptr, nullptr, nullptr);
   new G4PVPlacement(nullptr,  // no rotation
@@ -235,64 +230,24 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 
   // Tracker
 
-  G4ThreeVector positionTracker = G4ThreeVector(0,0,100*cm);
+  auto chamberS = new G4Tubs("chamber", 0, chamberRadius, chamberLength, 0.*deg, 360.*deg);
+  fLogicChamber = new G4LogicalVolume(chamberS, fChamberMaterial, "Chamber", nullptr, nullptr, nullptr);
 
-  auto trackerS = new G4Tubs("tracker", 0, 50*cm, trackerSize, 0. * deg, 360. * deg);
-  auto trackerLV = new G4LogicalVolume(trackerS, vacuum, "Tracker", nullptr, nullptr, nullptr);
   new G4PVPlacement(nullptr,  // no rotation
     positionTracker,          // at (x,y,z)
-    trackerLV,                // its logical volume
-    "Tracker",                // its name
+    fLogicChamber,                // its logical volume
+    "Chamber",                // its name
     worldLV,                  // its mother  volume
     false,                    // no boolean operations
     0,                        // copy number
     fCheckOverlaps);          // checking overlaps
 
-  // Tracker segments
-
-  // An example of Parameterised volumes
-  // Dummy values for G4Tubs -- modified by parameterised volume
-
-  auto chamberS = new G4Tubs("tracker", 0, 100 * cm, 100 * cm, 0. * deg, 360. * deg);
-  fLogicChamber =
-    new G4LogicalVolume(chamberS, fChamberMaterial, "Chamber", nullptr, nullptr, nullptr);
-
-  G4double firstPosition = -trackerSize + chamberSpacing;
-  G4double firstLength   = trackerLength;
-  G4double lastLength    = trackerLength;
-
-  G4VPVParameterisation* chamberParam =
-    new ChamberParameterisation(
-                                  NbOfChambers,   // NoChambers
-                                  firstPosition,  // Z of center of first
-                                  chamberSpacing, // Z spacing of centers
-                                  chamberWidth,  // chamber width
-                                  firstLength,    // initial length
-                                  lastLength);    // final length
-
-  // dummy value : kZAxis -- modified by parameterised volume
-
-  new G4PVParameterised("Chamber",       // their name
-                        fLogicChamber,   // their logical volume
-                        trackerLV,       // Mother logical volume
-                        kZAxis,          // Are placed along this axis
-                        NbOfChambers,    // Number of chambers
-                        chamberParam,    // The parametrisation
-                        fCheckOverlaps); // checking overlaps
-
-  G4cout << "There are " << NbOfChambers << " chambers in the tracker region. "
-         << G4endl
-         << "The chambers are " << chamberWidth/cm << " cm of "
-         << fChamberMaterial->GetName() << G4endl
-         << "The distance between chamber is " << chamberSpacing/cm << " cm"
-         << G4endl;
 
   // Visualization attributes
 
   auto boxVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
   worldLV   ->SetVisAttributes(boxVisAtt);
   fLogicTarget ->SetVisAttributes(boxVisAtt);
-  trackerLV ->SetVisAttributes(boxVisAtt);
 
   auto chamberVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 0.0));
   fLogicChamber->SetVisAttributes(chamberVisAtt);
@@ -304,9 +259,9 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
   //
   // Sets a max step length in the tracker region, with G4StepLimiter
 
-  G4double maxStep = 0.5*chamberWidth;
+  G4double maxStep = 0.5*chamberLength;
   fStepLimit = new G4UserLimits(maxStep);
-  trackerLV->SetUserLimits(fStepLimit);
+  fLogicChamber->SetUserLimits(fStepLimit);
 
   /// Set additional contraints on the track, with G4UserSpecialCuts
   ///

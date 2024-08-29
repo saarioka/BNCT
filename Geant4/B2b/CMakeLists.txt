@@ -42,8 +42,6 @@ target_link_libraries(exampleB2b ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(EXAMPLEB2B_SCRIPTS
-  exampleB2b.out
-  exampleB2.in
   gui.mac
   init_vis.mac
   run.mac

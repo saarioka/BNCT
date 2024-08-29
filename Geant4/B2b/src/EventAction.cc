@@ -60,7 +60,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
   // periodic printing
 
   G4int eventID = event->GetEventID();
-  if ( eventID % 1000000 == 0) {
+  if ( eventID % 10000000 == 0) {
     G4cout << ">>> Event: " << eventID  << G4endl;
     if ( trajectoryContainer ) {
       G4cout << "    " << n_trajectories
@@ -74,7 +74,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
   G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(0);
   G4int nHit = hc->GetSize();
   if (nHit > 0) {
-    G4cout << "    " << nHit << " hits stored in this event" << G4endl;
+    //G4cout << "    " << nHit << " hits stored in this event" << G4endl;
 
     auto analysisManager = G4AnalysisManager::Instance();
 
