@@ -29,7 +29,6 @@
 
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
-#include "ChamberParameterisation.hh"
 #include "TrackerSD.hh"
 
 #include "G4Material.hh"
@@ -147,8 +146,6 @@ void DetectorConstruction::DefineMaterials()
   G4Isotope* Li7 = new G4Isotope("Li7", Z=3, A=7);
   Li->AddIsotope(Li6, 4.85*perCent);
   Li->AddIsotope(Li7, 95.15*perCent);
-  //G4Material* natural_lithium = new G4Material("Lithium", 2.635*g/cm3, ncomponents=1, kStateSolid, 293.15*kelvin, 1*atmosphere);
-  //natural_lithium->AddElement(Li, natoms=1);
 
   G4Element* F = new G4Element("Fluorine", "F", 1);
   G4Isotope* F19 = new G4Isotope("F19", Z=9, A=19);
@@ -172,7 +169,6 @@ void DetectorConstruction::DefineMaterials()
 G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 {
   //G4Material* air  = G4Material::GetMaterial("G4_AIR");
-  //G4Material* vacuum = new G4Material("Galactic", 1, 1.01*g/mole, universe_mean_density, kStateGas, 2.73*kelvin, 3.e-18*pascal);
   G4Material* vacuum  = G4Material::GetMaterial("G4_Galactic");
 
   // Sizes of the principal geometrical components (solids)
@@ -183,7 +179,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
   G4double targetLength =  1.5*mm; // half length of Target
   G4double targetRadius  = 5.0*mm;   // Radius of Target
 
-  G4ThreeVector positionTarget = G4ThreeVector(0,0,-2*targetLength);
+  G4ThreeVector positionTarget = G4ThreeVector(0,0,-targetLength);
   G4ThreeVector positionTracker = G4ThreeVector(0,0,20*cm + chamberLength);
 
   // Definitions of Solids, Logical Volumes, Physical Volumes
@@ -201,8 +197,6 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     vacuum,                                                 // its material
     "World");                                            // its name
 
-  //  Must place the World Physical volume unrotated at (0,0,0).
-  //
   auto worldPV = new G4PVPlacement(nullptr,  // no rotation
     G4ThreeVector(),                         // at (0,0,0)
     worldLV,                                 // its logical volume
@@ -225,8 +219,10 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     0,                        // copy number
     fCheckOverlaps);          // checking overlaps
 
-  G4cout << "Target is " << 2*targetLength/cm << " cm of "
-         << fTargetMaterial->GetName() << G4endl;
+  G4cout << "Target is " << fTargetMaterial->GetName() << ", "
+         << 2*targetLength/cm << " cm long and has radius of"
+         << targetRadius/cm << " cm"
+         << G4endl;
 
   // Tracker
 
@@ -242,6 +238,10 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
     0,                        // copy number
     fCheckOverlaps);          // checking overlaps
 
+  G4cout << "Tracker is " << fChamberMaterial->GetName() << ", "
+         << 2*trackerLength/cm << " cm long and has radius of"
+         << trackerRadius/cm << " cm"
+         << G4endl;
 
   // Visualization attributes
 
