@@ -54,7 +54,7 @@ void RunAction::BeginOfRunAction(const G4Run* run)
   auto analysisManager = G4AnalysisManager::Instance();
 
   std::string runnumber = std::to_string( run->GetRunID() );
-  G4String fileName = "Run" + runnumber + ".csv";
+  G4String fileName = "Run" + runnumber + ".root";
 
   analysisManager->SetNtupleMerging(false);
   analysisManager->OpenFile(fileName);

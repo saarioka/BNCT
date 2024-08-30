@@ -36,6 +36,7 @@ def read_csv(file_name):
     plt.legend(title=info_str)
     plt.savefig(file_name.replace('.csv', '.pdf'))
 
+
 def main():
     read_csv('Run0_h1_E.csv')
     read_csv('Run0_h1_Edep.csv')
@@ -43,6 +44,7 @@ def main():
     read_csv('Run0_h1_Y.csv')
     read_csv('Run0_h1_Z.csv')
     plt.show()
+
 
 if __name__ == '__main__':
     main()
