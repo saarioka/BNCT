@@ -134,13 +134,30 @@ void DetectorConstruction::DefineMaterials() {
     G4Material *aluminum = new G4Material("Aluminum", 2.699 * g / cm3, ncomponents = 1, kStateSolid, 293.15 * kelvin, 1 * atmosphere);
     aluminum->AddElement(Al, natoms = 1);
 
+    // Detector gas
+    G4Isotope *He3 = new G4Isotope("He3", Z = 2, A = 3);
+    G4Element *He = new G4Element("TS_H_of_Ortho_Hydrogen", "He-3", ncomponents = 1);
+    He->AddIsotope(He3, 100 * perCent);
+    
+    G4Material* methane = nistManager->FindOrBuildMaterial("G4_METHANE");
+
+    G4Material* gas = new G4Material("DetectorGas", 0.1786 * mg / cm3, ncomponents = 2, kStateGas, 293.15 * kelvin, 3 * atmosphere);
+    gas->AddElement(He, 90 * perCent);
+    gas->AddMaterial(methane, 10 * perCent);
+
+
+    G4Element* elPE = new G4Element("TS_H_of_Polyethylene" , "H_POLYETHYLENE" , 1.0 , 1.0079*g/mole );
+    G4Material* polyethylene = new G4Material("Polyethylene", 0.95*g/cm3, 1);
+    polyethylene->AddElement(elPE, 2);
+
     fTargetMaterial = nistManager->FindOrBuildMaterial("LiF");
     fFlangeMaterial = nistManager->FindOrBuildMaterial("Aluminum");
     fModeratorMaterial = nistManager->FindOrBuildMaterial("G4_Galactic");
     fPanelMaterial = nistManager->FindOrBuildMaterial("G4_Galactic");
-    fBertholdMaterial = nistManager->FindOrBuildMaterial("G4_Galactic");
+    fBertholdMaterial = nistManager->FindOrBuildMaterial("DetectorGas");
     nistManager->FindOrBuildMaterial("G4_Galactic");
     nistManager->FindOrBuildMaterial("G4_AIR");
+    nistManager->FindOrBuildMaterial("G4_STAINLESS-STEEL");
 
     // Print materials
     G4cout << *(G4Material::GetMaterialTable()) << G4endl;
@@ -171,7 +188,7 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
 
     G4cout << "Computed tolerance = " << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance() / mm << " mm" << G4endl;
 
-    auto worldS = new G4Box("world", 60 * cm, 60 * cm, 120 * cm); // its size
+    auto worldS = new G4Box("world", 60 * cm, 60 * cm, 130 * cm); // its size
     auto worldLV = new G4LogicalVolume(worldS,                    // its solid
                                        worldMat,                  // its material
                                        "World");                  // its name
@@ -292,10 +309,10 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
     xRot->rotateX(90 * deg);
 
     G4Material *plexiglass = G4Material::GetMaterial("Plexiglass");
-    G4Material *Al = G4Material::GetMaterial("Aluminum");
+    G4Material *steel = G4Material::GetMaterial("G4_STAINLESS-STEEL");
 
-    fLogicBerthold = new G4LogicalVolume(cylInnerS, fBertholdMaterial, "HGasLV", nullptr, nullptr, nullptr);
-    G4LogicalVolume *HTubeLV = new G4LogicalVolume(cylOuterS, Al, "HTubeLV", nullptr, nullptr, nullptr);
+    fLogicBerthold = new G4LogicalVolume(cylInnerS, fBertholdMaterial, "HeGasLV", nullptr, nullptr, nullptr);
+    G4LogicalVolume *HTubeLV = new G4LogicalVolume(cylOuterS, steel, "HeTubeLV", nullptr, nullptr, nullptr);
     G4LogicalVolume *SphereLV = new G4LogicalVolume(sphereS, plexiglass, "BertholdLV", nullptr, nullptr, nullptr);
 
     new G4PVPlacement(nullptr,          // no rotation

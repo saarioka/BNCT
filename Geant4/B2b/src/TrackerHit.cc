@@ -70,13 +70,12 @@ void TrackerHit::Draw()
 void TrackerHit::Print()
 {
   G4cout
-     << "  trackID: " << fTrackID << " chamberNb: " << fChamberNb
-     << " Edep: "
-     << std::setw(7) << G4BestUnit(fEdep,"Energy")
-     << " E: "
-     << std::setw(7) << G4BestUnit(fE,"Energy")
-     << " Position: "
-     << std::setw(7) << G4BestUnit( fPos,"Length")
+     << "  trackID: " << fTrackID
+     << " chamberNb: " << fChamberNb
+     << " particleName: " << fParticleName
+     << " Edep: " << std::setw(7) << G4BestUnit(fEdep,"Energy")
+     << " E: " << std::setw(7) << G4BestUnit(fE,"Energy")
+     << " Position: " << std::setw(7) << G4BestUnit( fPos,"Length")
      << G4endl;
 }
 

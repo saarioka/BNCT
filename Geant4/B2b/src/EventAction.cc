@@ -66,29 +66,28 @@ void EventAction::EndOfEventAction(const G4Event* event)
       G4cout << "    " << n_trajectories
              << " trajectories stored in this event." << G4endl;
     }
-    G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(0);
-    G4cout << "    "
-           << hc->GetSize() << " hits stored in this event" << G4endl;
+    G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(2);
+    G4cout << "    " << hc->GetSize() << " hits stored in this event" << G4endl;
   }
 
-  G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(0);
+  G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(2);
   G4int nHit = hc->GetSize();
-  bool firstHit = true;
+  bool firstNeutron = true;
   if (nHit > 0) {
-    //G4cout << "    " << nHit << " hits stored in this event" << G4endl;
 
     auto analysisManager = G4AnalysisManager::Instance();
 
     for (G4int i=0; i<nHit; i++){
       auto hit = dynamic_cast<TrackerHit*>(hc->GetHit(i));
+      G4String particleName = hit->GetParticleName();
       G4double E = hit->GetE();
       G4double Edep = hit->GetEdep();
       G4ThreeVector pos = hit->GetPos();
 
-      if (firstHit){
+      if (firstNeutron && particleName == "neutron") {
         analysisManager->FillH1(0, E / keV);
         analysisManager->FillNtupleDColumn(0, E / keV);
-        firstHit = false;
+        firstNeutron = false;
       } 
 
       analysisManager->FillH1(1, Edep / keV);
@@ -100,6 +99,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
       analysisManager->FillNtupleDColumn(2, pos.x() / cm);
       analysisManager->FillNtupleDColumn(3, pos.y() / cm);
       analysisManager->FillNtupleDColumn(4, pos.x() / cm);
+      analysisManager->FillNtupleIColumn(5, eventID);
       analysisManager->AddNtupleRow();
     }
   }

@@ -69,20 +69,16 @@ G4bool TrackerSD::ProcessHits(G4Step* aStep,
 {
   G4String chamberNb = aStep->GetPreStepPoint()->GetTouchable()->GetVolume()->GetName();
 
-  //G4cout << "Name: " << chamberNb << G4endl;
   //if (chamberNb == "Panel") return false;
   //if (chamberNb == "Moderator") return false;
+  //G4cout << "Name: " << chamberNb << G4endl;
 
   if (chamberNb != "BertholdGas") return false;
 
   auto particleType = aStep->GetTrack()->GetParticleDefinition()->GetParticleName();
   //G4cout << "Particle type: " << particleType << G4endl;
 
-  if (particleType != "neutron") return false;
-
-  //auto postStep = aStep->GetPostStepPoint();
-  //auto stepProcess = ((G4VProcess*)postStep->GetProcessDefinedStep())->GetProcessName();
-  //G4cout << "Process: " << stepProcess << G4endl;
+  //if (particleType != "neutron") return false;
 
   G4ThreeVector parentPos = aStep->GetPreStepPoint()->GetTouchableHandle()->GetTranslation();
 
@@ -92,6 +88,7 @@ G4bool TrackerSD::ProcessHits(G4Step* aStep,
 
   auto newHit = new TrackerHit();
 
+  newHit->SetParticleName(particleType);
   newHit->SetTrackID(aStep->GetTrack()->GetTrackID());
   newHit->SetChamberNb(chamberNb);
   newHit->SetEdep(edep);
@@ -100,7 +97,7 @@ G4bool TrackerSD::ProcessHits(G4Step* aStep,
 
   fHitsCollection->insert( newHit );
 
-  newHit->Print();
+  //newHit->Print();
 
   return true;
 }

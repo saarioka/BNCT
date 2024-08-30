@@ -54,7 +54,7 @@ void RunAction::BeginOfRunAction(const G4Run* run)
   auto analysisManager = G4AnalysisManager::Instance();
 
   std::string runnumber = std::to_string( run->GetRunID() );
-  G4String fileName = "Run" + runnumber + ".root";
+  G4String fileName = "Run" + runnumber + ".csv";
 
   analysisManager->SetNtupleMerging(false);
   analysisManager->OpenFile(fileName);
@@ -62,9 +62,9 @@ void RunAction::BeginOfRunAction(const G4Run* run)
   // Hists
   analysisManager->CreateH1("E", "Incoming energy (keV)", 200, 0, 10000);
   analysisManager->CreateH1("Edep", "Deposited energy (keV)", 200, 0, 10000);
-  analysisManager->CreateH1("X", "X-coordinate (cm)", 100, -15, 15);
-  analysisManager->CreateH1("Y", "Y-coordinate (cm)", 100, -15, 15);
-  analysisManager->CreateH1("Z", "Z-coordinate (cm)", 100, -15, 15);
+  analysisManager->CreateH1("X", "X-coordinate (cm)", 100, -3, 3);
+  analysisManager->CreateH1("Y", "Y-coordinate (cm)", 100, -3, 3);
+  analysisManager->CreateH1("Z", "Z-coordinate (cm)", 100, -3, 3);
 
   // Ntuples
   analysisManager->CreateNtuple("Ntuple", "Ntuple");
@@ -73,6 +73,7 @@ void RunAction::BeginOfRunAction(const G4Run* run)
   analysisManager->CreateNtupleDColumn("X");
   analysisManager->CreateNtupleDColumn("Y");
   analysisManager->CreateNtupleDColumn("Z");
+  analysisManager->CreateNtupleIColumn("Evt");
   analysisManager->FinishNtuple();
 }
 
