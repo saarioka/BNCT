@@ -27,6 +27,8 @@
 /// \file B2/B2b/src/DetectorConstruction.cc
 /// \brief Implementation of the B2b::DetectorConstruction class
 
+#include <string>
+
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
 #include "TrackerSD.hh"
@@ -152,7 +154,7 @@ void DetectorConstruction::DefineMaterials() {
 
     fTargetMaterial = nistManager->FindOrBuildMaterial("LiF");
     fFlangeMaterial = nistManager->FindOrBuildMaterial("Aluminum");
-    fModeratorMaterial = nistManager->FindOrBuildMaterial("G4_Galactic");
+    fModeratorMaterial = nistManager->FindOrBuildMaterial("Plexiglass");
     fPanelMaterial = nistManager->FindOrBuildMaterial("G4_Galactic");
     fBertholdMaterial = nistManager->FindOrBuildMaterial("DetectorGas");
 
@@ -239,34 +241,52 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
 
     G4ThreeVector positionTracker = G4ThreeVector(0, 0, 0);
 
-    const char *moderators = std::getenv("MODERATORS");
-    // const char* num_moderators = std::getenv("NUM_MODERATORS");
+    const char *moderatorThickness = std::getenv("MODERATOR_THICKNESS");
 
-    if (moderators != NULL) {
-        if (strcmp(moderators, "1") == 0) {
-            G4cout << "Configuration: moderators" << G4endl;
-
-            chamberLength = 2 * cm / 2;    // half length
-            chamberRadius = 25.0 * cm / 2; // radius
-
-            positionTracker = G4ThreeVector(0, 0, 51 * cm + chamberLength);
-            chamberS = new G4Box("ModeratorBox", chamberRadius, chamberRadius, chamberLength);
-
-            fLogicModerator = new G4LogicalVolume(chamberS, fModeratorMaterial, "ModeratorLV", nullptr, nullptr, nullptr);
-
-            new G4PVPlacement(nullptr,         // no rotation
-                              positionTracker, // at (x,y,z)
-                              fLogicModerator, // its logical volume
-                              "Moderator",     // its name
-                              worldLV,         // its mother  volume
-                              false,           // no boolean operations
-                              0,               // copy number
-                              fCheckOverlaps); // checking overlaps
-
-            G4cout << "Moderator is " << fModeratorMaterial->GetName() << ", " << 2 * chamberLength / cm << " cm long and has radius of " << chamberRadius / cm << " cm" << G4endl;
-        }
+    G4bool placeModerator = true;
+    chamberLength = 1 * cm;  // dummy
+    if ((moderatorThickness != NULL) && (std::stod(moderatorThickness) > 0)) {
+        chamberLength = std::stod(moderatorThickness) * cm / 2;    // half length
     } else {
-        G4cout << "No moderators" << G4endl;
+        placeModerator = false;
+    }
+
+    chamberRadius = 25.0 * cm / 2; // radius
+
+    positionTracker = G4ThreeVector(0, 0, 51 * cm + chamberLength);
+    chamberS = new G4Box("ModeratorBox", chamberRadius, chamberRadius, chamberLength);
+
+    fLogicModerator = new G4LogicalVolume(chamberS, fModeratorMaterial, "ModeratorLV", nullptr, nullptr, nullptr);
+
+    G4double scorerThickness = 1 * cm;  // full
+    G4ThreeVector positionScorer1 = positionTracker + G4ThreeVector(0, 0, chamberLength + scorerThickness / 2);
+    G4Box *scorer1S = new G4Box("Scorer1Box", chamberRadius, chamberRadius, scorerThickness / 2);
+
+    fLogicScorer1 = new G4LogicalVolume(scorer1S, fWorldMaterial, "Scorer1LV", nullptr, nullptr, nullptr);
+
+    if (placeModerator) {
+        new G4PVPlacement(nullptr,         // no rotation
+                            positionTracker, // at (x,y,z)
+                            fLogicModerator, // its logical volume
+                            "Moderator",     // its name
+                            worldLV,         // its mother  volume
+                            false,           // no boolean operations
+                            0,               // copy number
+                            fCheckOverlaps); // checking overlaps
+
+        new G4PVPlacement(nullptr,         // no rotation
+                            positionScorer1, // at (x,y,z)
+                            fLogicScorer1, // its logical volume
+                            "Scorer1",     // its name
+                            worldLV,         // its mother  volume
+                            false,           // no boolean operations
+                            0,               // copy number
+                            fCheckOverlaps); // checking overlaps
+
+        G4cout << "Moderator is " << fModeratorMaterial->GetName() << ", " << 2 * chamberLength / cm << " cm long and has side length of " << chamberRadius / cm << " cm" << G4endl;
+
+    } else {
+        G4cout << "No moderator" << G4endl;
     }
 
     const char *panel = std::getenv("PANEL");
@@ -341,22 +361,6 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
                       0,                               // copy number
                       fCheckOverlaps);                 // checking overlaps
 
-    // Scorers
-    G4double scorerRadius = 0.564189584 * m;  // pi*r^2 = 1 m^2
-
-    auto scorerS = new G4Tubs("scorer", 0., flangeRadius, flangeLength, 0. * deg, 360. * deg);
-    fLogicFlange = new G4LogicalVolume(flangeS, fFlangeMaterial, "Flange", nullptr, nullptr, nullptr);
-    new G4PVPlacement(nullptr,         // no rotation
-                      positionFlange,  // at (x,y,z)
-                      fLogicFlange,    // its logical volume
-                      "Flange",        // its name
-                      worldLV,         // its mother volume
-                      false,           // no boolean operations
-                      0,               // copy number
-                      fCheckOverlaps); // checking overlaps
-
-    G4cout << "Flange is " << fFlangeMaterial->GetName() << ", " << 2 * flangeLength / cm << " cm long and has radius of " << flangeRadius / cm << " cm" << G4endl;
-
     // Visualization attributes
 
     auto boxVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
@@ -373,6 +377,8 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
     HTubeLV->SetVisAttributes(new G4VisAttributes(G4Colour(0.8, 0.8, 0.8, 0.6)));
     fLogicBerthold->SetVisAttributes(new G4VisAttributes(G4Colour(1.0, 0.0, 0.0, 0.2)));
 
+    fLogicScorer1->SetVisAttributes(new G4VisAttributes(G4Colour(1.0, 0.0, 0.0, 0.1)));
+
     // Example of User Limits
     //
     // Below is an example of how to set tracking constraints in a given
@@ -380,13 +386,16 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
     //
     // Sets a max step length in the tracker region, with G4StepLimiter
 
-    G4double maxStep = 2*cm;
+    G4double maxStep = 0.1*cm;
     fStepLimit = new G4UserLimits(maxStep);
     fLogicModerator->SetUserLimits(fStepLimit);
     fLogicPanel->SetUserLimits(fStepLimit);
     fLogicBerthold->SetUserLimits(fStepLimit);
     HTubeLV->SetUserLimits(fStepLimit);
     SphereLV->SetUserLimits(fStepLimit);
+    fLogicScorer1->SetUserLimits(fStepLimit);
+    //fLogicScorer2->SetUserLimits(fStepLimit);
+    //fLogicScorer3->SetUserLimits(fStepLimit);
 
     /// Set additional contraints on the track, with G4UserSpecialCuts
     ///
@@ -417,6 +426,10 @@ void DetectorConstruction::ConstructSDandField() {
     auto bertholdSD = new TrackerSD("BertholdSD", "BertholdHitsCollection");
     G4SDManager::GetSDMpointer()->AddNewDetector(bertholdSD);
     SetSensitiveDetector(fLogicBerthold, bertholdSD);
+
+    auto scorer1SD = new TrackerSD("Scorer1SD", "Scorer1HitsCollection");
+    G4SDManager::GetSDMpointer()->AddNewDetector(scorer1SD);
+    SetSensitiveDetector(fLogicScorer1, scorer1SD);
 
     // Create global magnetic field messenger.
     // Uniform magnetic field is then created automatically if

@@ -1,0 +1,5 @@
+/run/numberOfThreads 22
+/run/initialize 
+
+/gun/particle neutron
+/run/beamOn 100
