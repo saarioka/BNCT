@@ -67,13 +67,13 @@ void TrackerSD::Initialize(G4HCofThisEvent* hce)
 G4bool TrackerSD::ProcessHits(G4Step* aStep,
                                      G4TouchableHistory*)
 {
-  G4String chamberNb = aStep->GetPreStepPoint()->GetTouchable()->GetVolume()->GetName();
+  G4String chamberName = aStep->GetPreStepPoint()->GetTouchable()->GetVolume()->GetName();
 
   //if (chamberNb == "Panel") return false;
   //if (chamberNb == "Moderator") return false;
   //G4cout << "Name: " << chamberNb << G4endl;
 
-  if (chamberNb != "BertholdGas") return false;
+  if (chamberName != "BertholdGas") return false;
 
   auto particleType = aStep->GetTrack()->GetParticleDefinition()->GetParticleName();
   //G4cout << "Particle type: " << particleType << G4endl;
@@ -90,7 +90,7 @@ G4bool TrackerSD::ProcessHits(G4Step* aStep,
 
   newHit->SetParticleName(particleType);
   newHit->SetTrackID(aStep->GetTrack()->GetTrackID());
-  newHit->SetChamberNb(chamberNb);
+  newHit->SetChamberNb(TrackerHit::NameToNb(chamberName));
   newHit->SetEdep(edep);
   newHit->SetE(e);
   newHit->SetPos(parentPos - aStep->GetPostStepPoint()->GetPosition());

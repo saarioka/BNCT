@@ -72,6 +72,7 @@ void TrackerHit::Print()
   G4cout
      << "  trackID: " << fTrackID
      << " chamberNb: " << fChamberNb
+     << " chamberName: " << fChamberNbToName.at(fChamberNb)
      << " particleName: " << fParticleName
      << " Edep: " << std::setw(7) << G4BestUnit(fEdep,"Energy")
      << " E: " << std::setw(7) << G4BestUnit(fE,"Energy")

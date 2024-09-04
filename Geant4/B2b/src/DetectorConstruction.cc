@@ -155,8 +155,10 @@ void DetectorConstruction::DefineMaterials() {
     fModeratorMaterial = nistManager->FindOrBuildMaterial("G4_Galactic");
     fPanelMaterial = nistManager->FindOrBuildMaterial("G4_Galactic");
     fBertholdMaterial = nistManager->FindOrBuildMaterial("DetectorGas");
+
+    fWorldMaterial = nistManager->FindOrBuildMaterial("G4_AIR");
+
     nistManager->FindOrBuildMaterial("G4_Galactic");
-    nistManager->FindOrBuildMaterial("G4_AIR");
     nistManager->FindOrBuildMaterial("G4_STAINLESS-STEEL");
 
     // Print materials
@@ -166,9 +168,6 @@ void DetectorConstruction::DefineMaterials() {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
-    G4Material *worldMat = G4Material::GetMaterial("G4_AIR");
-    // G4Material* worldMat  = G4Material::GetMaterial("G4_Galactic");
-
     // Sizes of the principal geometrical components (solids)
 
     G4double targetLength = 1.5 * mm;      // half length of Target
@@ -190,7 +189,7 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
 
     auto worldS = new G4Box("world", 60 * cm, 60 * cm, 130 * cm); // its size
     auto worldLV = new G4LogicalVolume(worldS,                    // its solid
-                                       worldMat,                  // its material
+                                       fWorldMaterial,                  // its material
                                        "World");                  // its name
 
     auto worldPV = new G4PVPlacement(nullptr,         // no rotation
@@ -341,6 +340,22 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
                       false,                           // no boolean operations
                       0,                               // copy number
                       fCheckOverlaps);                 // checking overlaps
+
+    // Scorers
+    G4double scorerRadius = 0.564189584 * m;  // pi*r^2 = 1 m^2
+
+    auto scorerS = new G4Tubs("scorer", 0., flangeRadius, flangeLength, 0. * deg, 360. * deg);
+    fLogicFlange = new G4LogicalVolume(flangeS, fFlangeMaterial, "Flange", nullptr, nullptr, nullptr);
+    new G4PVPlacement(nullptr,         // no rotation
+                      positionFlange,  // at (x,y,z)
+                      fLogicFlange,    // its logical volume
+                      "Flange",        // its name
+                      worldLV,         // its mother volume
+                      false,           // no boolean operations
+                      0,               // copy number
+                      fCheckOverlaps); // checking overlaps
+
+    G4cout << "Flange is " << fFlangeMaterial->GetName() << ", " << 2 * flangeLength / cm << " cm long and has radius of " << flangeRadius / cm << " cm" << G4endl;
 
     // Visualization attributes
 

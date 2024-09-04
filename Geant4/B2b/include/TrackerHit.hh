@@ -30,14 +30,14 @@
 #ifndef B2TrackerHit_h
 #define B2TrackerHit_h 1
 
-#include "G4VHit.hh"
-#include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
+#include "G4THitsCollection.hh"
 #include "G4ThreeVector.hh"
+#include "G4VHit.hh"
 #include "tls.hh"
+#include <map>
 
-namespace B2
-{
+namespace B2 {
 
 /// Tracker hit class
 ///
@@ -45,46 +45,50 @@ namespace B2
 /// and position of charged particles in a selected volume:
 /// - fTrackID, fChamberNB, fEdep, fPos
 
-class TrackerHit : public G4VHit
-{
+static std::map<G4int, G4String> fChamberNbToName = {{0, "Flange"}, {1, "Moderator"}, {2, "Panel"}, {3, "BertholdGas"}, {4, "Scorer1"}, {5, "Scorer2"}, {6, "Scorer3"}};
+static std::map<G4String, G4int> fChamberNameToNb = {{"Flange", 0}, {"Moderator", 1}, {"Panel", 2}, {"BertholdGas", 3}, {"Scorer1", 4}, {"Scorer2", 5}, {"Scorer3", 6}};
+
+class TrackerHit : public G4VHit {
   public:
     TrackerHit() = default;
-    TrackerHit(const TrackerHit&) = default;
+    TrackerHit(const TrackerHit &) = default;
     ~TrackerHit() override = default;
 
     // operators
-    TrackerHit& operator=(const TrackerHit&) = default;
-    G4bool operator==(const TrackerHit&) const;
+    TrackerHit &operator=(const TrackerHit &) = default;
+    G4bool operator==(const TrackerHit &) const;
 
-    inline void* operator new(size_t);
-    inline void  operator delete(void*);
+    inline void *operator new(size_t);
+    inline void operator delete(void *);
 
     // methods from base class
     void Draw() override;
     void Print() override;
 
     // Set methods
-    void SetParticleName  (G4String name)      { fParticleName = name; };
-    void SetTrackID  (G4int track)      { fTrackID = track; };
-    void SetChamberNb(G4String chamb)      { fChamberNb = chamb; };
-    void SetEdep     (G4double de)      { fEdep = de; };
-    void SetE     (G4double e)      { fE = e; };
-    void SetPos      (G4ThreeVector xyz){ fPos = xyz; };
+    void SetParticleName(G4String name) { fParticleName = name; };
+    void SetTrackID(G4int track) { fTrackID = track; };
+    void SetChamberNb(G4int chamb) { fChamberNb = chamb; };
+    void SetEdep(G4double de) { fEdep = de; };
+    void SetE(G4double e) { fE = e; };
+    void SetPos(G4ThreeVector xyz) { fPos = xyz; };
 
     // Get methods
-    G4String GetParticleName() const     { return fParticleName; };
-    G4int GetTrackID() const     { return fTrackID; };
-    G4String GetChamberNb() const   { return fChamberNb; };
-    G4double GetEdep() const     { return fEdep; };
-    G4double GetE() const     { return fE; };
+    G4String GetParticleName() const { return fParticleName; };
+    G4int GetTrackID() const { return fTrackID; };
+    G4int GetChamberNb() const { return fChamberNb; };
+    G4String GetChamberName() const { return fChamberNbToName.at(fChamberNb); };
+    G4double GetEdep() const { return fEdep; };
+    G4double GetE() const { return fE; };
     G4ThreeVector GetPos() const { return fPos; };
+    static G4int NameToNb(G4String name) { return fChamberNameToNb.at(name); };
 
   private:
-    G4String         fParticleName = "";
-    G4int         fTrackID = -1;
-    G4String         fChamberNb = "";
-    G4double      fEdep = 0.;
-    G4double      fE = 0.;
+    G4String fParticleName = "";
+    G4int fTrackID = -1;
+    G4int fChamberNb = -1;
+    G4double fEdep = 0.;
+    G4double fE = 0.;
     G4ThreeVector fPos;
 };
 
@@ -92,26 +96,22 @@ class TrackerHit : public G4VHit
 
 using TrackerHitsCollection = G4THitsCollection<TrackerHit>;
 
-extern G4ThreadLocal G4Allocator<TrackerHit>* TrackerHitAllocator;
+extern G4ThreadLocal G4Allocator<TrackerHit> *TrackerHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void* TrackerHit::operator new(size_t)
-{
-  if(!TrackerHitAllocator)
-      TrackerHitAllocator = new G4Allocator<TrackerHit>;
-  return (void *) TrackerHitAllocator->MallocSingle();
+inline void *TrackerHit::operator new(size_t) {
+    if (!TrackerHitAllocator)
+        TrackerHitAllocator = new G4Allocator<TrackerHit>;
+    return (void *)TrackerHitAllocator->MallocSingle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void TrackerHit::operator delete(void *hit)
-{
-  TrackerHitAllocator->FreeSingle((TrackerHit*) hit);
-}
+inline void TrackerHit::operator delete(void *hit) { TrackerHitAllocator->FreeSingle((TrackerHit *)hit); }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-}
+} // namespace B2
 
 #endif

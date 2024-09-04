@@ -74,6 +74,7 @@ void RunAction::BeginOfRunAction(const G4Run* run)
   analysisManager->CreateNtupleDColumn("Y");
   analysisManager->CreateNtupleDColumn("Z");
   analysisManager->CreateNtupleIColumn("Evt");
+  analysisManager->CreateNtupleIColumn("Detector");
   analysisManager->FinishNtuple();
 }
 

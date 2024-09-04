@@ -78,12 +78,16 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume*  fLogicModerator = nullptr;
     G4LogicalVolume*  fLogicPanel = nullptr;
     G4LogicalVolume*  fLogicBerthold = nullptr;
+    G4LogicalVolume*  fLogicScorer1 = nullptr;
+    G4LogicalVolume*  fLogicScorer2 = nullptr;
+    G4LogicalVolume*  fLogicScorer3 = nullptr;
 
     G4Material*       fTargetMaterial = nullptr;
     G4Material*       fFlangeMaterial = nullptr;
     G4Material*       fModeratorMaterial = nullptr;
     G4Material*       fPanelMaterial = nullptr;
     G4Material*       fBertholdMaterial = nullptr;
+    G4Material*       fWorldMaterial = nullptr;
 
     G4UserLimits* fStepLimit = nullptr; // pointer to user step limits
 

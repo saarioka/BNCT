@@ -2,8 +2,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import yaml
+import glob
 
-def read_csv(file_name):
+def read_histo(file_name):
     print('Reading file: ', file_name)
     with open(file_name, 'r') as f:
         l = 0
@@ -37,12 +38,46 @@ def read_csv(file_name):
     plt.savefig(file_name.replace('.csv', '.pdf'))
 
 
+def read_ntuples(file_names):
+    data_start = 0
+    dfs = []
+    for i, fn in enumerate(file_names):
+        if i == 0:
+            print('Reading file: ', fn)
+
+            with open(fn, 'r') as f:
+                cols = []
+                for line in f.readlines():
+                    ll = line.replace('\n', '')
+                    if ll.startswith('#title'):
+                        title = ll.replace('#title', '')
+                    elif ll.startswith('#column'):
+                        cols.append(ll.split()[-1])
+                    if not line.startswith('#'):
+                        break
+                    data_start += 1
+
+        dfs.append(pd.read_csv(fn, skiprows=data_start, names=cols))
+    df = pd.concat(dfs)
+    print(df.describe())
+    plt.figure()
+    Es = df[df.Edep > 0].groupby('Evt').sum()
+    print(Es.describe())
+
+    plt.figure(figsize=(10, 6))
+    plt.hist(Es.Edep, bins=100, histtype='step')
+
+
 def main():
-    read_csv('Run0_h1_E.csv')
-    read_csv('Run0_h1_Edep.csv')
-    read_csv('Run0_h1_X.csv')
-    read_csv('Run0_h1_Y.csv')
-    read_csv('Run0_h1_Z.csv')
+    read_histo('Run0_h1_E.csv')
+    read_histo('Run0_h1_Edep.csv')
+    read_histo('Run0_h1_X.csv')
+    read_histo('Run0_h1_Y.csv')
+    read_histo('Run0_h1_Z.csv')
+
+    read_ntuples(glob.glob('Run0_nt_Ntuple_t*.csv'))
+
+
     plt.show()
 
 
