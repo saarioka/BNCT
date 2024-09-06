@@ -39,6 +39,7 @@
 #include "QGSP_BIC_AllHP.hh"
 #include "G4ParticleHPManager.hh"
 #include "G4StepLimiterPhysics.hh"
+#include "G4GenericBiasingPhysics.hh"
 
 #include "Randomize.hh"
 
@@ -73,10 +74,11 @@ int main(int argc,char** argv)
   //G4VModularPhysicsList* physicsList = new QGSP_BIC_HP;
   G4VModularPhysicsList* physicsList = new QGSP_BIC_AllHP;
   physicsList->RegisterPhysics(new G4StepLimiterPhysics());
+
   runManager->SetUserInitialization(physicsList);
 
   G4ParticleHPManager::GetInstance()->SetSkipMissingIsotopes(true);
-  //G4ParticleHPManager::GetInstance()->SetDoNotAdjustFinalState(true);
+  G4ParticleHPManager::GetInstance()->SetDoNotAdjustFinalState(true);
   //G4ParticleHPManager::GetInstance()->SetProduceFissionFragments(true);
   //G4ParticleHPManager::GetInstance()->SetUseOnlyPhotoEvaporation(true);
 

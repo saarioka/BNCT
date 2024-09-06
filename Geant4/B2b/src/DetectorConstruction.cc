@@ -233,51 +233,61 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
 
     G4cout << "Flange is " << fFlangeMaterial->GetName() << ", " << 2 * flangeLength / cm << " cm long and has radius of " << flangeRadius / cm << " cm" << G4endl;
 
+    const char *panel = std::getenv("PANEL");
+
+    G4double chamberLength = 8 * cm / 2;
+    G4double chamberRadius = 25.0 * cm / 2;
+    G4ThreeVector positionPanel = G4ThreeVector(0, 0, 62 * cm + chamberLength);
+
+    G4CSGSolid *chamberS = new G4Box("PanelBox", chamberRadius, chamberRadius, chamberLength);
+
+    fLogicPanel = new G4LogicalVolume(chamberS, fPanelMaterial, "PanelLV", nullptr, nullptr, nullptr);
+
+    new G4PVPlacement(nullptr,         // no rotation
+                        positionPanel, // at (x,y,z)
+                        fLogicPanel,     // its logical volume
+                        "Panel",       // its name
+                        worldLV,         // its mother  volume
+                        false,           // no boolean operations
+                        0,               // copy number
+                        fCheckOverlaps); // checking overlaps
+
+    G4cout << "Panel is " << fPanelMaterial->GetName() << ", " << 2 * chamberLength / cm << " cm long and has radius of " << chamberRadius / cm << " cm" << G4endl;
+
     // Moderators
 
-    G4CSGSolid *chamberS = nullptr;
-    G4double chamberLength = 0; // half length
-    G4double chamberRadius = 0; // radius
-
-    G4ThreeVector positionTracker = G4ThreeVector(0, 0, 0);
+    chamberS = nullptr;
+    chamberLength = 0; // half length
+    chamberRadius = 0; // radius
 
     const char *moderatorThickness = std::getenv("MODERATOR_THICKNESS");
 
     G4bool placeModerator = true;
     chamberLength = 1 * cm;  // dummy
     if ((moderatorThickness != NULL) && (std::stod(moderatorThickness) > 0)) {
-        chamberLength = std::stod(moderatorThickness) * cm / 2;    // half length
+        chamberLength = std::stod(moderatorThickness) * mm / 2;    // half length
     } else {
         placeModerator = false;
     }
 
     chamberRadius = 25.0 * cm / 2; // radius
 
-    positionTracker = G4ThreeVector(0, 0, 51 * cm + chamberLength);
+    G4ThreeVector positionModerator = G4ThreeVector(0, 0, 51 * cm + chamberLength);
     chamberS = new G4Box("ModeratorBox", chamberRadius, chamberRadius, chamberLength);
 
     fLogicModerator = new G4LogicalVolume(chamberS, fModeratorMaterial, "ModeratorLV", nullptr, nullptr, nullptr);
 
     G4double scorerThickness = 1 * cm;  // full
-    G4ThreeVector positionScorer1 = positionTracker + G4ThreeVector(0, 0, chamberLength + scorerThickness / 2);
+    G4ThreeVector positionScorer1 = positionModerator + G4ThreeVector(0, 0, chamberLength + scorerThickness / 2);
     G4Box *scorer1S = new G4Box("Scorer1Box", chamberRadius, chamberRadius, scorerThickness / 2);
 
     fLogicScorer1 = new G4LogicalVolume(scorer1S, fWorldMaterial, "Scorer1LV", nullptr, nullptr, nullptr);
 
     if (placeModerator) {
         new G4PVPlacement(nullptr,         // no rotation
-                            positionTracker, // at (x,y,z)
+                            positionModerator, // at (x,y,z)
                             fLogicModerator, // its logical volume
                             "Moderator",     // its name
-                            worldLV,         // its mother  volume
-                            false,           // no boolean operations
-                            0,               // copy number
-                            fCheckOverlaps); // checking overlaps
-
-        new G4PVPlacement(nullptr,         // no rotation
-                            positionScorer1, // at (x,y,z)
-                            fLogicScorer1, // its logical volume
-                            "Scorer1",     // its name
                             worldLV,         // its mother  volume
                             false,           // no boolean operations
                             0,               // copy number
@@ -289,36 +299,20 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
         G4cout << "No moderator" << G4endl;
     }
 
-    const char *panel = std::getenv("PANEL");
+    new G4PVPlacement(nullptr,         // no rotation
+                        positionScorer1, // at (x,y,z)
+                        fLogicScorer1, // its logical volume
+                        "Scorer1",     // its name
+                        worldLV,         // its mother  volume
+                        false,           // no boolean operations
+                        0,               // copy number
+                        fCheckOverlaps); // checking overlaps
 
-    if (panel != NULL) {
-        if (strcmp(panel, "1") == 0) {
-            chamberLength = 8 * cm / 2;
-            chamberRadius = 25.0 * cm / 2;
-
-            positionTracker = G4ThreeVector(0, 0, 62 * cm + chamberLength);
-
-            chamberS = new G4Box("PanelBox", chamberRadius, chamberRadius, chamberLength);
-
-            fLogicPanel = new G4LogicalVolume(chamberS, fPanelMaterial, "PanelLV", nullptr, nullptr, nullptr);
-
-            new G4PVPlacement(nullptr,         // no rotation
-                              positionTracker, // at (x,y,z)
-                              fLogicPanel,     // its logical volume
-                              "Panel",       // its name
-                              worldLV,         // its mother  volume
-                              false,           // no boolean operations
-                              0,               // copy number
-                              fCheckOverlaps); // checking overlaps
-
-            G4cout << "Panel is " << fPanelMaterial->GetName() << ", " << 2 * chamberLength / cm << " cm long and has radius of " << chamberRadius / cm << " cm" << G4endl;
-        }
-    }
 
     G4cout << "Configuration: berthold" << G4endl;
 
     chamberRadius = 25.0 * cm / 2;
-    positionTracker = G4ThreeVector(0, 0, 101 * cm + chamberRadius);
+    G4ThreeVector positionTracker = G4ThreeVector(0, 0, 101 * cm + chamberRadius);
 
     G4Tubs *cylInnerS = new G4Tubs("CylinderI", 0, (18.9) * mm, 40 * mm / 2, 0, twopi);
     G4Tubs *cylOuterS = new G4Tubs("CylinderO", 0, (18.9 + 1) * mm, (40 + 1) * mm / 2, 0, twopi);
