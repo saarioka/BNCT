@@ -14,6 +14,7 @@ colors = ['deeppink', 'deepskyblue']
 def read_MCNP():
     df = pd.read_csv('8cm_600kev_out.csv')
     df['Counts'] /= N_PRIMARIES_MCNP
+    df['bin_centers'] = (df['Energy'] + np.roll(df['Energy'], 1)) / 2
     return df
 
 def read_FLUKA():
@@ -35,8 +36,10 @@ def read_FLUKA():
                     b1, b2, c, u = float(b1), float(b2), float(c), float(u)
                     b1 *= 1e6
                     b2 *= 1e6
+                    u *= 1e6
                     mb = (b1 + b2) / 2
                     c /= N_PRIMARIES_FLUKA
+                    u /= N_PRIMARIES_FLUKA
                     indata.append([b1, b2, c, u, mb])
             print('Name:', name, ', bins:', bins)
             df = pd.DataFrame(indata, columns=['bin_left', 'bin_right', 'Counts', 'Uncertainty', 'mean_bin'])
@@ -61,11 +64,12 @@ def main():
     plt.title('Neutron energy spectra IN\ntwo-way current')
 
     df = dff['I2_1']
-    #plt.step(df['Energy'] * 1e3 , df['Counts'] * df['mean_bin'], **kwargs_fluka)
-    plt.errorbar(df['Energy'] * 1e3, df['Counts'] * df['mean_bin'], yerr=df['Uncertainty'] * df['mean_bin'], fmt='none', color=colors[0])
+    plt.step(df['Energy'] * 1e3 , df['Counts'] * df['mean_bin'], **kwargs_fluka)
+    plt.errorbar(df['mean_bin'] * 1e3, df['Counts'] * df['mean_bin'], yerr=df['Counts'] * df['mean_bin'] * df['Uncertainty'], fmt='none', color=colors[0])
 
     df = dfm[dfm['Surface'] == 7]
     plt.step(df['Energy'] * 1e3, df['Counts'], **kwargs_mcnp)
+    plt.errorbar(df['bin_centers'] * 1e3, df['Counts'], yerr=df['Counts'] * df['Uncertainty'], linewidth=2, fmt='none', color=colors[1])
 
     plt.legend()
     plt.loglog()
@@ -80,9 +84,11 @@ def main():
 
     df = dff['I2_9']
     plt.step(df['Energy'] * 1e3 , df['Counts'] * df['mean_bin'], **kwargs_fluka)
+    plt.errorbar(df['mean_bin'] * 1e3, df['Counts'] * df['mean_bin'], yerr=df['Counts'] * df['mean_bin'] * df['Uncertainty'], fmt='none', color=colors[0])
 
     df = dfm[dfm['Surface'] == 15]
     plt.step(df['Energy'] * 1e3, df['Counts'], **kwargs_mcnp)
+    plt.errorbar(df['bin_centers'] * 1e3, df['Counts'], yerr=df['Counts'] * df['Uncertainty'], linewidth=2, fmt='none', color=colors[1])
 
     plt.legend()
     plt.loglog()
