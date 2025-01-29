@@ -1,0 +1,1 @@
+cp ../FLUKA/bnct_34*.lis . && cp ../FLUKA/bnct_42*.lis . && cp ../FLUKA/bnct_43*.lis . && cp ../FLUKA/bnct_51*.lis .
