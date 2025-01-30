@@ -1,8 +1,9 @@
 RADDECAY           2         1           333333303                   1
 * Set the defaults for precision simulations
 DEFAULTS                                                              PRECISIO
+#define ENERGY -0.0006
 * Define the beam characteristics
-BEAM         -0.0006         0      -1.0      -1.0      -1.0       1.0NEUTRON
+BEAM                         0      -1.0      -1.0      -1.0       1.0NEUTRON
 BEAMPOS            0         0      -0.1         0         0
 *PHYSICS            1                                                  COALESCE
 PHYSICS            3                                                  EVAPORAT
@@ -203,5 +204,5 @@ ASSIGNMA        PMMA      MOD8
 * Set the random number seed
 RANDOMIZ                377746
 * Set the number of primary histories to be simulated in the run
-START         100000                             1
+START        1000000                             1
 STOP

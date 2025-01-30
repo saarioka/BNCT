@@ -2,13 +2,14 @@
 Version: 300
 Mode: fluka
 Title: LiF neutron source
-md5: bc0a9462bbfb660ddd54b1d83998bff2
+md5: 1e6800f742254e7e01c2357a0033d3f3
 Input:
 RADDECAY , 2 1,, 333333303,, 1
 * Set the defaults for precision simulations
 DEFAULTS PRECISIO
+#define ENERGY -0.0006
 * Define the beam characteristics
-BEAM NEUTRON -0.0006 0 -1.0 -1.0 -1.0 1.0
+BEAM NEUTRON,, 0 -1.0 -1.0 -1.0 1.0
 	@select=8
 BEAMPOS , 0 0 -0.1 0 0
 !PHYSICS COALESCE 1
@@ -155,7 +156,7 @@ ASSIGNMA , PMMA MOD8
 * Set the random number seed
 RANDOMIZ ,, 377746
 * Set the number of primary histories to be simulated in the run
-START , 100000,,, 1
+START , 1000000,,, 1
 STOP
 EndInput
 
@@ -172,141 +173,279 @@ End
 Run: bnct_01
 	Rnd:      377747
 	Status:   3
-	StartRun: 1738154120.6764638
+	StartRun: 1738163312.9095335
 	Parent:   <default>
-	open:     1
 End
 Run: bnct_02
 	Rnd:      377748
 	Status:   3
-	StartRun: 1738154120.6828203
+	StartRun: 1738163312.9159167
 	Parent:   <default>
-	open:     1
 End
 Run: bnct_03
 	Rnd:      377749
 	Status:   3
-	StartRun: 1738154120.6889496
+	StartRun: 1738163312.9223666
 	Parent:   <default>
-	open:     1
 End
 Run: bnct_04
 	Rnd:      377750
 	Status:   3
-	StartRun: 1738154120.6952286
+	StartRun: 1738163312.9289713
 	Parent:   <default>
-	open:     1
 End
 Run: bnct_05
 	Rnd:      377751
 	Status:   3
-	StartRun: 1738154120.7029867
+	StartRun: 1738163312.9366267
 	Parent:   <default>
-	open:     1
 End
 Run: bnct_06
 	Rnd:      377752
 	Status:   3
-	StartRun: 1738154120.7126544
+	StartRun: 1738163312.9488494
 	Parent:   <default>
-	open:     1
 End
 Run: bnct_07
 	Rnd:      377753
 	Status:   3
-	StartRun: 1738154120.7247107
+	StartRun: 1738163312.9621747
 	Parent:   <default>
-	open:     1
 End
 Run: bnct_08
 	Rnd:      377754
 	Status:   3
-	StartRun: 1738154120.7390878
+	StartRun: 1738163312.9773872
 	Parent:   <default>
-	open:     1
 End
 Run: bnct_09
 	Rnd:      377755
 	Status:   3
-	StartRun: 1738154120.757356
+	StartRun: 1738163312.998285
 	Parent:   <default>
-	open:     1
 End
 Run: bnct_10
 	Rnd:      377756
 	Status:   3
-	StartRun: 1738154120.7787838
+	StartRun: 1738163313.0221372
 	Parent:   <default>
-	open:     1
 End
 Run: bnct_11
 	Rnd:      377757
 	Status:   3
-	StartRun: 1738154120.8047357
+	StartRun: 1738163313.047558
 	Parent:   <default>
-	open:     1
 End
 Run: bnct_12
 	Rnd:      377758
 	Status:   3
-	StartRun: 1738154120.8350964
+	StartRun: 1738163313.0780013
 	Parent:   <default>
-	open:     1
 End
 Run: bnct_13
 	Rnd:      377759
 	Status:   3
-	StartRun: 1738154120.8691325
+	StartRun: 1738163313.1183739
 	Parent:   <default>
-	open:     1
 End
 Run: bnct_14
 	Rnd:      377760
 	Status:   3
-	StartRun: 1738154120.909417
+	StartRun: 1738163313.1610177
 	Parent:   <default>
-	open:     1
 End
 Run: bnct_15
 	Rnd:      377761
 	Status:   3
-	StartRun: 1738154120.9513364
+	StartRun: 1738163313.192962
 	Parent:   <default>
-	open:     1
 End
 Run: bnct_16
 	Rnd:      377762
 	Status:   3
-	StartRun: 1738154120.9749506
+	StartRun: 1738163313.2195601
 	Parent:   <default>
-	open:     1
 End
 Run: bnct_17
 	Rnd:      377763
 	Status:   3
-	StartRun: 1738154121.0014157
+	StartRun: 1738163313.2394223
 	Parent:   <default>
-	open:     1
 End
 Run: bnct_18
 	Rnd:      377764
 	Status:   3
-	StartRun: 1738154121.0270813
+	StartRun: 1738163313.2589834
 	Parent:   <default>
-	open:     1
 End
 Run: bnct_19
 	Rnd:      377765
 	Status:   3
-	StartRun: 1738154121.0473206
+	StartRun: 1738163313.2788548
 	Parent:   <default>
-	open:     1
 End
 Run: bnct_20
 	Rnd:      377766
 	Status:   3
-	StartRun: 1738154121.0632048
+	StartRun: 1738163313.29643
 	Parent:   <default>
+End
+Run: bnct-1
+	Title:    LiF neutron source [Energy=-0.001]
+	Define:   Energy=-0.001
+	Status:   4
+	StartRun: 1737647605.3958123
+	open:     1
+End
+Run: bnct-1_01
+	Rnd:      377747
+	Status:   4
+	StartRun: 1738227673.9269524
+	Parent:   bnct-1
+	open:     1
+End
+Run: bnct-1_02
+	Rnd:      377748
+	Status:   6
+	StartRun: 1738227270.3816187
+	Parent:   bnct-1
+	open:     1
+End
+Run: bnct-1_03
+	Rnd:      377749
+	Status:   6
+	StartRun: 1738227270.390296
+	Parent:   bnct-1
+	open:     1
+End
+Run: bnct-2
+	Title:    LiF neutron source [Energy=-0.002]
+	Define:   Energy=-0.002
+	StartRun: 1737647605.3958123
+	open:     1
+End
+Run: bnct-2_01
+	Rnd:      377747
+	StartRun: 1738227270.4005105
+	Parent:   bnct-2
+	open:     1
+End
+Run: bnct-2_02
+	Rnd:      377748
+	StartRun: 1738227270.412292
+	Parent:   bnct-2
+	open:     1
+End
+Run: bnct-2_03
+	Rnd:      377749
+	StartRun: 1738227270.42601
+	Parent:   bnct-2
+	open:     1
+End
+Run: bnct-3
+	Title:    LiF neutron source [Energy=-0.003]
+	Define:   Energy=-0.003
+	StartRun: 1737647605.3958123
+	open:     1
+End
+Run: bnct-3_01
+	Rnd:      377747
+	StartRun: 1738227270.442618
+	Parent:   bnct-3
+	open:     1
+End
+Run: bnct-3_02
+	Rnd:      377748
+	StartRun: 1738227270.4617252
+	Parent:   bnct-3
+	open:     1
+End
+Run: bnct-3_03
+	Rnd:      377749
+	Pid:      3006417
+	StartRun: 1738227270.4816587
+	Parent:   bnct-3
+	open:     1
+End
+Run: bnct-4
+	Title:    LiF neutron source [Energy=-0.004]
+	Define:   Energy=-0.004
+	StartRun: 1737647605.3958123
+	open:     1
+End
+Run: bnct-4_01
+	Rnd:      377747
+	Pid:      3006473
+	StartRun: 1738227270.5144303
+	Parent:   bnct-4
+	open:     1
+End
+Run: bnct-4_02
+	Rnd:      377748
+	Pid:      3006524
+	StartRun: 1738227270.5484076
+	Parent:   bnct-4
+	open:     1
+End
+Run: bnct-4_03
+	Rnd:      377749
+	Pid:      3006565
+	StartRun: 1738227270.5850244
+	Parent:   bnct-4
+	open:     1
+End
+Run: bnct-5
+	Title:    LiF neutron source [Energy=-0.005]
+	Define:   Energy=-0.005
+	StartRun: 1737647605.3958123
+	open:     1
+End
+Run: bnct-5_01
+	Rnd:      377747
+	Pid:      3006651
+	StartRun: 1738227270.6200185
+	Parent:   bnct-5
+	open:     1
+End
+Run: bnct-5_02
+	Rnd:      377748
+	Pid:      3006707
+	StartRun: 1738227270.6565375
+	Parent:   bnct-5
+	open:     1
+End
+Run: bnct-5_03
+	Rnd:      377749
+	Pid:      3006780
+	StartRun: 1738227270.687055
+	Parent:   bnct-5
+	open:     1
+End
+Run: bnct-6
+	Title:    LiF neutron source [Energy=-0.006]
+	Define:   Energy=-0.006
+	StartRun: 1737647605.3958123
+	open:     1
+End
+Run: bnct-6_01
+	Rnd:      377747
+	Pid:      3006838
+	StartRun: 1738227270.7174234
+	Parent:   bnct-6
+	open:     1
+End
+Run: bnct-6_02
+	Rnd:      377748
+	Pid:      3006900
+	StartRun: 1738227270.746902
+	Parent:   bnct-6
+	open:     1
+End
+Run: bnct-6_03
+	Rnd:      377749
+	Pid:      3006946
+	StartRun: 1738227270.77845
+	Parent:   bnct-6
 	open:     1
 End
 Geometry: Geometry

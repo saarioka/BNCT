@@ -9,7 +9,7 @@ hep.style.use(hep.style.CMS)
 N_PRIMARIES_FLUKA = 20e6
 N_PRIMARIES_MCNP = 1e9
 
-colors = ['deeppink', 'deepskyblue']
+colors = ['deeppink', 'deepskyblue', 'orangered', 'limegreen']
 
 def read_MCNP():
     df = pd.read_csv('8cm_600kev_out.csv')
@@ -89,6 +89,29 @@ def main():
     df = dfm[dfm['Surface'] == 15]
     plt.step(df['Energy'] * 1e3, df['Counts'], **kwargs_mcnp)
     plt.errorbar(df['bin_centers'] * 1e3, df['Counts'], yerr=df['Counts'] * df['Uncertainty'], linewidth=2, fmt='none', color=colors[1])
+
+    plt.legend()
+    plt.loglog()
+    plt.xlabel('Energy (eV)')
+    plt.xlim([1e-3, 1e6])
+    plt.ylabel('$I_n$ (1/primary/400cm$^2$)')
+    plt.tight_layout()
+
+
+    plt.figure(figsize=(13, 7))
+    plt.title('Neutron energy spectra\none-way current')
+
+    df = dff['I1_1']
+    kwargs_fluka['label'] = 'FLUKA IN'
+    kwargs_fluka['color'] = colors[2]
+    plt.step(df['Energy'] * 1e3 , df['Counts'] * df['mean_bin'], **kwargs_fluka)
+    plt.errorbar(df['mean_bin'] * 1e3, df['Counts'] * df['mean_bin'], yerr=df['Counts'] * df['mean_bin'] * df['Uncertainty'], fmt='none', color=colors[2])
+
+    df = dff['I1_9']
+    kwargs_fluka['label'] = 'FLUKA OUT'
+    kwargs_fluka['color'] = colors[3]
+    plt.step(df['Energy'] * 1e3 , df['Counts'] * df['mean_bin'], **kwargs_fluka)
+    plt.errorbar(df['mean_bin'] * 1e3, df['Counts'] * df['mean_bin'], yerr=df['Counts'] * df['mean_bin'] * df['Uncertainty'], fmt='none', color=colors[3])
 
     plt.legend()
     plt.loglog()
