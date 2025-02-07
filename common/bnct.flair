@@ -1,0 +1,1189 @@
+# flair project file
+Version: 300
+Mode: fluka
+Title: LiF neutron source
+md5: 1e6800f742254e7e01c2357a0033d3f3
+Input:
+RADDECAY , 2 1,, 333333303,, 1
+* Set the defaults for precision simulations
+DEFAULTS PRECISIO
+#define ENERGY -0.0006
+* Define the beam characteristics
+BEAM NEUTRON,, 0 -1.0 -1.0 -1.0 1.0
+	@select=8
+BEAMPOS , 0 0 -0.1 0 0
+!PHYSICS COALESCE 1
+PHYSICS EVAPORAT 3
+!EMF
+USRBIN Ndepth 10 NEUTRON -22 10 10 10 -10 -10 0 1 100 100
+USRBIN Nwidth 10 NEUTRON -23 10 10 10 -10 -10 0 1000 1000 1
+USRBIN NRZ 11 NEUTRON -24 10,, 10,,, 0 1000 1 1000
+!USRBIN NielDep 11 NIEL-DEP -25 5 0 0.3 0 0 0 1000 1000 1000
+!USRBIN ScorerNH 10 NEUTRON -26 50 50 20.3 0 0 20.2 100 100 1
+!USRBIN ScorerNH2 11 NEUTRON -27 50,, 20.3 0,, 19.3 50 50 1
+USRBDX I1_1 -2 NEUTRON -34 AIR MOD1,, 0.0007 1E-13 500,,, 3
+USRBDX I1_2 -2 NEUTRON -35 MOD1 MOD2,, 0.0007 1E-13 500,,, 3
+USRBDX I1_3 -2 NEUTRON -36 MOD2 MOD3,, 0.0007 1E-13 500,,, 3
+USRBDX I1_4 -2 NEUTRON -37 MOD3 MOD4,, 0.0007 1E-13 500,,, 3
+USRBDX I1_5 -2 NEUTRON -38 MOD4 MOD5,, 0.0007 1E-13 500,,, 3
+USRBDX I1_6 -2 NEUTRON -39 MOD5 MOD6,, 0.0007 1E-13 500,,, 3
+USRBDX I1_7 -2 NEUTRON -40 MOD6 MOD7,, 0.0007 1E-13 500,,, 3
+USRBDX I1_8 -2 NEUTRON -41 MOD7 MOD8,, 0.0007 1E-13 500,,, 3
+USRBDX I1_9 -2 NEUTRON -42 MOD8 AIR,, 0.0007 1E-13 500,,, 3
+USRBDX I2_1 8 NEUTRON -43 AIR MOD1,, 0.0007 1E-13 500,,, 3
+USRBDX I2_2 8 NEUTRON -44 MOD1 MOD2,, 0.0007 1E-13 500,,, 3
+USRBDX I2_3 8 NEUTRON -45 MOD2 MOD3,, 0.0007 1E-13 500,,, 3
+USRBDX I2_4 8 NEUTRON -46 MOD3 MOD4,, 0.0007 1E-13 500,,, 3
+USRBDX I2_5 8 NEUTRON -47 MOD4 MOD5,, 0.0007 1E-13 500,,, 3
+USRBDX I2_6 8 NEUTRON -48 MOD5 MOD6,, 0.0007 1E-13 500,,, 3
+USRBDX I2_7 8 NEUTRON -49 MOD6 MOD7,, 0.0007 1E-13 500,,, 3
+USRBDX I2_8 8 NEUTRON -50 MOD7 MOD8,, 0.0007 1E-13 500,,, 3
+USRBDX I2_9 8 NEUTRON -51 MOD8 AIR,, 0.0007 1E-13 500,,, 3
+SCORE , PROTON NEUTRON
+!USRTRACK flnvlm,, NEUTRON -41 DET_AM 78.5398 100,, 0.001
+!IONTRANS , -2
+!IRRPROFI , 3600 3.1E+12
+LOW-NEUT , 260 42 0.02 0,, 4
+!PHYSICS DECAYS 3,,,, NEUTRON 1000
+!PHYSICS PEATHRES 1
+!PHYSICS EM-DISSO 4
+!PHYSICS DPMTHRES
+!EVENTYPE DPMJET,,, 1
+!EVENTYPE DPMJET,,, 2
+!PART-THR , -1E-14,, NEUTRON
+!LOW-DOWN
+GEOBEGIN COMBNAME
+SPH blkbody,, 0.0 0.0 100000.0
+	@select=8
+*
+SPH air,, 0.0 0.0 10000.0
+	@select=8
+!RCC tubeIn,,, -10,,, 10.25 5
+!RCC tubeOut,,, -10,,, 10.25 6
+!XYP LiFStart -0.3
+!XYP LiFEnd 0
+!XYP DumpEnd 0.25
+XYP modEnd1 1
+XYP modEnd2 2
+XYP modEnd3 3
+XYP modEnd4 4
+XYP modEnd5 5
+XYP modEnd6 6
+XYP modEnd7 7
+RPP mod -10 10 -10 10 0 8
+!XYP scorerp1 20.3
+!XYP scorerp2 20.4
+!RCC scorer,,, 20,,, 1 50
+!RPP scorer 0 100 0 100 20 21
+!RPP BB -100 100 -100 100 21.1 22.1
+!XYP modEnd2 111
+	@select=8
+!XYP modEnd4 111
+	@select=8
+!XYP modEnd7 111
+	@select=8
+!XYP modEnd8 111
+	@select=8
+!XYP modEnd11 111
+	@select=8
+!XYP modEnd12 111
+	@select=8
+!REGION TARGET 5
+	+tubeIn -LiFStart +LiFEnd 
+!XYP modEnd15 111
+	@select=8
+!XYP modEnd16 111
+	@select=8
+!XYP modEnd19 111
+	@select=8
+!XYP modEnd20 111
+	@select=8
+!XYP modEnd25 111
+	@select=8
+!XYP modEnd26 111
+	@select=8
+!XYP modEnd27 111
+	@select=8
+!XYP modEnd28 111
+	@select=8
+!XYP modEnd33 111
+	@select=8
+!XYP modEnd34 111
+	@select=8
+!XYP modEnd35 111
+	@select=8
+!XYP modEnd36 111
+	@select=8
+!XYP modEnd41 111
+	@select=8
+!XYP modEnd42 111
+	@select=8
+END
+* Black hole
+REGION BLKBODY 5
+	+blkbody -air
+* Black hole
+REGION AIR 5
+	+air -mod
+REGION MOD1 5
+	+mod +modEnd1
+REGION MOD2 5
+	+mod -modEnd1 +modEnd2
+REGION MOD3 5
+	+mod -modEnd2 +modEnd3
+REGION MOD4 5
+	+mod -modEnd3 +modEnd4
+REGION MOD5 5
+	+mod -modEnd4 +modEnd5
+REGION MOD6 5
+	+mod -modEnd5 +modEnd6
+REGION MOD7 5
+	+mod -modEnd6 +modEnd7
+REGION MOD8 5
+	+mod -modEnd7
+END
+GEOEND
+ASSIGNMA , BLCKHOLE BLKBODY
+ASSIGNMA , VACUUM AIR
+ASSIGNMA , PMMA MOD1
+ASSIGNMA , PMMA MOD2
+ASSIGNMA , PMMA MOD3
+ASSIGNMA , PMMA MOD4
+ASSIGNMA , PMMA MOD5
+ASSIGNMA , PMMA MOD6
+ASSIGNMA , PMMA MOD7
+ASSIGNMA , PMMA MOD8
+* Set the random number seed
+RANDOMIZ ,, 377746
+* Set the number of primary histories to be simulated in the run
+START , 1000000,,, 1
+STOP
+EndInput
+
+Page: Input
+plotengine: Gnuplot
+
+# Run information
+Run: <default>
+	Exe:      <flukadpm>
+	Status:   3
+	StartRun: 1737647605.3958123
+	open:     1
+End
+Run: bnct_01
+	Rnd:      377747
+	Status:   3
+	StartRun: 1738163312.9095335
+	Parent:   <default>
+End
+Run: bnct_02
+	Rnd:      377748
+	Status:   3
+	StartRun: 1738163312.9159167
+	Parent:   <default>
+End
+Run: bnct_03
+	Rnd:      377749
+	Status:   3
+	StartRun: 1738163312.9223666
+	Parent:   <default>
+End
+Run: bnct_04
+	Rnd:      377750
+	Status:   3
+	StartRun: 1738163312.9289713
+	Parent:   <default>
+End
+Run: bnct_05
+	Rnd:      377751
+	Status:   3
+	StartRun: 1738163312.9366267
+	Parent:   <default>
+End
+Run: bnct_06
+	Rnd:      377752
+	Status:   3
+	StartRun: 1738163312.9488494
+	Parent:   <default>
+End
+Run: bnct_07
+	Rnd:      377753
+	Status:   3
+	StartRun: 1738163312.9621747
+	Parent:   <default>
+End
+Run: bnct_08
+	Rnd:      377754
+	Status:   3
+	StartRun: 1738163312.9773872
+	Parent:   <default>
+End
+Run: bnct_09
+	Rnd:      377755
+	Status:   3
+	StartRun: 1738163312.998285
+	Parent:   <default>
+End
+Run: bnct_10
+	Rnd:      377756
+	Status:   3
+	StartRun: 1738163313.0221372
+	Parent:   <default>
+End
+Run: bnct_11
+	Rnd:      377757
+	Status:   3
+	StartRun: 1738163313.047558
+	Parent:   <default>
+End
+Run: bnct_12
+	Rnd:      377758
+	Status:   3
+	StartRun: 1738163313.0780013
+	Parent:   <default>
+End
+Run: bnct_13
+	Rnd:      377759
+	Status:   3
+	StartRun: 1738163313.1183739
+	Parent:   <default>
+End
+Run: bnct_14
+	Rnd:      377760
+	Status:   3
+	StartRun: 1738163313.1610177
+	Parent:   <default>
+End
+Run: bnct_15
+	Rnd:      377761
+	Status:   3
+	StartRun: 1738163313.192962
+	Parent:   <default>
+End
+Run: bnct_16
+	Rnd:      377762
+	Status:   3
+	StartRun: 1738163313.2195601
+	Parent:   <default>
+End
+Run: bnct_17
+	Rnd:      377763
+	Status:   3
+	StartRun: 1738163313.2394223
+	Parent:   <default>
+End
+Run: bnct_18
+	Rnd:      377764
+	Status:   3
+	StartRun: 1738163313.2589834
+	Parent:   <default>
+End
+Run: bnct_19
+	Rnd:      377765
+	Status:   3
+	StartRun: 1738163313.2788548
+	Parent:   <default>
+End
+Run: bnct_20
+	Rnd:      377766
+	Status:   3
+	StartRun: 1738163313.29643
+	Parent:   <default>
+End
+Run: bnct-1
+	Title:    LiF neutron source [Energy=-0.001]
+	Define:   Energy=-0.001
+	Status:   4
+	StartRun: 1737647605.3958123
+	open:     1
+End
+Run: bnct-1_01
+	Rnd:      377747
+	Status:   4
+	StartRun: 1738227673.9269524
+	Parent:   bnct-1
+	open:     1
+End
+Run: bnct-1_02
+	Rnd:      377748
+	Status:   6
+	StartRun: 1738227270.3816187
+	Parent:   bnct-1
+	open:     1
+End
+Run: bnct-1_03
+	Rnd:      377749
+	Status:   6
+	StartRun: 1738227270.390296
+	Parent:   bnct-1
+	open:     1
+End
+Run: bnct-2
+	Title:    LiF neutron source [Energy=-0.002]
+	Define:   Energy=-0.002
+	StartRun: 1737647605.3958123
+	open:     1
+End
+Run: bnct-2_01
+	Rnd:      377747
+	StartRun: 1738227270.4005105
+	Parent:   bnct-2
+	open:     1
+End
+Run: bnct-2_02
+	Rnd:      377748
+	StartRun: 1738227270.412292
+	Parent:   bnct-2
+	open:     1
+End
+Run: bnct-2_03
+	Rnd:      377749
+	StartRun: 1738227270.42601
+	Parent:   bnct-2
+	open:     1
+End
+Run: bnct-3
+	Title:    LiF neutron source [Energy=-0.003]
+	Define:   Energy=-0.003
+	StartRun: 1737647605.3958123
+	open:     1
+End
+Run: bnct-3_01
+	Rnd:      377747
+	StartRun: 1738227270.442618
+	Parent:   bnct-3
+	open:     1
+End
+Run: bnct-3_02
+	Rnd:      377748
+	StartRun: 1738227270.4617252
+	Parent:   bnct-3
+	open:     1
+End
+Run: bnct-3_03
+	Rnd:      377749
+	Pid:      3006417
+	StartRun: 1738227270.4816587
+	Parent:   bnct-3
+	open:     1
+End
+Run: bnct-4
+	Title:    LiF neutron source [Energy=-0.004]
+	Define:   Energy=-0.004
+	StartRun: 1737647605.3958123
+	open:     1
+End
+Run: bnct-4_01
+	Rnd:      377747
+	Pid:      3006473
+	StartRun: 1738227270.5144303
+	Parent:   bnct-4
+	open:     1
+End
+Run: bnct-4_02
+	Rnd:      377748
+	Pid:      3006524
+	StartRun: 1738227270.5484076
+	Parent:   bnct-4
+	open:     1
+End
+Run: bnct-4_03
+	Rnd:      377749
+	Pid:      3006565
+	StartRun: 1738227270.5850244
+	Parent:   bnct-4
+	open:     1
+End
+Run: bnct-5
+	Title:    LiF neutron source [Energy=-0.005]
+	Define:   Energy=-0.005
+	StartRun: 1737647605.3958123
+	open:     1
+End
+Run: bnct-5_01
+	Rnd:      377747
+	Pid:      3006651
+	StartRun: 1738227270.6200185
+	Parent:   bnct-5
+	open:     1
+End
+Run: bnct-5_02
+	Rnd:      377748
+	Pid:      3006707
+	StartRun: 1738227270.6565375
+	Parent:   bnct-5
+	open:     1
+End
+Run: bnct-5_03
+	Rnd:      377749
+	Pid:      3006780
+	StartRun: 1738227270.687055
+	Parent:   bnct-5
+	open:     1
+End
+Run: bnct-6
+	Title:    LiF neutron source [Energy=-0.006]
+	Define:   Energy=-0.006
+	StartRun: 1737647605.3958123
+	open:     1
+End
+Run: bnct-6_01
+	Rnd:      377747
+	Pid:      3006838
+	StartRun: 1738227270.7174234
+	Parent:   bnct-6
+	open:     1
+End
+Run: bnct-6_02
+	Rnd:      377748
+	Pid:      3006900
+	StartRun: 1738227270.746902
+	Parent:   bnct-6
+	open:     1
+End
+Run: bnct-6_03
+	Rnd:      377749
+	Pid:      3006946
+	StartRun: 1738227270.77845
+	Parent:   bnct-6
+	open:     1
+End
+Geometry: Geometry
+	Layer: Borders
+		Palette: 1
+		Palette._visible: 1
+		Show.color: None
+		Usrbin: 1
+		Usrbin._visible: 1
+		Usrbin.alpha: 97
+		Usrbin.file: fission_3_27.bnn
+	End
+	Layer: Media
+		Palette: 1
+		Palette._visible: 1
+		Usrbin.alpha: 97
+		Usrbin.file: fission_3_27.bnn
+	End
+	Layer: 3D
+		3D: 1
+		3D._visible: 1
+		3D.ambient: 141
+		3D.clip.0: clip
+		3D.clipnegative.0: 1
+		3D.edgedetect: 1
+		3D.fov: 65.4
+		Beam: 1
+		Beam._visible: 1
+		Options.viewport: 0
+		Palette: 1
+		Palette._visible: 1
+		Show.label: Material
+		Show.lattice: 1
+		Show.palette: Palette4
+		Show.voxel: 1
+		Usrbin._visible: 1
+		Usrbin.alpha: 28
+		Usrbin.file: fission_3_28.bnn
+		Usrbin.norm: 100000
+		Usrbin.prompt: 1
+	End
+	Layer: Lattice
+		Palette: 1
+		Palette._visible: 1
+		Show.lattice: 2
+		Show.voxel: 2
+		Usrbin._visible: 1
+		Usrbin.file: fission_3_27.bnn
+		Usrbin.prompt: 1
+	End
+	Layer: Layer 01
+		Palette: 1
+		Palette._visible: 1
+		Usrbin.alpha: 28
+		Usrbin.file: fission_3_28.bnn
+		Usrbin.norm: 100000
+		Usrbin.prompt: 1
+	End
+	Layer: Layer 02
+		Palette: 1
+		Palette._visible: 1
+		Usrbin: 1
+		Usrbin._visible: 1
+	End
+End
+Pet: pet
+	region: MODEND
+End
+
+# Plots information
+Plot: Blue
+	Type: Geometry
+	basisu: 0 0 1
+	coord: Z-Y
+	extends: 57.87037037037024 29.628045947886246
+	grid: 0
+	group: Geometry
+	layer: Media
+	origin: -0.451855 -21.9676 41.1718
+End
+Plot: Green
+	Type: Geometry
+	basisu: -0.364642 -0.620748 0.694052
+	basisv: -0.805561 0.584146 0.0992222
+	extends: 33.489797668038364 17.203663185636145
+	grid: 0
+	group: Geometry
+	layer: 3D
+	origin: -56.5311 -65.3937 -80.4847
+End
+Plot: Red
+	Type: Geometry
+	basisu: 0 0 1
+	basisv: 1 0 0
+	coord: Z-X
+	extends: 23.25680393613765 11.933365759705751
+	grid: 0
+	group: Geometry
+	layer: Media
+	origin: 0.298967 0 6.10385
+End
+Plot: Magenta
+	Type: Geometry
+	coord: X-Y
+	extends: 119.99999999999989 61.506849315068436
+	grid: 0
+	group: Geometry
+	layer: Media
+	origin: -34.7296 35.1118 -1.61506
+End
+Plot: in_vs_out
+	Type: USR-1D
+	file.0: bnct_34_tab.lis
+	file.1: bnct_43_tab.lis
+	file.2: bnct_42_tab.lis
+	file.3: bnct_51_tab.lis
+	grid: 0
+	index: 5
+	lc.0: royalblue
+	lc.1: plum
+	lc.2: bisque
+	lc.3: chartreuse
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: In 1-way
+	name.1: In 2-way
+	name.2: Out 1-way
+	name.3: Out 2-way
+	ndetectors: 4
+	open: 1
+	title: Current
+	titlesize: 20
+	x.0: 2
+	x.1: 2
+	xlabel: MeV
+	xlog: 1
+	xmax: 1
+	xmin: 1e-10
+	xnorm.0: 1/MeV
+	xnorm.1: 1/MeV
+	xnorm.2: 1/MeV
+	xnorm.3: 1/MeV
+	xsize: 20
+	xticssize: 10
+	y.0: 0
+	y.1: 0
+	y.2: 0
+	y.3: 0
+	y2log: 1
+	ylog: 1
+	yticssize: 10
+End
+Plot: 1-way
+	Type: USR-1D
+	file.0: bnct_34_tab.lis
+	file.1: bnct_35_tab.lis
+	file.2: bnct_36_tab.lis
+	file.3: bnct_37_tab.lis
+	file.4: bnct_38_tab.lis
+	file.5: bnct_39_tab.lis
+	file.6: bnct_40_tab.lis
+	file.7: bnct_41_tab.lis
+	file.8: bnct_42_tab.lis
+	grid: 0
+	index: 5
+	lc.0: royalblue
+	lc.1: black
+	lc.2: salmon
+	lc.3: sandybrown
+	lc.4: turquoise
+	lc.5: violet
+	lc.6: seagreen
+	lc.7: slategray
+	lc.8: greenyellow
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	lw.3: 2
+	lw.4: 2
+	lw.5: 2
+	lw.6: 2
+	lw.7: 2
+	lw.8: 2
+	name.0: 0 cm (into PMMA)
+	name.1: 1 cm
+	name.2: 2 cm
+	name.3: 3 cm
+	name.4: 4 cm
+	name.5: 5 cm
+	name.6: 6 cm
+	name.7: 7 cm
+	name.8: 8 cm (out from PMMA)
+	ndetectors: 9
+	norm.0: 1/400
+	norm.1: 1/400
+	norm.2: 1/400
+	norm.3: 1/400
+	norm.4: 1/400
+	norm.5: 1/400
+	norm.6: 1/400
+	norm.7: 1/400
+	norm.8: 1/400
+	open: 1
+	title: 1-way Current
+	titlesize: 20
+	x.0: 2
+	x.1: 2
+	x.2: 2
+	x.3: 2
+	x.4: 2
+	x.5: 2
+	x.6: 2
+	x.7: 2
+	x.8: 2
+	xlabel: MeV
+	xlog: 1
+	xnorm.0: 1/MeV
+	xnorm.1: 1/MeV
+	xnorm.2: 1/MeV
+	xnorm.3: 1/MeV
+	xnorm.4: 1/MeV
+	xnorm.5: 1/MeV
+	xnorm.6: 1/MeV
+	xnorm.7: 1/MeV
+	xnorm.8: 1/MeV
+	xsize: 20
+	xticssize: 10
+	y.0: 0
+	y.1: 0
+	y.2: 0
+	y.3: 0
+	y.4: 0
+	y.5: 0
+	y.6: 0
+	y.7: 0
+	y.8: 0
+	y2log: 1
+	ylog: 1
+	yticssize: 10
+End
+Plot: in_vs_out_1
+	Type: USR-1D
+	file.0: bnct_34_tab.lis
+	file.1: bnct_42_tab.lis
+	grid: 0
+	index: 1
+	lc.0: royalblue
+	lc.1: bisque
+	lw.0: 2
+	lw.1: 2
+	name.0: Out
+	name.1: In
+	ndetectors: 2
+	open: 1
+	title: One way scoring
+	titlesize: 20
+	x.0: 2
+	xlabel: MeV
+	xlog: 1
+	xmax: 1
+	xmin: 1e-10
+	xnorm.0: 1/MeV
+	xnorm.1: 1/MeV
+	xsize: 20
+	xticssize: 10
+	y.0: 0
+	y.1: 0
+	ylog: 1
+	yticssize: 10
+End
+Plot: in_vs_out_2
+	Type: USR-1D
+	file.0: bnct_43_tab.lis
+	file.1: bnct_51_tab.lis
+	grid: 0
+	index: 2
+	lc.0: royalblue
+	lc.1: bisque
+	lw.0: 2
+	lw.1: 2
+	name.0: Out
+	name.1: In
+	ndetectors: 2
+	open: 1
+	title: Two way scoring
+	titlesize: 20
+	x.0: 2
+	xlabel: MeV
+	xlog: 1
+	xmax: 1
+	xmin: 1e-10
+	xnorm.0: 1/MeV
+	xnorm.1: 1/MeV
+	xsize: 20
+	xticssize: 10
+	y.0: 0
+	y.1: 0
+	ylog: 1
+	yticssize: 10
+End
+Plot: in_vs_out_meanx
+	Type: USR-1D
+	file.0: bnct_34_tab.lis
+	file.1: bnct_43_tab.lis
+	file.2: bnct_42_tab.lis
+	file.3: bnct_51_tab.lis
+	grid: 0
+	index: 6
+	lc.0: royalblue
+	lc.1: plum
+	lc.2: bisque
+	lc.3: chartreuse
+	lw.0: 2
+	lw.2: 2
+	name.0: In 1-way
+	name.1: In 2-way
+	name.2: Out 1-way
+	name.3: Out 2-way
+	ndetectors: 4
+	open: 1
+	title: Current, <X>*Y
+	titlesize: 20
+	x.0: 2
+	x.1: 2
+	xlabel: MeV
+	xlog: 1
+	xmax: 1
+	xmin: 1e-10
+	xnorm.0: 1/MeV
+	xnorm.1: 1/MeV
+	xnorm.2: 1/MeV
+	xnorm.3: 1/MeV
+	xsize: 20
+	xticssize: 10
+	y.0: 1
+	y.1: 1
+	y.2: 1
+	y.3: 1
+	y2log: 1
+	y2max: 5
+	ylog: 1
+	yticssize: 10
+End
+Plot: in_vs_out_1_meanx
+	Type: USR-1D
+	file.0: bnct_34_tab.lis
+	file.1: bnct_42_tab.lis
+	grid: 0
+	index: 3
+	lc.0: royalblue
+	lc.1: bisque
+	lw.0: 2
+	lw.1: 2
+	name.0: Out
+	name.1: In
+	ndetectors: 2
+	open: 1
+	title: One way scoring, <X>*Y
+	titlesize: 20
+	x.0: 2
+	xlabel: MeV
+	xlog: 1
+	xmax: 1
+	xmin: 1e-10
+	xnorm.0: 1/MeV
+	xnorm.1: 1/MeV
+	xsize: 20
+	xticssize: 10
+	y.0: 1
+	y.1: 1
+	ylog: 1
+	yticssize: 10
+End
+Plot: in_vs_out_2_meanx
+	Type: USR-1D
+	file.0: bnct_43_tab.lis
+	file.1: bnct_51_tab.lis
+	grid: 0
+	index: 4
+	lc.0: royalblue
+	lc.1: bisque
+	lw.0: 2
+	lw.1: 2
+	name.0: Out
+	name.1: In
+	ndetectors: 2
+	open: 1
+	title: Two way scoring, <X>*Y
+	titlesize: 20
+	x.0: 2
+	xlabel: MeV
+	xlog: 1
+	xmax: 1
+	xmin: 1e-10
+	xnorm.0: 1/MeV
+	xnorm.1: 1/MeV
+	xsize: 20
+	xticssize: 10
+	y.0: 1
+	y.1: 1
+	ylog: 1
+	yticssize: 10
+End
+Plot: bnct_34_plot
+	Type: USR-1D
+	file.0: bnct_34_tab.lis
+	grid: 0
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 34
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: bnct_35_plot
+	Type: USR-1D
+	file.0: bnct_35_tab.lis
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 35
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: bnct_36_plot
+	Type: USR-1D
+	file.0: bnct_36_tab.lis
+	grid: 0
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 36
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: bnct_37_plot
+	Type: USR-1D
+	file.0: bnct_37_tab.lis
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 37
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: bnct_38_plot
+	Type: USR-1D
+	file.0: bnct_38_tab.lis
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 38
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: bnct_39_plot
+	Type: USR-1D
+	file.0: bnct_39_tab.lis
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 39
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: bnct_40_plot
+	Type: USR-1D
+	file.0: bnct_40_tab.lis
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 40
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: bnct_41_plot
+	Type: USR-1D
+	file.0: bnct_41_tab.lis
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 41
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: bnct_42_plot
+	Type: USR-1D
+	file.0: bnct_42_tab.lis
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 42
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: bnct_43_plot
+	Type: USR-1D
+	file.0: bnct_43_tab.lis
+	grid: 0
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 43
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: bnct_44_plot
+	Type: USR-1D
+	file.0: bnct_44_tab.lis
+	grid: 0
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 44
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: bnct_45_plot
+	Type: USR-1D
+	file.0: bnct_45_tab.lis
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 45
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: bnct_46_plot
+	Type: USR-1D
+	file.0: bnct_46_tab.lis
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 46
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: bnct_47_plot
+	Type: USR-1D
+	file.0: bnct_47_tab.lis
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 47
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: bnct_48_plot
+	Type: USR-1D
+	file.0: bnct_48_tab.lis
+	grid: 0
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 48
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: bnct_49_plot
+	Type: USR-1D
+	file.0: bnct_49_tab.lis
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 49
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: bnct_50_plot
+	Type: USR-1D
+	file.0: bnct_50_tab.lis
+	grid: 0
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 50
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: bnct_51_plot
+	Type: USR-1D
+	file.0: bnct_51_tab.lis
+	grid: 0
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 51
+	x.0: 2
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: bnct_22_plot
+	Type: USRBIN
+	cblog: 1
+	cbtics: 1
+	datafile: bnct_22.bnn
+	grid: 0
+	hist: 2D Projection
+	index: 10
+	int: 23.114475410024482
+	max: 5.88857494E-02
+	min: 7.12564288E-05
+	open: 1
+	proj: X
+	title: USRBIN bnct 22
+End
+Plot: bnct_23_plot
+	Type: USRBIN
+	cblog: 1
+	cbtics: 1
+	datafile: bnct_23.bnn
+	grid: 0
+	hist: 2D Projection
+	index: 11
+	int: 23.114473485573910
+	max: 0.297434747
+	min: 1.72126747E-05
+	open: 1
+	title: USRBIN bnct 23
+End
+Plot: bnct_24_plot
+	Type: USRBIN
+	cblog: 1
+	cbtics: 1
+	datafile: bnct_24.bnn
+	grid: 0
+	hist: 2D Projection
+	int: 22.750161783511533
+	max: 0.998070300
+	min: 1.64034020E-04
+	open: 1
+	proj: Y
+	title: USRBIN bnct 24
+End
+Plot: Z
+	Type: USRBIN
+	bxmax: 10
+	bxmin: 0
+	bymax: 3.141593
+	bymin: 0
+	cblog: 1
+	cbtics: 1
+	datafile: bnct_24.bnn
+	grid: 0
+	hist: 1D Projection
+	int: 15.166774522340393
+	max: 1.15677752E-02
+	min: 1.38538354E-03
+	open: 1
+	title: USRBIN bnct 24
+	xlabel: Z
+	ylabel: Neutrons
+End
+Plot: lateralR
+	Type: USRBIN
+	cblog: 1
+	cbtics: 1
+	datafile: bnct_24.bnn
+	grid: 0
+	hist: 1D Projection
+	int: 22.750161783510489
+	max: 0.288064897
+	min: 6.95318507E-04
+	open: 1
+	proj: X
+	title: USRBIN bnct 24
+	xlabel: Distance from beam line (R)
+	ylabel: Neutrons
+End
