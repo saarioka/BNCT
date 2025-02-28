@@ -2,7 +2,7 @@
 Version: 300
 Mode: fluka
 Title: LiF neutron source
-md5: 4628e95a5147c9738452707ee366ed30
+md5: 950b10fa23384acc8f081de939a92640
 Input:
 RADDECAY , 2 1,, 333333303,, 1
 * Set the defaults for precision simulations
@@ -25,8 +25,9 @@ BEAMPOS , 0 0 -0.9 0 0
 !PHYSICS COALESCE 1
 PHYSICS EVAPORAT 3
 !EMF
-USRBIN Ndepth 10 NEUTRON -22 15 15 35 -15 -15 -20 100 100 100
-USRBIN Gdepth 10 PHOTON -22 15 15 35 -15 -15 -20 100 100 100
+USRBIN Ndepth 10 NEUTRON -22 20 20 35 -20 -20 -25 100 100 100
+USRBIN Gdepth 10 PHOTON -22 20 20 35 -20 -20 -25 100 100 100
+USRBIN Pdepth 10 PROTON -22 20 20 35 -20 -20 -25 100 100 100
 USRBIN Nwidth 10 NEUTRON -23 15 15 32 -15 -15 31 100 100 1
 USRBIN NRZ 11 NEUTRON -24 10,, 10,,, 0 1000 1 1000
 !USRBIN NielDep 11 NIEL-DEP -25 5 0 0.3 0 0 0 1000 1000 1000
@@ -56,7 +57,7 @@ USRBDX I_n1 101 NEUTRON -52 LIF FLANGE,, 0.001 1E-13 100,,, 3
 LOW-NEUT , 260 42 0.02 0,, 4
 LOW-PWXS ENDF-VIII0
 !BIASING PRINT 3 100000,, LIF FLANGE
-LAM-BIAS GDECAY 1 0.002 LiF PROTON
+LAM-BIAS GDECAY 1 0.0001 LiF PROTON
 !BIASING PRINT 3 5 100000 MOD8
 !AUTOIMBS CONFIG,, -1 0
 !AUTOIMBS PRINT 0 3 1
@@ -80,7 +81,6 @@ XYP modEnd4 16
 XYP modEnd5 20
 XYP modEnd6 24
 XYP modEnd7 28
-	@select=1
 RPP mod -5 5 -5 5 0 32
 END
 * Black hole
@@ -94,6 +94,7 @@ REGION FLANGE 5
 	+flange -mod
 REGION TUBE 5
 	+tube -tube1 -tubeHole
+	@select=1
 	alpha=50
 REGION TUBE1 5
 	+tube1 -mod -tubeHole
@@ -158,7 +159,7 @@ ASSIGNMA , ALUMINUM MOD2 MOD8 2
 * Set the random number seed
 RANDOMIZ ,, 377746
 * Set the number of primary histories to be simulated in the run
-START , 100000,,, 1
+START , 250000,,, 1
 STOP
 EndInput
 
@@ -187,140 +188,140 @@ End
 Run: bnct_01
 	Rnd:      377747
 	Status:   3
-	StartRun: 1740741864.2314842
+	StartRun: 1740743493.0992916
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_02
 	Rnd:      377748
 	Status:   3
-	StartRun: 1740741864.2544453
+	StartRun: 1740743493.1194215
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_03
 	Rnd:      377749
 	Status:   3
-	StartRun: 1740741864.2794626
+	StartRun: 1740743493.1433234
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_04
 	Rnd:      377750
 	Status:   3
-	StartRun: 1740741864.3083959
+	StartRun: 1740743493.1716797
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_05
 	Rnd:      377751
 	Status:   3
-	StartRun: 1740741864.3406093
+	StartRun: 1740743493.2032175
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_06
 	Rnd:      377752
 	Status:   3
-	StartRun: 1740741864.366974
+	StartRun: 1740743493.2280283
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_07
 	Rnd:      377753
 	Status:   3
-	StartRun: 1740741864.3950217
+	StartRun: 1740743493.2547364
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_08
 	Rnd:      377754
 	Status:   3
-	StartRun: 1740741864.4256046
+	StartRun: 1740743493.2846465
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_09
 	Rnd:      377755
 	Status:   3
-	StartRun: 1740741864.4635308
+	StartRun: 1740743493.322932
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_10
 	Rnd:      377756
 	Status:   3
-	StartRun: 1740741864.5035143
+	StartRun: 1740743493.3517802
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_11
 	Rnd:      377757
 	Status:   3
-	StartRun: 1740741864.5460927
+	StartRun: 1740743493.3930526
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_12
 	Rnd:      377758
 	Status:   3
-	StartRun: 1740741864.5945232
+	StartRun: 1740743493.4351273
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_13
 	Rnd:      377759
 	Status:   3
-	StartRun: 1740741864.6384392
+	StartRun: 1740743493.4776511
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_14
 	Rnd:      377760
 	Status:   3
-	StartRun: 1740741864.6722763
+	StartRun: 1740743493.518839
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_15
 	Rnd:      377761
 	Status:   3
-	StartRun: 1740741864.7153141
+	StartRun: 1740743493.552994
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_16
 	Rnd:      377762
 	Status:   3
-	StartRun: 1740741864.759999
+	StartRun: 1740743493.5907698
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_17
 	Rnd:      377763
 	Status:   3
-	StartRun: 1740741864.8017771
+	StartRun: 1740743493.6286156
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_18
 	Rnd:      377764
 	Status:   3
-	StartRun: 1740741864.8422787
+	StartRun: 1740743493.6700163
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_19
 	Rnd:      377765
 	Status:   3
-	StartRun: 1740741864.8866487
+	StartRun: 1740743493.729025
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_20
 	Rnd:      377766
 	Status:   3
-	StartRun: 1740741864.9268992
+	StartRun: 1740743493.7770276
 	Parent:   <default>
 	open:     1
 End
@@ -531,7 +532,6 @@ Geometry: Geometry
 		Show.lattice: 1
 		Show.palette: Palette4
 		Show.voxel: 1
-		Usrbin: 1
 		Usrbin._visible: 1
 		Usrbin.file: bnct_22.bnn
 		Usrbin.norm: 1000000
@@ -581,11 +581,11 @@ Plot: Blue
 	Type: Geometry
 	basisu: 0 0 1
 	coord: Z-Y
-	extends: 48.225308641975126 18.298808127239433
+	extends: 57.870370370370146 21.958569752687314
 	grid: 0
 	group: Geometry
 	layer: Layer 02
-	origin: 0 0 6.5
+	origin: 0 0 12.5
 End
 Plot: Green
 	Type: Geometry
@@ -602,11 +602,11 @@ Plot: Red
 	basisu: 0 0 1
 	basisv: 1 0 0
 	coord: Z-X
-	extends: 34.39853567999977 13.052320907666362
+	extends: 41.278242815999704 15.66278508919963
 	grid: 0
 	group: Geometry
 	layer: Layer 01
-	origin: 0.679313 0 4.29331
+	origin: 0.935468 0 1.53431
 End
 Plot: Magenta
 	Type: Geometry
@@ -683,6 +683,7 @@ Plot: out
 	xsize: 20
 	xticssize: 10
 	y2log: 1
+	ylog: 1
 	yticssize: 10
 End
 Plot: out_meanx
@@ -1215,6 +1216,7 @@ Plot: bnct_51_plot
 	title: USR-1D bnct 51
 	x.0: 2
 	xlog: 1
+	xnorm.0: 1/MeV
 	ylog: 1
 End
 Plot: bnct_52_plot
