@@ -2,7 +2,7 @@
 Version: 300
 Mode: fluka
 Title: LiF neutron source
-md5: 1fbb96e7934486efdffc52bbe8b7fd11
+md5: 769248968ef37218bff5fefeca5c8948
 Input:
 * Set the defaults for precision simulations
 DEFAULTS PRECISIO
@@ -29,14 +29,30 @@ USRBIN protons 10 PROTON -21 20 20 35 -20 -20 -25 100 100 100
 USRBIN n_out 10 NEUTRON -22 15 15 32 -15 -15 31 100 100 1
 USRBIN n_RZ 11 NEUTRON -23 30,, 35,,, -30 1000 1 1000
 USRBIN g_RZ 11 PHOTON -23 30,, 35,,, -30 1000 1 1000
-USRBDX neutrons 101 NEUTRON -40 LIF FLANGE,, 0.001 1E-13 100,,, 3
-USRBDX neutrons 111 NEUTRON -40 LIF FLANGE,, 0.001 1E-13 100,,, 3
-USRBDX neutrons 98 NEUTRON -41 LIF FLANGE,, 0.001 1E-13 500,,, 3
-USRBDX neutrons 108 NEUTRON -41 LIF FLANGE,, 0.001 1E-13 500,,, 3
-USRBDX neutron 98 NEUTRON -41 FLANGE MOD1,, 0.001 1E-13 500,,, 3
-USRBDX neutron 108 NEUTRON -41 FLANGE MOD1,, 0.001 1E-13 500,,, 3
-USRBDX neutron 98 NEUTRON -41 MOD1 MOD2,, 0.001 1E-13 500,,, 3
-USRBDX neutron 108 NEUTRON -41 MOD1 MOD2,, 0.001 1E-13 500,,, 3
+USRBDX n1way 101 NEUTRON -40 LIF FLANGE,, 0.001 1E-13 100,,, 3
+USRBDX n2way 111 NEUTRON -40 LIF FLANGE,, 0.001 1E-13 100,,, 3
+USRBDX toflan1 98 NEUTRON -41 LIF FLANGE,, 0.001 1E-13 500,,, 3
+USRBDX toflan2 108 NEUTRON -41 LIF FLANGE,, 0.001 1E-13 500,,, 3
+USRBDX tomod1_1 98 NEUTRON -41 FLANGE MOD1,, 0.001 1E-13 500,,, 3
+USRBDX tomod1_2 108 NEUTRON -41 FLANGE MOD1,, 0.001 1E-13 500,,, 3
+USRBDX tomod2_1 98 NEUTRON -41 MOD1 MOD2,, 0.001 1E-13 500,,, 3
+USRBDX tomod2_2 108 NEUTRON -41 MOD1 MOD2,, 0.001 1E-13 500,,, 3
+USRBDX tomod3_1 98 NEUTRON -41 MOD2 MOD3,, 0.001 1E-13 500,,, 3
+USRBDX tomod3_2 108 NEUTRON -41 MOD2 MOD3,, 0.001 1E-13 500,,, 3
+USRBDX tomod4_1 98 NEUTRON -41 MOD3 MOD4,, 0.001 1E-13 500,,, 3
+USRBDX tomod4_2 108 NEUTRON -41 MOD3 MOD4,, 0.001 1E-13 500,,, 3
+USRBDX tomod5_1 98 NEUTRON -41 MOD4 MOD5,, 0.001 1E-13 500,,, 3
+USRBDX tomod5_2 108 NEUTRON -41 MOD4 MOD5,, 0.001 1E-13 500,,, 3
+USRBDX tomod6_1 98 NEUTRON -41 MOD5 MOD6,, 0.001 1E-13 500,,, 3
+USRBDX tomod6_2 108 NEUTRON -41 MOD5 MOD6,, 0.001 1E-13 500,,, 3
+USRBDX tomod7_1 98 NEUTRON -41 MOD6 MOD7,, 0.001 1E-13 500,,, 3
+USRBDX tomod7_2 108 NEUTRON -41 MOD6 MOD7,, 0.001 1E-13 500,,, 3
+USRBDX tomod8_1 98 NEUTRON -41 MOD7 MOD8,, 0.001 1E-13 500,,, 3
+USRBDX tomod8_2 108 NEUTRON -41 MOD7 MOD8,, 0.001 1E-13 500,,, 3
+USRBDX toair_1 98 NEUTRON -41 MOD8 AIR,, 0.001 1E-13 500,,, 3
+USRBDX toair_2 108 NEUTRON -41 MOD8 AIR,, 0.001 1E-13 500,,, 3
+USRBDX tube1 101 NEUTRON -42 TUBE AIR,, 0.001 1E-13 500,,, 3
+USRBDX tube2 108 NEUTRON -42 TUBE AIR,, 0.001 1E-13 500,,, 3
 GEOBEGIN COMBNAME
 SPH blkbody,, 0.0 0.0 100000.0
 	@select=8
@@ -70,7 +86,6 @@ REGION FLANGE 5
 REGION TUBE 5
 	+tube -tube1 -tubeHole
 	alpha=50
-	@select=1
 REGION TUBE1 5
 	+tube1 -mod -tubeHole
 	alpha=50
@@ -99,6 +114,8 @@ REGION MOD7 5
 	+mod -modEnd6 +modEnd7
 REGION MOD8 5
 	+mod -modEnd7
+REGION REG1
+	@select=1
 END
 GEOEND
 MATERIAL FLUORINE 9,, 0.0015803
@@ -131,14 +148,15 @@ ASSIGNMA , ALUMINUM FLANGE
 ASSIGNMA , LiF LIF
 ASSIGNMA , TEFLON MOD1 MOD7 2
 ASSIGNMA , ALUMINUM MOD2 MOD8 2
+ASSIGNMA , VACUUM REG1
 * Set the random number seed
 RANDOMIZ ,, 377746
 * Set the number of primary histories to be simulated in the run
-START , 1000,,, 1
+START , 30000000,,, 1
 STOP
 EndInput
 
-Page: Input
+Page: Plot
 Calculator:
 	|dT2dp(E,dE,m)
 	|> Error: name 'E' is not defined
@@ -156,166 +174,147 @@ plotengine: Gnuplot
 # Run information
 Run: <default>
 	Exe:      <fluka>
-	Status:   2
+	Status:   3
 	StartRun: 1737647605.3958123
 	open:     1
 End
 Run: bnct_01
 	Rnd:      377747
-	Status:   2
-	Pid:      253105
-	StartRun: 1740756815.1494508
+	Status:   3
+	StartRun: 1740759166.4978871
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_02
 	Rnd:      377748
-	Status:   2
-	Pid:      253127
-	StartRun: 1740756815.1686165
+	Status:   3
+	StartRun: 1740759166.5171237
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_03
 	Rnd:      377749
-	Status:   2
-	Pid:      253186
-	StartRun: 1740756815.1910276
+	Status:   3
+	StartRun: 1740759166.540525
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_04
 	Rnd:      377750
-	Status:   2
-	Pid:      253240
-	StartRun: 1740756815.217473
+	Status:   3
+	StartRun: 1740759166.5688045
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_05
 	Rnd:      377751
-	Status:   2
-	Pid:      253294
-	StartRun: 1740756815.248559
+	Status:   3
+	StartRun: 1740759166.6010072
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_06
 	Rnd:      377752
-	Status:   2
-	Pid:      253340
-	StartRun: 1740756815.2735357
+	Status:   3
+	StartRun: 1740759166.6280773
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_07
 	Rnd:      377753
-	Status:   2
-	Pid:      253396
-	StartRun: 1740756815.299546
+	Status:   3
+	StartRun: 1740759166.655251
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_08
 	Rnd:      377754
-	Status:   2
-	Pid:      253447
-	StartRun: 1740756815.3272555
+	Status:   3
+	StartRun: 1740759166.6834228
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_09
 	Rnd:      377755
-	Status:   2
-	StartRun: 1740756815.3650565
+	Status:   3
+	StartRun: 1740759166.722367
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_10
 	Rnd:      377756
-	Status:   2
-	Pid:      253555
-	StartRun: 1740756815.4029229
+	Status:   3
+	StartRun: 1740759166.7619236
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_11
 	Rnd:      377757
-	Status:   2
-	Pid:      253608
-	StartRun: 1740756815.4377553
+	Status:   3
+	StartRun: 1740759166.7974315
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_12
 	Rnd:      377758
-	Status:   2
-	Pid:      253663
-	StartRun: 1740756815.4734595
+	Status:   3
+	StartRun: 1740759166.8381977
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_13
 	Rnd:      377759
-	Status:   2
-	Pid:      253715
-	StartRun: 1740756815.515276
+	Status:   3
+	StartRun: 1740759166.871049
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_14
 	Rnd:      377760
-	Status:   2
-	Pid:      253753
-	StartRun: 1740756815.554275
+	Status:   3
+	StartRun: 1740759166.9119508
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_15
 	Rnd:      377761
-	Status:   2
-	Pid:      253804
-	StartRun: 1740756815.5928278
+	Status:   3
+	StartRun: 1740759166.9455638
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_16
 	Rnd:      377762
-	Status:   2
-	Pid:      253855
-	StartRun: 1740756815.633359
+	Status:   3
+	StartRun: 1740759166.9766514
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_17
 	Rnd:      377763
-	Status:   2
-	Pid:      253911
-	StartRun: 1740756815.6782374
+	Status:   3
+	StartRun: 1740759167.0113447
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_18
 	Rnd:      377764
-	Status:   2
-	Pid:      253962
-	StartRun: 1740756815.7207515
+	Status:   3
+	StartRun: 1740759167.0422037
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_19
 	Rnd:      377765
-	Status:   2
-	Pid:      254008
-	StartRun: 1740756815.7606585
+	Status:   3
+	StartRun: 1740759167.0839472
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_20
 	Rnd:      377766
-	Status:   2
-	Pid:      254066
-	StartRun: 1740756815.8048654
+	Status:   3
+	StartRun: 1740759167.1230142
 	Parent:   <default>
 	open:     1
 End
@@ -330,21 +329,21 @@ End
 Run: bnct-1_01
 	Rnd:      377747
 	Status:   3
-	StartRun: 1740752577.9212031
+	StartRun: 1740758771.7349656
 	Parent:   bnct-1
 	open:     1
 End
 Run: bnct-1_02
 	Rnd:      377748
 	Status:   3
-	StartRun: 1740752577.9442
+	StartRun: 1740758771.7546887
 	Parent:   bnct-1
 	open:     1
 End
 Run: bnct-1_03
 	Rnd:      377749
 	Status:   3
-	StartRun: 1740752577.9725437
+	StartRun: 1740758771.7781672
 	Parent:   bnct-1
 	open:     1
 End
@@ -352,28 +351,28 @@ Run: bnct-2
 	Title:    LiF neutron source [ENERGY=-0.0021]
 	Define:   ENERGY=-0.0021
 	Exe:      <fluka>
-	Status:   6
+	Status:   3
 	StartRun: 1740752411.0504873
 	open:     1
 End
 Run: bnct-2_01
 	Rnd:      377747
 	Status:   3
-	StartRun: 1740752578.0048852
+	StartRun: 1740758771.8050225
 	Parent:   bnct-2
 	open:     1
 End
 Run: bnct-2_02
 	Rnd:      377748
-	Status:   6
-	StartRun: 1740752578.0352952
+	Status:   3
+	StartRun: 1740758771.8363013
 	Parent:   bnct-2
 	open:     1
 End
 Run: bnct-2_03
 	Rnd:      377749
 	Status:   3
-	StartRun: 1740752578.0645616
+	StartRun: 1740758771.8634741
 	Parent:   bnct-2
 	open:     1
 End
@@ -388,21 +387,21 @@ End
 Run: bnct-3_01
 	Rnd:      377747
 	Status:   3
-	StartRun: 1740752578.0972552
+	StartRun: 1740758771.8898878
 	Parent:   bnct-3
 	open:     1
 End
 Run: bnct-3_02
 	Rnd:      377748
 	Status:   3
-	StartRun: 1740752578.1299584
+	StartRun: 1740758771.91765
 	Parent:   bnct-3
 	open:     1
 End
 Run: bnct-3_03
 	Rnd:      377749
 	Status:   3
-	StartRun: 1740752578.1634645
+	StartRun: 1740758771.9512944
 	Parent:   bnct-3
 	open:     1
 End
@@ -410,28 +409,28 @@ Run: bnct-4
 	Title:    LiF neutron source [ENERGY=-0.0023]
 	Define:   ENERGY=-0.0023
 	Exe:      <fluka>
-	Status:   6
+	Status:   3
 	StartRun: 1740752411.1135476
 	open:     1
 End
 Run: bnct-4_01
 	Rnd:      377747
 	Status:   3
-	StartRun: 1740752578.2078187
+	StartRun: 1740758771.9855123
 	Parent:   bnct-4
 	open:     1
 End
 Run: bnct-4_02
 	Rnd:      377748
 	Status:   3
-	StartRun: 1740752578.2530258
+	StartRun: 1740758772.020937
 	Parent:   bnct-4
 	open:     1
 End
 Run: bnct-4_03
 	Rnd:      377749
-	Status:   6
-	StartRun: 1740752578.2983847
+	Status:   3
+	StartRun: 1740758772.0619714
 	Parent:   bnct-4
 	open:     1
 End
@@ -446,21 +445,21 @@ End
 Run: bnct-5_01
 	Rnd:      377747
 	Status:   3
-	StartRun: 1740752578.3341482
+	StartRun: 1740758772.1017058
 	Parent:   bnct-5
 	open:     1
 End
 Run: bnct-5_02
 	Rnd:      377748
 	Status:   3
-	StartRun: 1740752578.3776817
+	StartRun: 1740758772.1426773
 	Parent:   bnct-5
 	open:     1
 End
 Run: bnct-5_03
 	Rnd:      377749
 	Status:   3
-	StartRun: 1740752578.4211915
+	StartRun: 1740758772.1727607
 	Parent:   bnct-5
 	open:     1
 End
@@ -475,21 +474,21 @@ End
 Run: bnct-6_01
 	Rnd:      377747
 	Status:   3
-	StartRun: 1740752578.4710534
+	StartRun: 1740758772.214784
 	Parent:   bnct-6
 	open:     1
 End
 Run: bnct-6_02
 	Rnd:      377748
 	Status:   3
-	StartRun: 1740752578.5175803
+	StartRun: 1740758772.2556987
 	Parent:   bnct-6
 	open:     1
 End
 Run: bnct-6_03
 	Rnd:      377749
 	Status:   3
-	StartRun: 1740752578.5625865
+	StartRun: 1740758772.2966313
 	Parent:   bnct-6
 	open:     1
 End
@@ -560,17 +559,21 @@ Geometry: Geometry
 	Layer: Layer 02
 		3D.fov: 29.9
 		Options.latticelevel: 23
-		Palette: 1
-		Palette._visible: 1
-		Palette.alphamin: 1
+		Palette.cpd: 0
 		Palette.max: 100000.00000000001
 		Palette2: 1
 		Palette2._visible: 1
+		Palette2.alphamin: 1
+		Palette2.cpd: 0
+		Palette2.label: per nA proton current
+		Palette2.max: 1000000.0
+		Palette2.min: 1.0
 		Usrbin: 1
 		Usrbin._visible: 1
 		Usrbin.alpha: 33
-		Usrbin.file: bnct_22.bnn
-		Usrbin.norm: 1000000000
+		Usrbin.file: bnct_21.bnn
+		Usrbin.norm: 6.24e9
+		Usrbin.palette: Palette2
 		Usrbin.prompt: 1
 	End
 End
@@ -583,17 +586,17 @@ Plot: Blue
 	Type: Geometry
 	basisu: 0 0 1
 	coord: Z-Y
-	extends: 57.870370400000006 21.733785940371085
+	extends: 48.22530866666668 23.358373521695263
 	grid: 0
 	group: Geometry
 	layer: Layer 02
-	origin: -0.0555556 -0.872976 -0.693165
+	origin: 0 -1.41935 4.29063
 End
 Plot: Green
 	Type: Geometry
 	basisu: 0.10374 0.711429 0.695059
 	basisv: 0.912678 -0.345832 0.217757
-	extends: 61.921809800000005 23.255343795649395
+	extends: 61.921809800000005 29.992400306760853
 	grid: 0
 	group: Geometry
 	layer: 3D
@@ -604,16 +607,16 @@ Plot: Red
 	basisu: 0 0 1
 	basisv: 1 0 0
 	coord: Z-X
-	extends: 49.5338914 18.602939380550225
+	extends: 28.665446412037035 13.88437364054266
 	grid: 0
 	group: Geometry
 	layer: Layer 01
-	origin: -1.14606 0 1.36603
+	origin: -0.768403 0 3.30892
 End
 Plot: Magenta
 	Type: Geometry
 	coord: X-Y
-	extends: 48.225308639999994 18.111488273627636
+	extends: 48.225308639999994 23.35837350877901
 	grid: 0
 	group: Geometry
 	layer: Layer 01
@@ -621,10 +624,13 @@ Plot: Magenta
 End
 Plot: in_vs_out
 	Type: USR-1D
-	file.0: bnct_34_tab.lis
-	file.1: bnct_43_tab.lis
-	file.2: bnct_42_tab.lis
-	file.3: bnct_51_tab.lis
+	det.1: 2
+	det.2: 36
+	det.3: 38
+	file.0: bnct_41_tab.lis
+	file.1: bnct_41_tab.lis
+	file.2: bnct_41_tab.lis
+	file.3: bnct_41_tab.lis
 	grid: 0
 	index: 5
 	lc.0: royalblue
@@ -639,6 +645,7 @@ Plot: in_vs_out
 	name.2: Out 1-way
 	name.3: Out 2-way
 	ndetectors: 4
+	norm.0: 6.24*1e9
 	open: 1
 	title: Fluence
 	titlesize: 20
@@ -646,8 +653,6 @@ Plot: in_vs_out
 	x.1: 2
 	xlabel: MeV
 	xlog: 1
-	xmax: 4
-	xmin: 1e-4
 	xnorm.0: 1/MeV
 	xnorm.1: 1/MeV
 	xnorm.2: 1/MeV
@@ -656,7 +661,6 @@ Plot: in_vs_out
 	xticssize: 10
 	y2log: 1
 	ylog: 1
-	ymin: 0.01
 	ysize: 14
 	yticssize: 14
 End
@@ -984,8 +988,6 @@ Plot: bnct_34_plot
 End
 Plot: bnct_35_plot
 	Type: USR-1D
-	block.0: 3
-	det.0: 1
 	file.0: bnct_35_tab.lis
 	grid: 0
 	lc.0: red
@@ -1259,7 +1261,6 @@ End
 Plot: bnct_22_plot
 	Type: USRBIN
 	cblog: 1
-	cbtics: 1
 	datafile: bnct_22.bnn
 	grid: 0
 	hist: 2D Projection
@@ -1276,9 +1277,7 @@ End
 Plot: bnct_22_plot_g
 	Type: USRBIN
 	cblog: 1
-	cbtics: 1
 	datafile: bnct_22.bnn
-	det: 2
 	grid: 0
 	hist: 2D Projection
 	index: 11
@@ -1286,7 +1285,6 @@ Plot: bnct_22_plot_g
 	max: 5.30083664E-02
 	min: 3.17868078E-04
 	open: 1
-	proj: X
 	title: Gammas
 	xlabel: x (cm)
 	ylabel: y (cm)
@@ -1294,7 +1292,6 @@ End
 Plot: bnct_22_plot_p
 	Type: USRBIN
 	cblog: 1
-	cbtics: 1
 	datafile: bnct_22.bnn
 	det: 3
 	grid: 0
@@ -1368,15 +1365,104 @@ Plot: lateralR
 	xlabel: Distance from beam line (R)
 	ylabel: Neutrons
 End
+Plot: bnct_21_plot
+	Type: USRBIN
+	cblog: 1
+	cbtics: 1
+	datafile: bnct_21.bnn
+	det: 3
+	grid: 0
+	hist: 2D Projection
+	open: 1
+	proj: X
+	title: USRBIN bnct 21
+End
+Plot: bnct_22_plot
+	Type: USRBIN
+	cblog: 1
+	cbtics: 1
+	datafile: bnct_22.bnn
+	grid: 0
+	hist: 2D Projection
+	open: 1
+	title: USRBIN bnct 22
+End
+Plot: bnct_23_plot
+	Type: USRBIN
+	cblog: 1
+	cbtics: 1
+	datafile: bnct_23.bnn
+	errors: 1
+	grid: 0
+	hist: 2D Projection
+	open: 1
+	proj: Y
+	title: USRBIN bnct 23
+End
+Plot: bnct_40_plot
+	Type: USR-1D
+	det.1: 2
+	file.0: bnct_40_tab.lis
+	file.1: bnct_40_tab.lis
+	grid: 0
+	lc.0: red
+	lc.1: plum
+	lw.0: 2
+	lw.1: 2
+	name.0: Detector 1
+	name.1: Detector 1
+	ndetectors: 2
+	open: 1
+	title: USR-1D bnct 40
+	x.0: 2
+	x.1: 2
+	xlog: 1
+	ylog: 1
+End
+Plot: bnct_41_plot
+	Type: USR-1D
+	block.0: 3
+	det.0: 3
+	file.0: bnct_41_tab.lis
+	grid: 0
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 41
+	x.0: 2
+	xlog: 1
+	ylog: 1
+End
+Plot: bnct_42_plot
+	Type: USR-1D
+	file.0: bnct_42_tab.lis
+	grid: 0
+	lc.0: red
+	lw.0: 2
+	name.0: Detector 1
+	ndetectors: 1
+	open: 1
+	title: USR-1D bnct 42
+	x.0: 2
+	xlog: 1
+	ylog: 1
+End
+Plot: bnct-1_21_plot
+	Type: USRBIN
+	cblog: 1
+	cbtics: 1
+	datafile: bnct-1_21.bnn
+	group: bnct-1
+	title: USRBIN bnct-1 21
+End
 Plot: bnct-1_22_plot
 	Type: USRBIN
 	cblog: 1
 	cbtics: 1
 	datafile: bnct-1_22.bnn
-	grid: 0
 	group: bnct-1
-	hist: 2D Projection
-	proj: X
 	title: USRBIN bnct-1 22
 End
 Plot: bnct-1_23_plot
@@ -1384,102 +1470,8 @@ Plot: bnct-1_23_plot
 	cblog: 1
 	cbtics: 1
 	datafile: bnct-1_23.bnn
-	grid: 0
 	group: bnct-1
-	hist: 2D Projection
 	title: USRBIN bnct-1 23
-End
-Plot: bnct-1_24_plot
-	Type: USRBIN
-	cblog: 1
-	cbtics: 1
-	datafile: bnct-1_24.bnn
-	grid: 0
-	group: bnct-1
-	hist: 2D Projection
-	proj: Y
-	title: USRBIN bnct-1 24
-End
-Plot: bnct-1_34_plot
-	Type: USR-1D
-	file.0: bnct-1_34_tab.lis
-	grid: 0
-	group: bnct-1
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-1 34
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-1_35_plot
-	Type: USR-1D
-	file.0: bnct-1_35_tab.lis
-	grid: 0
-	group: bnct-1
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-1 35
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-1_36_plot
-	Type: USR-1D
-	file.0: bnct-1_36_tab.lis
-	grid: 0
-	group: bnct-1
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-1 36
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-1_37_plot
-	Type: USR-1D
-	file.0: bnct-1_37_tab.lis
-	group: bnct-1
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-1 37
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-1_38_plot
-	Type: USR-1D
-	file.0: bnct-1_38_tab.lis
-	group: bnct-1
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-1 38
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-1_39_plot
-	Type: USR-1D
-	file.0: bnct-1_39_tab.lis
-	group: bnct-1
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-1 39
-	x.0: 2
-	xlog: 1
-	ylog: 1
 End
 Plot: bnct-1_40_plot
 	Type: USR-1D
@@ -1520,142 +1512,16 @@ Plot: bnct-1_42_plot
 	xlog: 1
 	ylog: 1
 End
-Plot: bnct-1_43_plot
-	Type: USR-1D
-	file.0: bnct-1_43_tab.lis
-	group: bnct-1
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-1 43
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-1_44_plot
-	Type: USR-1D
-	file.0: bnct-1_44_tab.lis
-	group: bnct-1
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-1 44
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-1_45_plot
-	Type: USR-1D
-	file.0: bnct-1_45_tab.lis
-	group: bnct-1
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-1 45
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-1_46_plot
-	Type: USR-1D
-	file.0: bnct-1_46_tab.lis
-	group: bnct-1
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-1 46
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-1_47_plot
-	Type: USR-1D
-	file.0: bnct-1_47_tab.lis
-	group: bnct-1
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-1 47
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-1_48_plot
-	Type: USR-1D
-	file.0: bnct-1_48_tab.lis
-	group: bnct-1
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-1 48
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-1_49_plot
-	Type: USR-1D
-	file.0: bnct-1_49_tab.lis
+Plot: bnct-2_21_plot
+	Type: USRBIN
+	cblog: 1
+	cbtics: 1
+	datafile: bnct-2_21.bnn
 	grid: 0
-	group: bnct-1
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-1 49
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-1_50_plot
-	Type: USR-1D
-	file.0: bnct-1_50_tab.lis
-	group: bnct-1
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-1 50
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-1_51_plot
-	Type: USR-1D
-	file.0: bnct-1_51_tab.lis
-	grid: 0
-	group: bnct-1
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-1 51
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-1_52_plot
-	Type: USR-1D
-	det.1: 2
-	file.0: bnct-1_52_tab.lis
-	file.1: bnct-1_52_tab.lis
-	grid: 0
-	group: bnct-1
-	lc.0: red
-	lc.1: plum
-	lw.0: 2
-	lw.1: 2
-	name.0: Detector 1
-	name.1: Detector 1
-	ndetectors: 2
-	title: USR-1D bnct-1 52
-	x.0: 2
-	x.1: 2
+	group: bnct-2
+	hist: 2D Projection
+	proj: X
+	title: USRBIN bnct-2 21
 End
 Plot: bnct-2_22_plot
 	Type: USRBIN
@@ -1665,8 +1531,6 @@ Plot: bnct-2_22_plot
 	grid: 0
 	group: bnct-2
 	hist: 2D Projection
-	index: 1
-	proj: X
 	title: USRBIN bnct-2 22
 End
 Plot: bnct-2_23_plot
@@ -1674,98 +1538,16 @@ Plot: bnct-2_23_plot
 	cblog: 1
 	cbtics: 1
 	datafile: bnct-2_23.bnn
+	grid: 0
 	group: bnct-2
+	hist: 2D Projection
+	proj: Y
 	title: USRBIN bnct-2 23
-End
-Plot: bnct-2_24_plot
-	Type: USRBIN
-	cblog: 1
-	cbtics: 1
-	datafile: bnct-2_24.bnn
-	group: bnct-2
-	title: USRBIN bnct-2 24
-End
-Plot: bnct-2_34_plot
-	Type: USR-1D
-	file.0: bnct-2_34_tab.lis
-	group: bnct-2
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-2 34
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-2_35_plot
-	Type: USR-1D
-	file.0: bnct-2_35_tab.lis
-	group: bnct-2
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-2 35
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-2_36_plot
-	Type: USR-1D
-	file.0: bnct-2_36_tab.lis
-	group: bnct-2
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-2 36
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-2_37_plot
-	Type: USR-1D
-	file.0: bnct-2_37_tab.lis
-	group: bnct-2
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-2 37
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-2_38_plot
-	Type: USR-1D
-	file.0: bnct-2_38_tab.lis
-	group: bnct-2
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-2 38
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-2_39_plot
-	Type: USR-1D
-	file.0: bnct-2_39_tab.lis
-	group: bnct-2
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-2 39
-	x.0: 2
-	xlog: 1
-	ylog: 1
 End
 Plot: bnct-2_40_plot
 	Type: USR-1D
 	file.0: bnct-2_40_tab.lis
+	grid: 0
 	group: bnct-2
 	lc.0: red
 	lw.0: 2
@@ -1773,12 +1555,11 @@ Plot: bnct-2_40_plot
 	ndetectors: 1
 	title: USR-1D bnct-2 40
 	x.0: 2
-	xlog: 1
-	ylog: 1
 End
 Plot: bnct-2_41_plot
 	Type: USR-1D
 	file.0: bnct-2_41_tab.lis
+	grid: 0
 	group: bnct-2
 	lc.0: red
 	lw.0: 2
@@ -1802,135 +1583,16 @@ Plot: bnct-2_42_plot
 	xlog: 1
 	ylog: 1
 End
-Plot: bnct-2_43_plot
-	Type: USR-1D
-	file.0: bnct-2_43_tab.lis
-	group: bnct-2
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-2 43
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-2_44_plot
-	Type: USR-1D
-	file.0: bnct-2_44_tab.lis
-	group: bnct-2
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-2 44
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-2_45_plot
-	Type: USR-1D
-	file.0: bnct-2_45_tab.lis
-	group: bnct-2
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-2 45
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-2_46_plot
-	Type: USR-1D
-	file.0: bnct-2_46_tab.lis
-	group: bnct-2
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-2 46
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-2_47_plot
-	Type: USR-1D
-	file.0: bnct-2_47_tab.lis
-	group: bnct-2
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-2 47
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-2_48_plot
-	Type: USR-1D
-	file.0: bnct-2_48_tab.lis
-	group: bnct-2
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-2 48
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-2_49_plot
-	Type: USR-1D
-	file.0: bnct-2_49_tab.lis
-	group: bnct-2
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-2 49
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-2_50_plot
-	Type: USR-1D
-	file.0: bnct-2_50_tab.lis
-	group: bnct-2
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-2 50
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-2_51_plot
-	Type: USR-1D
-	file.0: bnct-2_51_tab.lis
-	group: bnct-2
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-2 51
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-2_52_plot
-	Type: USR-1D
-	file.0: bnct-2_52_tab.lis
-	group: bnct-2
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-2 52
-	x.0: 2
-	xlog: 1
-	ylog: 1
+Plot: bnct-3_21_plot
+	Type: USRBIN
+	cblog: 1
+	cbtics: 1
+	datafile: bnct-3_21.bnn
+	grid: 0
+	group: bnct-3
+	hist: 2D Projection
+	proj: X
+	title: USRBIN bnct-3 21
 End
 Plot: bnct-3_22_plot
 	Type: USRBIN
@@ -1940,8 +1602,6 @@ Plot: bnct-3_22_plot
 	grid: 0
 	group: bnct-3
 	hist: 2D Projection
-	index: 2
-	proj: X
 	title: USRBIN bnct-3 22
 End
 Plot: bnct-3_23_plot
@@ -1949,98 +1609,16 @@ Plot: bnct-3_23_plot
 	cblog: 1
 	cbtics: 1
 	datafile: bnct-3_23.bnn
+	grid: 0
 	group: bnct-3
+	hist: 2D Projection
+	proj: Y
 	title: USRBIN bnct-3 23
-End
-Plot: bnct-3_24_plot
-	Type: USRBIN
-	cblog: 1
-	cbtics: 1
-	datafile: bnct-3_24.bnn
-	group: bnct-3
-	title: USRBIN bnct-3 24
-End
-Plot: bnct-3_34_plot
-	Type: USR-1D
-	file.0: bnct-3_34_tab.lis
-	group: bnct-3
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-3 34
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-3_35_plot
-	Type: USR-1D
-	file.0: bnct-3_35_tab.lis
-	group: bnct-3
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-3 35
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-3_36_plot
-	Type: USR-1D
-	file.0: bnct-3_36_tab.lis
-	group: bnct-3
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-3 36
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-3_37_plot
-	Type: USR-1D
-	file.0: bnct-3_37_tab.lis
-	group: bnct-3
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-3 37
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-3_38_plot
-	Type: USR-1D
-	file.0: bnct-3_38_tab.lis
-	group: bnct-3
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-3 38
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-3_39_plot
-	Type: USR-1D
-	file.0: bnct-3_39_tab.lis
-	group: bnct-3
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-3 39
-	x.0: 2
-	xlog: 1
-	ylog: 1
 End
 Plot: bnct-3_40_plot
 	Type: USR-1D
 	file.0: bnct-3_40_tab.lis
+	grid: 0
 	group: bnct-3
 	lc.0: red
 	lw.0: 2
@@ -2054,6 +1632,7 @@ End
 Plot: bnct-3_41_plot
 	Type: USR-1D
 	file.0: bnct-3_41_tab.lis
+	grid: 0
 	group: bnct-3
 	lc.0: red
 	lw.0: 2
@@ -2077,146 +1656,20 @@ Plot: bnct-3_42_plot
 	xlog: 1
 	ylog: 1
 End
-Plot: bnct-3_43_plot
-	Type: USR-1D
-	file.0: bnct-3_43_tab.lis
-	group: bnct-3
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-3 43
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-3_44_plot
-	Type: USR-1D
-	file.0: bnct-3_44_tab.lis
-	group: bnct-3
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-3 44
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-3_45_plot
-	Type: USR-1D
-	file.0: bnct-3_45_tab.lis
-	group: bnct-3
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-3 45
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-3_46_plot
-	Type: USR-1D
-	file.0: bnct-3_46_tab.lis
-	group: bnct-3
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-3 46
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-3_47_plot
-	Type: USR-1D
-	file.0: bnct-3_47_tab.lis
-	group: bnct-3
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-3 47
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-3_48_plot
-	Type: USR-1D
-	file.0: bnct-3_48_tab.lis
-	group: bnct-3
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-3 48
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-3_49_plot
-	Type: USR-1D
-	file.0: bnct-3_49_tab.lis
-	group: bnct-3
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-3 49
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-3_50_plot
-	Type: USR-1D
-	file.0: bnct-3_50_tab.lis
-	group: bnct-3
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-3 50
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-3_51_plot
-	Type: USR-1D
-	file.0: bnct-3_51_tab.lis
-	group: bnct-3
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-3 51
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-3_52_plot
-	Type: USR-1D
-	file.0: bnct-3_52_tab.lis
-	group: bnct-3
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-3 52
-	x.0: 2
-	xlog: 1
-	ylog: 1
+Plot: bnct-4_21_plot
+	Type: USRBIN
+	cblog: 1
+	cbtics: 1
+	datafile: bnct-4_21.bnn
+	group: bnct-4
+	title: USRBIN bnct-4 21
 End
 Plot: bnct-4_22_plot
 	Type: USRBIN
 	cblog: 1
 	cbtics: 1
 	datafile: bnct-4_22.bnn
-	grid: 0
 	group: bnct-4
-	hist: 2D Projection
-	index: 3
-	proj: X
 	title: USRBIN bnct-4 22
 End
 Plot: bnct-4_23_plot
@@ -2226,92 +1679,6 @@ Plot: bnct-4_23_plot
 	datafile: bnct-4_23.bnn
 	group: bnct-4
 	title: USRBIN bnct-4 23
-End
-Plot: bnct-4_24_plot
-	Type: USRBIN
-	cblog: 1
-	cbtics: 1
-	datafile: bnct-4_24.bnn
-	group: bnct-4
-	title: USRBIN bnct-4 24
-End
-Plot: bnct-4_34_plot
-	Type: USR-1D
-	file.0: bnct-4_34_tab.lis
-	group: bnct-4
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-4 34
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-4_35_plot
-	Type: USR-1D
-	file.0: bnct-4_35_tab.lis
-	group: bnct-4
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-4 35
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-4_36_plot
-	Type: USR-1D
-	file.0: bnct-4_36_tab.lis
-	group: bnct-4
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-4 36
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-4_37_plot
-	Type: USR-1D
-	file.0: bnct-4_37_tab.lis
-	group: bnct-4
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-4 37
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-4_38_plot
-	Type: USR-1D
-	file.0: bnct-4_38_tab.lis
-	group: bnct-4
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-4 38
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-4_39_plot
-	Type: USR-1D
-	file.0: bnct-4_39_tab.lis
-	group: bnct-4
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-4 39
-	x.0: 2
-	xlog: 1
-	ylog: 1
 End
 Plot: bnct-4_40_plot
 	Type: USR-1D
@@ -2352,146 +1719,20 @@ Plot: bnct-4_42_plot
 	xlog: 1
 	ylog: 1
 End
-Plot: bnct-4_43_plot
-	Type: USR-1D
-	file.0: bnct-4_43_tab.lis
-	group: bnct-4
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-4 43
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-4_44_plot
-	Type: USR-1D
-	file.0: bnct-4_44_tab.lis
-	group: bnct-4
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-4 44
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-4_45_plot
-	Type: USR-1D
-	file.0: bnct-4_45_tab.lis
-	group: bnct-4
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-4 45
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-4_46_plot
-	Type: USR-1D
-	file.0: bnct-4_46_tab.lis
-	group: bnct-4
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-4 46
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-4_47_plot
-	Type: USR-1D
-	file.0: bnct-4_47_tab.lis
-	group: bnct-4
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-4 47
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-4_48_plot
-	Type: USR-1D
-	file.0: bnct-4_48_tab.lis
-	group: bnct-4
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-4 48
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-4_49_plot
-	Type: USR-1D
-	file.0: bnct-4_49_tab.lis
-	group: bnct-4
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-4 49
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-4_50_plot
-	Type: USR-1D
-	file.0: bnct-4_50_tab.lis
-	group: bnct-4
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-4 50
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-4_51_plot
-	Type: USR-1D
-	file.0: bnct-4_51_tab.lis
-	group: bnct-4
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-4 51
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-4_52_plot
-	Type: USR-1D
-	file.0: bnct-4_52_tab.lis
-	group: bnct-4
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-4 52
-	x.0: 2
-	xlog: 1
-	ylog: 1
+Plot: bnct-5_21_plot
+	Type: USRBIN
+	cblog: 1
+	cbtics: 1
+	datafile: bnct-5_21.bnn
+	group: bnct-5
+	title: USRBIN bnct-5 21
 End
 Plot: bnct-5_22_plot
 	Type: USRBIN
 	cblog: 1
 	cbtics: 1
 	datafile: bnct-5_22.bnn
-	grid: 0
 	group: bnct-5
-	hist: 2D Projection
-	index: 4
-	proj: X
 	title: USRBIN bnct-5 22
 End
 Plot: bnct-5_23_plot
@@ -2501,115 +1742,6 @@ Plot: bnct-5_23_plot
 	datafile: bnct-5_23.bnn
 	group: bnct-5
 	title: USRBIN bnct-5 23
-End
-Plot: bnct-5_24_plot
-	Type: USRBIN
-	cblog: 1
-	cbtics: 1
-	datafile: bnct-5_24.bnn
-	grid: 0
-	group: bnct-5
-	hist: 2D Projection
-	proj: Y
-	title: USRBIN bnct-5 24
-End
-Plot: bnct-5_34_plot
-	Type: USR-1D
-	block.1: 1
-	block.2: 2
-	det.1: 1
-	det.2: 1
-	file.0: bnct-5_34_tab.lis
-	file.1: bnct-5_34_tab.lis
-	file.2: bnct-5_34_tab.lis
-	file.3: bnct-5_34_tab.lis
-	grid: 0
-	group: bnct-5
-	lc.0: red
-	lc.1: salmon
-	lc.2: turquoise
-	lc.3: light-gray
-	lw.0: 2
-	lw.1: 2
-	lw.2: 2
-	lw.3: 2
-	name.0: Detector 1
-	name.1: Detector 1
-	name.2: Detector 1
-	name.3: Detector 1
-	ndetectors: 4
-	title: USR-1D bnct-5 34
-	x.0: 2
-	x.1: 2
-	x.2: 2
-	x.3: 2
-	xlog: 1
-End
-Plot: bnct-5_35_plot
-	Type: USR-1D
-	file.0: bnct-5_35_tab.lis
-	group: bnct-5
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-5 35
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-5_36_plot
-	Type: USR-1D
-	file.0: bnct-5_36_tab.lis
-	group: bnct-5
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-5 36
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-5_37_plot
-	Type: USR-1D
-	file.0: bnct-5_37_tab.lis
-	group: bnct-5
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-5 37
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-5_38_plot
-	Type: USR-1D
-	file.0: bnct-5_38_tab.lis
-	group: bnct-5
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-5 38
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-5_39_plot
-	Type: USR-1D
-	file.0: bnct-5_39_tab.lis
-	grid: 0
-	group: bnct-5
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-5 39
-	x.0: 2
-	xlog: 1
-	ylog: 1
 End
 Plot: bnct-5_40_plot
 	Type: USR-1D
@@ -2627,7 +1759,6 @@ End
 Plot: bnct-5_41_plot
 	Type: USR-1D
 	file.0: bnct-5_41_tab.lis
-	grid: 0
 	group: bnct-5
 	lc.0: red
 	lw.0: 2
@@ -2651,146 +1782,22 @@ Plot: bnct-5_42_plot
 	xlog: 1
 	ylog: 1
 End
-Plot: bnct-5_43_plot
-	Type: USR-1D
-	file.0: bnct-5_43_tab.lis
-	group: bnct-5
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-5 43
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-5_44_plot
-	Type: USR-1D
-	file.0: bnct-5_44_tab.lis
-	group: bnct-5
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-5 44
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-5_45_plot
-	Type: USR-1D
-	file.0: bnct-5_45_tab.lis
-	group: bnct-5
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-5 45
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-5_46_plot
-	Type: USR-1D
-	file.0: bnct-5_46_tab.lis
-	group: bnct-5
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-5 46
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-5_47_plot
-	Type: USR-1D
-	file.0: bnct-5_47_tab.lis
-	group: bnct-5
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-5 47
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-5_48_plot
-	Type: USR-1D
-	file.0: bnct-5_48_tab.lis
-	group: bnct-5
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-5 48
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-5_49_plot
-	Type: USR-1D
-	file.0: bnct-5_49_tab.lis
-	group: bnct-5
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-5 49
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-5_50_plot
-	Type: USR-1D
-	file.0: bnct-5_50_tab.lis
-	group: bnct-5
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-5 50
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-5_51_plot
-	Type: USR-1D
-	file.0: bnct-5_51_tab.lis
-	group: bnct-5
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-5 51
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-5_52_plot
-	Type: USR-1D
-	file.0: bnct-5_52_tab.lis
-	group: bnct-5
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-5 52
-	x.0: 2
-	xlog: 1
-	ylog: 1
+Plot: bnct-6_21_plot
+	Type: USRBIN
+	cblog: 1
+	cbtics: 1
+	datafile: bnct-6_21.bnn
+	grid: 0
+	group: bnct-6
+	hist: 2D Projection
+	title: USRBIN bnct-6 21
 End
 Plot: bnct-6_22_plot
 	Type: USRBIN
 	cblog: 1
 	cbtics: 1
 	datafile: bnct-6_22.bnn
-	grid: 0
 	group: bnct-6
-	hist: 2D Projection
-	index: 5
-	proj: X
 	title: USRBIN bnct-6 22
 End
 Plot: bnct-6_23_plot
@@ -2800,92 +1807,6 @@ Plot: bnct-6_23_plot
 	datafile: bnct-6_23.bnn
 	group: bnct-6
 	title: USRBIN bnct-6 23
-End
-Plot: bnct-6_24_plot
-	Type: USRBIN
-	cblog: 1
-	cbtics: 1
-	datafile: bnct-6_24.bnn
-	group: bnct-6
-	title: USRBIN bnct-6 24
-End
-Plot: bnct-6_34_plot
-	Type: USR-1D
-	file.0: bnct-6_34_tab.lis
-	group: bnct-6
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-6 34
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-6_35_plot
-	Type: USR-1D
-	file.0: bnct-6_35_tab.lis
-	group: bnct-6
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-6 35
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-6_36_plot
-	Type: USR-1D
-	file.0: bnct-6_36_tab.lis
-	group: bnct-6
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-6 36
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-6_37_plot
-	Type: USR-1D
-	file.0: bnct-6_37_tab.lis
-	group: bnct-6
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-6 37
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-6_38_plot
-	Type: USR-1D
-	file.0: bnct-6_38_tab.lis
-	group: bnct-6
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-6 38
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-6_39_plot
-	Type: USR-1D
-	file.0: bnct-6_39_tab.lis
-	group: bnct-6
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-6 39
-	x.0: 2
-	xlog: 1
-	ylog: 1
 End
 Plot: bnct-6_40_plot
 	Type: USR-1D
@@ -2922,136 +1843,6 @@ Plot: bnct-6_42_plot
 	name.0: Detector 1
 	ndetectors: 1
 	title: USR-1D bnct-6 42
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-6_43_plot
-	Type: USR-1D
-	file.0: bnct-6_43_tab.lis
-	group: bnct-6
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-6 43
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-6_44_plot
-	Type: USR-1D
-	file.0: bnct-6_44_tab.lis
-	group: bnct-6
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-6 44
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-6_45_plot
-	Type: USR-1D
-	file.0: bnct-6_45_tab.lis
-	group: bnct-6
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-6 45
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-6_46_plot
-	Type: USR-1D
-	file.0: bnct-6_46_tab.lis
-	group: bnct-6
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-6 46
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-6_47_plot
-	Type: USR-1D
-	file.0: bnct-6_47_tab.lis
-	group: bnct-6
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-6 47
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-6_48_plot
-	Type: USR-1D
-	file.0: bnct-6_48_tab.lis
-	group: bnct-6
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-6 48
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-6_49_plot
-	Type: USR-1D
-	file.0: bnct-6_49_tab.lis
-	group: bnct-6
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-6 49
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-6_50_plot
-	Type: USR-1D
-	file.0: bnct-6_50_tab.lis
-	group: bnct-6
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-6 50
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-6_51_plot
-	Type: USR-1D
-	file.0: bnct-6_51_tab.lis
-	group: bnct-6
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-6 51
-	x.0: 2
-	xlog: 1
-	ylog: 1
-End
-Plot: bnct-6_52_plot
-	Type: USR-1D
-	file.0: bnct-6_52_tab.lis
-	group: bnct-6
-	lc.0: red
-	lw.0: 2
-	name.0: Detector 1
-	ndetectors: 1
-	title: USR-1D bnct-6 52
 	x.0: 2
 	xlog: 1
 	ylog: 1
