@@ -2,7 +2,7 @@
 Version: 300
 Mode: fluka
 Title: LiF neutron source
-md5: 950b10fa23384acc8f081de939a92640
+md5: ce9d63d253c5c84311c42db7a77a0600
 Input:
 RADDECAY , 2 1,, 333333303,, 1
 * Set the defaults for precision simulations
@@ -55,7 +55,22 @@ USRBDX I_n2 111 NEUTRON -52 LIF FLANGE,, 0.001 1E-13 100,,, 3
 USRBDX I_n1 101 NEUTRON -52 LIF FLANGE,, 0.001 1E-13 100,,, 3
 !SCORE , PROTON NEUTRON
 LOW-NEUT , 260 42 0.02 0,, 4
+#define LIB_BROND 0
+#define LIB_CENDL 0
+#define LIB_ENDF 1
+#define LIB_JENDL 0
+#ifdef LIB_BROND
+LOW-PWXS BROND-3.1
+#endif
+#ifdef LIB_CENDL
+LOW-PWXS CENDL-31
+#endif
+#ifdef LIB_ENDF
 LOW-PWXS ENDF-VIII0
+#endif
+#ifdef LIB_JENDL
+LOW-PWXS JENDL-4.0u
+#endif
 !BIASING PRINT 3 100000,, LIF FLANGE
 LAM-BIAS GDECAY 1 0.0001 LiF PROTON
 !BIASING PRINT 3 5 100000 MOD8
@@ -94,11 +109,11 @@ REGION FLANGE 5
 	+flange -mod
 REGION TUBE 5
 	+tube -tube1 -tubeHole
-	@select=1
 	alpha=50
 REGION TUBE1 5
 	+tube1 -mod -tubeHole
 	alpha=50
+	@select=1
 REGION TUBEHOLE 5
 	+tubeHole -flange -pipeOut
 	alpha=50
@@ -188,140 +203,140 @@ End
 Run: bnct_01
 	Rnd:      377747
 	Status:   3
-	StartRun: 1740743493.0992916
+	StartRun: 1740744400.7628071
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_02
 	Rnd:      377748
 	Status:   3
-	StartRun: 1740743493.1194215
+	StartRun: 1740744400.7832954
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_03
 	Rnd:      377749
 	Status:   3
-	StartRun: 1740743493.1433234
+	StartRun: 1740744400.80817
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_04
 	Rnd:      377750
 	Status:   3
-	StartRun: 1740743493.1716797
+	StartRun: 1740744400.8359473
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_05
 	Rnd:      377751
 	Status:   3
-	StartRun: 1740743493.2032175
+	StartRun: 1740744400.8662186
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_06
 	Rnd:      377752
 	Status:   3
-	StartRun: 1740743493.2280283
+	StartRun: 1740744400.89183
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_07
 	Rnd:      377753
 	Status:   3
-	StartRun: 1740743493.2547364
+	StartRun: 1740744400.9184015
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_08
 	Rnd:      377754
 	Status:   3
-	StartRun: 1740743493.2846465
+	StartRun: 1740744400.946573
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_09
 	Rnd:      377755
 	Status:   3
-	StartRun: 1740743493.322932
+	StartRun: 1740744400.9845197
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_10
 	Rnd:      377756
 	Status:   3
-	StartRun: 1740743493.3517802
+	StartRun: 1740744401.0259278
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_11
 	Rnd:      377757
 	Status:   3
-	StartRun: 1740743493.3930526
+	StartRun: 1740744401.0693493
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_12
 	Rnd:      377758
 	Status:   3
-	StartRun: 1740743493.4351273
+	StartRun: 1740744401.1126566
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_13
 	Rnd:      377759
 	Status:   3
-	StartRun: 1740743493.4776511
+	StartRun: 1740744401.1504774
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_14
 	Rnd:      377760
 	Status:   3
-	StartRun: 1740743493.518839
+	StartRun: 1740744401.1915824
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_15
 	Rnd:      377761
 	Status:   3
-	StartRun: 1740743493.552994
+	StartRun: 1740744401.2326274
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_16
 	Rnd:      377762
 	Status:   3
-	StartRun: 1740743493.5907698
+	StartRun: 1740744401.2730763
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_17
 	Rnd:      377763
 	Status:   3
-	StartRun: 1740743493.6286156
+	StartRun: 1740744401.3104892
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_18
 	Rnd:      377764
 	Status:   3
-	StartRun: 1740743493.6700163
+	StartRun: 1740744401.3442278
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_19
 	Rnd:      377765
 	Status:   3
-	StartRun: 1740743493.729025
+	StartRun: 1740744401.3874214
 	Parent:   <default>
 	open:     1
 End
 Run: bnct_20
 	Rnd:      377766
 	Status:   3
-	StartRun: 1740743493.7770276
+	StartRun: 1740744401.4342487
 	Parent:   <default>
 	open:     1
 End
@@ -568,6 +583,7 @@ Geometry: Geometry
 		Palette2._visible: 1
 		Usrbin: 1
 		Usrbin._visible: 1
+		Usrbin.alpha: 44
 		Usrbin.file: bnct_22.bnn
 		Usrbin.norm: 1000000000
 	End
@@ -585,7 +601,7 @@ Plot: Blue
 	grid: 0
 	group: Geometry
 	layer: Layer 02
-	origin: 0 0 12.5
+	origin: -0.0555556 -0.611086 -0.591319
 End
 Plot: Green
 	Type: Geometry
@@ -602,11 +618,11 @@ Plot: Red
 	basisu: 0 0 1
 	basisv: 1 0 0
 	coord: Z-X
-	extends: 41.278242815999704 15.66278508919963
+	extends: 49.533891379199645 18.795342107039552
 	grid: 0
 	group: Geometry
 	layer: Layer 01
-	origin: 0.935468 0 1.53431
+	origin: -0.174535 0 0.819214
 End
 Plot: Magenta
 	Type: Geometry
@@ -1242,15 +1258,18 @@ Plot: bnct_22_plot
 	cblog: 1
 	cbtics: 1
 	datafile: bnct_22.bnn
+	det: 3
 	grid: 0
 	hist: 2D Projection
-	index: 10
+	index: 11
 	int: 13.787600884646265
 	max: 5.30083664E-02
 	min: 3.17868078E-04
 	open: 1
 	proj: X
-	title: USRBIN bnct 22
+	title: Neutrons
+	xlabel: x (cm)
+	ylabel: y (cm)
 End
 Plot: bnct_22_plot_g
 	Type: USRBIN
