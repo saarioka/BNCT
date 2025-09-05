@@ -66,8 +66,9 @@ void RunAction::BeginOfRunAction(const G4Run* run)
   analysisManager->OpenFile(fileName);
 
   // Hists
-  analysisManager->CreateH1("E", "Incoming energy (keV)", 200, 0, 10000);
   analysisManager->CreateH1("Edep", "Deposited energy (keV)", 200, 0, 10000);
+  analysisManager->CreateH1("EProton", "Proton energy (keV)", 200, 0, 10000);
+  analysisManager->CreateH1("ENeutron", "Neutron energy (keV)", 200, 0, 10000);
   analysisManager->CreateH1("X", "X-coordinate (cm)", 100, -3, 3);
   analysisManager->CreateH1("Y", "Y-coordinate (cm)", 100, -3, 3);
   analysisManager->CreateH1("Z", "Z-coordinate (cm)", 100, -3, 3);
@@ -75,8 +76,9 @@ void RunAction::BeginOfRunAction(const G4Run* run)
   // Ntuples
   analysisManager->CreateNtuple("Kinematics", "Kinematics");
   analysisManager->CreateNtupleIColumn("Evt");
-  analysisManager->CreateNtupleDColumn("E");
   analysisManager->CreateNtupleDColumn("Edep");
+  analysisManager->CreateNtupleDColumn("EProton");
+  analysisManager->CreateNtupleDColumn("ENeutron");
   analysisManager->CreateNtupleDColumn("X");
   analysisManager->CreateNtupleDColumn("Y");
   analysisManager->CreateNtupleDColumn("Z");

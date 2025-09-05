@@ -35,10 +35,9 @@ void TargetHit::Draw()
 void TargetHit::Print()
 {
   G4cout
-     << "  trackID: " << fTrackID
-     << " particleName: " << fParticleName
      << " Edep: " << std::setw(7) << G4BestUnit(fEdep, "Energy")
-     << " E: " << std::setw(7) << G4BestUnit(fE, "Energy")
+     << " ProtonE: " << std::setw(7) << G4BestUnit(fProtonE, "Energy")
+     << " NeutronE: " << std::setw(7) << G4BestUnit(fNeutronE, "Energy")
      << " Position: " << std::setw(7) << G4BestUnit(fPos, "Length")
      << G4endl;
 }

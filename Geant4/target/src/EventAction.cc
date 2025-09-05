@@ -47,23 +47,25 @@ void EventAction::EndOfEventAction(const G4Event* event)
 
   for (G4int i=0; i<nHit; i++){
     auto hit = dynamic_cast<TargetHit*>(hc->GetHit(i));
-    G4String particleName = hit->GetParticleName();
-    G4double E = hit->GetE();
+    G4double protonE = hit->GetProtonE();
+    G4double neutronE = hit->GetNeutronE();
     G4double Edep = hit->GetEdep();
     G4ThreeVector pos = hit->GetPos();
 
-    analysisManager->FillH1(0, E / keV);
-    analysisManager->FillH1(1, Edep / keV);
-    analysisManager->FillH1(2, pos.x() / cm);
-    analysisManager->FillH1(3, pos.y() / cm);
-    analysisManager->FillH1(4, pos.z() / cm);
+    analysisManager->FillH1(0, Edep / keV);
+    analysisManager->FillH1(1, protonE / keV);
+    analysisManager->FillH1(2, neutronE / keV);
+    analysisManager->FillH1(3, pos.x() / cm);
+    analysisManager->FillH1(4, pos.y() / cm);
+    analysisManager->FillH1(5, pos.z() / cm);
 
     analysisManager->FillNtupleIColumn(0, eventID);
-    analysisManager->FillNtupleDColumn(1, E / keV);
-    analysisManager->FillNtupleDColumn(2, Edep / keV);
-    analysisManager->FillNtupleDColumn(3, pos.x() / cm);
-    analysisManager->FillNtupleDColumn(4, pos.y() / cm);
-    analysisManager->FillNtupleDColumn(5, pos.x() / cm);
+    analysisManager->FillNtupleDColumn(1, Edep / keV);
+    analysisManager->FillNtupleDColumn(2, protonE / keV);
+    analysisManager->FillNtupleDColumn(3, neutronE / keV);
+    analysisManager->FillNtupleDColumn(4, pos.x() / cm);
+    analysisManager->FillNtupleDColumn(5, pos.y() / cm);
+    analysisManager->FillNtupleDColumn(6, pos.z() / cm);
     analysisManager->AddNtupleRow();
   }
 }

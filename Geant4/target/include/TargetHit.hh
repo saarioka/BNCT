@@ -34,24 +34,21 @@ class TargetHit : public G4VHit {
     void Print() override;
 
     // Set methods
-    void SetParticleName(G4String name) { fParticleName = name; };
-    void SetTrackID(G4int track) { fTrackID = track; };
     void SetEdep(G4double de) { fEdep = de; };
-    void SetE(G4double e) { fE = e; };
+    void SetProtonE(G4double e) { fProtonE = e; };
+    void SetNeutronE(G4double e) { fNeutronE = e; };
     void SetPos(G4ThreeVector xyz) { fPos = xyz; };
 
     // Get methods
-    G4String GetParticleName() const { return fParticleName; };
-    G4int GetTrackID() const { return fTrackID; };
     G4double GetEdep() const { return fEdep; };
-    G4double GetE() const { return fE; };
+    G4double GetProtonE() const { return fProtonE; };
+    G4double GetNeutronE() const { return fNeutronE; };
     G4ThreeVector GetPos() const { return fPos; };
 
   private:
-    G4String fParticleName = "";
-    G4int fTrackID = -1;
     G4double fEdep = 0.;
-    G4double fE = 0.;
+    G4double fProtonE = 0.;
+    G4double fNeutronE = 0.;
     G4ThreeVector fPos;
 };
 

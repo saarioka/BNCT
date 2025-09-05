@@ -6,6 +6,8 @@
 #include "G4SDManager.hh"
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Proton.hh"
+#include "G4Neutron.hh"
 
 namespace B2
 {
@@ -30,30 +32,26 @@ void TargetSD::Initialize(G4HCofThisEvent* hce)
 
 G4bool TargetSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
-  auto particleType = aStep->GetTrack()->GetParticleDefinition()->GetParticleName();
-  //G4cout << "Particle type: " << particleType << G4endl;
-  //if (particleType != "neutron") return false;
-
-  G4ThreeVector parentPos = aStep->GetPreStepPoint()->GetTouchableHandle()->GetTranslation();
-  //4cout << "Parent pos: " << parentPos/cm << " cm" << G4endl;
+  auto track = aStep->GetTrack();
+  if (!(track->GetDefinition() == G4Neutron::Definition())) { 
+    return false;
+  }
+  //G4cout << "Got a neutron!" << G4endl; 
 
   G4double edep = aStep->GetTotalEnergyDeposit();
-  G4double e = aStep->GetPreStepPoint()->GetKineticEnergy();
-  //if (edep==0.) return false;
-  //G4cout << "Edep: " << edep/keV << " keV" << G4endl;
+  G4double protonE = aStep->GetPreStepPoint()->GetKineticEnergy();
+  G4double neutronE = aStep->GetPostStepPoint()->GetKineticEnergy();
 
   auto newHit = new TargetHit();
 
-  newHit->SetParticleName(particleType);
-  newHit->SetTrackID(aStep->GetTrack()->GetTrackID());
   newHit->SetEdep(edep);
-  newHit->SetE(e);
-  //newHit->SetPos(parentPos - aStep->GetPostStepPoint()->GetPosition());
+  newHit->SetProtonE(protonE);
+  newHit->SetNeutronE(neutronE);
   newHit->SetPos(aStep->GetPostStepPoint()->GetPosition());
 
-  fHitsCollection->insert( newHit );
-
   //newHit->Print();
+
+  fHitsCollection->insert( newHit );
 
   return true;
 }
