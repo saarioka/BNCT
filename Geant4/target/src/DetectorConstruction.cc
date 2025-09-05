@@ -110,7 +110,7 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
 
     G4cout << "Computed tolerance = " << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance() / mm << " mm" << G4endl;
 
-    auto worldS = new G4Box("world", 60 * cm, 60 * cm, 130 * cm); // its size
+    auto worldS = new G4Box("world", targetRadius + 1 * mm, targetRadius + 1 * mm, 3.2 * mm); // its size
     auto worldLV = new G4LogicalVolume(worldS,                    // its solid
                                        fWorldMaterial,                  // its material
                                        "World");                  // its name
@@ -146,7 +146,7 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
     fLogicTarget->SetVisAttributes(targetVisAtt);
 
     // User Limits
-    G4double maxStep = 0.1*cm;
+    G4double maxStep = 0.1*mm;
     fStepLimit = new G4UserLimits(maxStep);
 
     // Set additional contraints on the track, with G4UserSpecialCuts

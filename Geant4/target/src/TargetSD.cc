@@ -30,28 +30,46 @@ void TargetSD::Initialize(G4HCofThisEvent* hce)
   hce->AddHitsCollection( hcID, fHitsCollection );
 }
 
-G4bool TargetSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
+G4bool TargetSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 {
-  auto track = aStep->GetTrack();
-  if (!(track->GetDefinition() == G4Neutron::Definition())) { 
+  auto track = step->GetTrack();
+
+  G4double cutoffEnergy = 1800 * keV;
+  G4ParticleDefinition* particleType = track->GetDefinition();
+
+  if (track->GetKineticEnergy() < cutoffEnergy && particleType == G4Proton::Definition()) {
+    // Too low energy proton, cannot produce neutrons anymore in LiF -> kill
+    //G4cout << "Killing proton with E = " << track->GetKineticEnergy()/keV << " keV" << G4endl;
+    track->SetTrackStatus(fStopAndKill);
     return false;
   }
-  //G4cout << "Got a neutron!" << G4endl; 
 
-  G4double edep = aStep->GetTotalEnergyDeposit();
-  G4double protonE = aStep->GetPreStepPoint()->GetKineticEnergy();
-  G4double neutronE = aStep->GetPostStepPoint()->GetKineticEnergy();
+  // neutron created in proton inelastic process
+  if (particleType == G4Neutron::Definition() && track->GetCreatorProcess()->GetProcessName() == "protonInelastic") {
+    //G4cout << "Got a neutron!" << G4endl; 
+    G4double edep = step->GetTotalEnergyDeposit();
+    G4double protonE = step->GetPreStepPoint()->GetKineticEnergy();
+    G4double neutronE = step->GetPostStepPoint()->GetKineticEnergy();
 
-  auto newHit = new TargetHit();
+    //G4cout << track->GetCreatorProcess()->GetProcessName() << " " 
+    //       << step->GetPreStepPoint()->GetKineticEnergy()/keV << " keV -> "
+    //       << step->GetPostStepPoint()->GetKineticEnergy()/keV << " keV" << G4endl;
 
-  newHit->SetEdep(edep);
-  newHit->SetProtonE(protonE);
-  newHit->SetNeutronE(neutronE);
-  newHit->SetPos(aStep->GetPostStepPoint()->GetPosition());
+    auto newHit = new TargetHit();
 
-  //newHit->Print();
+    newHit->SetEdep(edep);
+    newHit->SetProtonE(protonE);
+    newHit->SetNeutronE(neutronE);
+    newHit->SetPos(step->GetPreStepPoint()->GetPosition());
+    newHit->SetMom(step->GetPreStepPoint()->GetMomentum());
 
-  fHitsCollection->insert( newHit );
+    //newHit->Print();
+
+    fHitsCollection->insert( newHit );
+
+    //G4cout << step->GetPreStepPoint()->GetKineticEnergy()/keV << " keV neutron" << G4endl;
+    track->SetTrackStatus(fStopAndKill);
+  }
 
   return true;
 }

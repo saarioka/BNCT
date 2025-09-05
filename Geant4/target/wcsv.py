@@ -1,3 +1,4 @@
+from io import StringIO
 import pandas as pd
 
 def read_wcsv(filename: str) -> pd.DataFrame:
@@ -36,7 +37,7 @@ def read_wcsv(filename: str) -> pd.DataFrame:
 
     # Read into DataFrame
     df = pd.read_csv(
-        pd.compat.StringIO(data_str),
+        StringIO(data_str),
         sep=separator,
         names=columns,
         engine="python"
