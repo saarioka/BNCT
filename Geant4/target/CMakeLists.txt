@@ -45,11 +45,7 @@ set(EXAMPLEB2B_SCRIPTS
   gui.mac
   init_vis.mac
   run.mac
-  run_scorer.mac
-  neutrons.mac
   vis.mac
-  test_neutron.mac
-  run.sh
   )
 
 foreach(_script ${EXAMPLEB2B_SCRIPTS})

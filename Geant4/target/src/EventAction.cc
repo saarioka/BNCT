@@ -25,15 +25,6 @@ void EventAction::EndOfEventAction(const G4Event* event)
 
   // periodic printing
   G4int eventID = event->GetEventID();
-  if ( eventID % 10000000 == 0) {
-    G4cout << ">>> Event: " << eventID  << G4endl;
-    if ( trajectoryContainer ) {
-      G4cout << "    " << n_trajectories
-             << " trajectories stored in this event." << G4endl;
-    }
-    G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(0);
-    G4cout << "    " << hc->GetSize() << " hits stored in this event" << G4endl;
-  }
 
   G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(0);
   G4int nHit = hc->GetSize();
@@ -47,22 +38,15 @@ void EventAction::EndOfEventAction(const G4Event* event)
 
   for (G4int i=0; i<nHit; i++){
     auto hit = dynamic_cast<TargetHit*>(hc->GetHit(i));
-    G4double protonE = hit->GetProtonE();
+    //G4double protonE = hit->GetProtonE();
     G4double neutronE = hit->GetNeutronE();
     G4double Edep = hit->GetEdep();
     G4ThreeVector pos = hit->GetPos();
     G4ThreeVector mom = hit->GetMom();
 
-    //analysisManager->FillH1(0, Edep / keV);
-    //analysisManager->FillH1(1, protonE / keV);
-    //analysisManager->FillH1(2, neutronE / keV);
-    //analysisManager->FillH1(3, pos.x() / cm);
-    //analysisManager->FillH1(4, pos.y() / cm);
-    //analysisManager->FillH1(5, pos.z() / cm);
-
     analysisManager->FillNtupleIColumn(0, eventID);
     analysisManager->FillNtupleDColumn(1, Edep / keV);
-    analysisManager->FillNtupleDColumn(2, protonE / keV);
+    //analysisManager->FillNtupleDColumn(2, protonE / keV);
     analysisManager->FillNtupleDColumn(3, neutronE / keV);
     analysisManager->FillNtupleDColumn(4, pos.x() / cm);
     analysisManager->FillNtupleDColumn(5, pos.y() / cm);

@@ -25,7 +25,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   fParticleGun->SetParticleDefinition(particleDefinition);
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
-  fParticleGun->SetParticleEnergy(2.297 * MeV);
+  fParticleGun->SetParticleEnergy(2.31 * MeV);
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()

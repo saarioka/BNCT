@@ -48,8 +48,8 @@ G4bool TargetSD::ProcessHits(G4Step* step, G4TouchableHistory*)
   if (particleType == G4Neutron::Definition() && track->GetCreatorProcess()->GetProcessName() == "protonInelastic") {
     //G4cout << "Got a neutron!" << G4endl; 
     G4double edep = step->GetTotalEnergyDeposit();
-    G4double protonE = step->GetPreStepPoint()->GetKineticEnergy();
-    G4double neutronE = step->GetPostStepPoint()->GetKineticEnergy();
+    G4double neutronE = step->GetPreStepPoint()->GetKineticEnergy();
+    //G4double neutronE = step->GetPostStepPoint()->GetKineticEnergy();
 
     //G4cout << track->GetCreatorProcess()->GetProcessName() << " " 
     //       << step->GetPreStepPoint()->GetKineticEnergy()/keV << " keV -> "
@@ -58,7 +58,7 @@ G4bool TargetSD::ProcessHits(G4Step* step, G4TouchableHistory*)
     auto newHit = new TargetHit();
 
     newHit->SetEdep(edep);
-    newHit->SetProtonE(protonE);
+    //newHit->SetProtonE(protonE);
     newHit->SetNeutronE(neutronE);
     newHit->SetPos(step->GetPreStepPoint()->GetPosition());
     newHit->SetMom(step->GetPreStepPoint()->GetMomentum());

@@ -3,7 +3,14 @@
 
 /run/verbose 0
 /event/verbose 0
-/hits/verbose 1
+/hits/verbose 0
 /tracking/verbose 0
 
-/run/beamOn 10000000
+/gun/energy 1960 keV
+/run/beamOn 2000000000
+
+/gun/energy 2040 keV
+/run/beamOn 2000000000
+
+/gun/energy 2310 keV
+/run/beamOn 2000000000
