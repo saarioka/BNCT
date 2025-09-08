@@ -10,7 +10,7 @@
 
 namespace B2 {
 
-/// Tracker hit class
+/// Target hit class
 ///
 /// It defines data members to store the trackID, energy deposit,
 /// and position of charged particles in a selected volume:

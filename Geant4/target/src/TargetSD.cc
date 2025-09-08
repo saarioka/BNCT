@@ -34,6 +34,12 @@ G4bool TargetSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 {
   auto track = step->GetTrack();
 
+  G4cout << "TargetSD::ProcessHits: Particle " << track->GetDefinition()->GetParticleName()
+         << " E = " << track->GetKineticEnergy()/keV << " keV"
+         << G4endl;
+  
+  return true;
+
   G4double cutoffEnergy = 1800 * keV;
   G4ParticleDefinition* particleType = track->GetDefinition();
 

@@ -149,13 +149,6 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
     G4double maxStep = 0.1*mm;
     fStepLimit = new G4UserLimits(maxStep);
 
-    // Set additional contraints on the track, with G4UserSpecialCuts
-    // G4double maxLength = 2*trackerLength, maxTime = 0.1*ns, minEkin = 10*MeV;
-    // trackerLV->SetUserLimits(new G4UserLimits(maxStep,
-    //                                           maxLength,
-    //                                           maxTime,
-    //                                           minEkin));
-
     return worldPV;
 }
 

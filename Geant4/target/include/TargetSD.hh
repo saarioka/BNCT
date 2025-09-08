@@ -42,7 +42,7 @@ class G4HCofThisEvent;
 namespace B2
 {
 
-/// Tracker sensitive detector class
+/// Target sensitive detector class
 ///
 /// The hits are accounted in hits in ProcessHits() function which is called
 /// by Geant4 kernel at each step. A hit is created with each step with non zero

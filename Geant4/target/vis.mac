@@ -85,8 +85,10 @@
 /vis/modeling/trajectories/select drawByParticleID-0
 
 /vis/geometry/set/visibility World 0 false
-/vis/geometry/set/visibility Tracker 0 false
 
 /vis/viewer/set/background 0.8 0.7 0.6
 /vis/viewer/set/style s
 /vis/viewer/set/hiddenEdge 1
+
+/BNCT/selectGunAction 1
+/BNCT/selectInputFolder ../run1_1B_2310kev/Run0
