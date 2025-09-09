@@ -1,13 +1,14 @@
 from io import StringIO
 import pandas as pd
 
-def read_wcsv(filename: str) -> pd.DataFrame:
+def read_wcsv(filename: str, header:bool=False) -> pd.DataFrame:
     """
     Parse custom wcsv::ntuple format into a pandas DataFrame.
     file_content: str (whole file as string)
     """
     with open(filename, 'r') as file:
         file_content = file.read()
+
     
     lines = file_content.strip().splitlines()
 
@@ -42,4 +43,10 @@ def read_wcsv(filename: str) -> pd.DataFrame:
         names=columns,
         engine="python"
     )
+
+    if header:
+        # extract header lines and return them as well
+        header_lines = "\n".join([line for line in lines if line.startswith("#")])
+        return df, header_lines
+
     return df

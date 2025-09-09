@@ -40,7 +40,6 @@ void RunAction::BeginOfRunAction(const G4Run* run)
   analysisManager->CreateNtuple("Kinematics", "Kinematics");
   analysisManager->CreateNtupleIColumn("Evt");
   analysisManager->CreateNtupleDColumn("Edep");
-  analysisManager->CreateNtupleDColumn("EProton");
   analysisManager->CreateNtupleDColumn("ENeutron");
   analysisManager->CreateNtupleDColumn("X");
   analysisManager->CreateNtupleDColumn("Y");

@@ -18,9 +18,9 @@ PrimaryGeneratorAction0::PrimaryGeneratorAction0(G4ParticleGun* gun) : fParticle
 
 void PrimaryGeneratorAction0::GeneratePrimaries(G4Event* anEvent)
 {
-  G4cout << "Generating primary protons with energy "
-         << fParticleGun->GetParticleEnergy()/keV << " keV"
-         << G4endl;
+  //G4cout << "Generating primary protons with energy "
+  //       << fParticleGun->GetParticleEnergy()/keV << " keV"
+  //       << G4endl;
 
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }

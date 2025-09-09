@@ -89,6 +89,3 @@
 /vis/viewer/set/background 0.8 0.7 0.6
 /vis/viewer/set/style s
 /vis/viewer/set/hiddenEdge 1
-
-/BNCT/selectGunAction 1
-/BNCT/selectInputFolder ../run1_1B_2310kev/Run0

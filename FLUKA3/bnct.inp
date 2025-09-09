@@ -1,7 +1,6 @@
-RADDECAY           2         1           333333303                   1
 * Set the defaults for precision simulations
 DEFAULTS                                                              PRECISIO
-!#define ENERGY -0.0006
+#define ENERGY -0.0025
 * Define the beam characteristics
 *BEAM         $ENERGY         0   -3000.0      -1.0      -1.0       1.0NEUTRON
 * Define the beam characteristics
@@ -9,229 +8,196 @@ DEFAULTS                                                              PRECISIO
 *BEAM        -0.00035             13140.0       2.0         0      -1.0NEUTRON
 *Neutron beam
 *BEAM         -0.0005         0   13140.0       2.0         0      -1.0NEUTRON
-BEAMPOS            0         0      -0.1         0         0
+*BEAMPOS            0         0      -0.1         0         0
+*Neutron beam for debug
+*BEAM          -1E-06         0         0      -1.0      -1.0       1.0NEUTRON
+*BEAMPOS            0         0        33         0         0
 *Proton beam
-BEAM         -0.0025         0         0      -1.0      -1.0       1.0PROTON
+BEAM         $ENERGY         0         0      -1.0      -1.0       1.0PROTON
 BEAMPOS            0         0      -0.9         0         0
-*PHYSICS            1                                                  COALESCE
-PHYSICS            3                                                  EVAPORAT
-*EMF
-USRBIN            10   NEUTRON       -22        10        10        10Ndepth
-USRBIN           -10       -10         0         1       100       100 &
-USRBIN            10   NEUTRON       -23        10        10        10Nwidth
-USRBIN           -10       -10         0      1000      1000         1 &
-USRBIN            11   NEUTRON       -24        10                  10NRZ
-USRBIN                                 0      1000         1      1000 &
-*USRBIN            11  NIEL-DEP       -25         5         0       0.3NielDep
-*USRBIN             0         0         0      1000      1000      1000 &
-*USRBIN            10   NEUTRON       -26        50        50      20.3ScorerNH
-*USRBIN             0         0      20.2       100       100         1 &
-*USRBIN            11   NEUTRON       -27        50                20.3ScorerNH2
-*USRBIN             0                19.3        50        50         1 &
-USRBDX            98   NEUTRON       -34       AIR      MOD1          I1_1
-USRBDX        0.0007     1E-13       500                             3 &
-USRBDX            98   NEUTRON       -35      MOD1      MOD2          I1_2
-USRBDX        0.0007     1E-13       500                             3 &
-USRBDX            98   NEUTRON       -36      MOD2      MOD3          I1_3
-USRBDX        0.0007     1E-13       500                             3 &
-USRBDX            98   NEUTRON       -37      MOD3      MOD4          I1_4
-USRBDX        0.0007     1E-13       500                             3 &
-USRBDX            98   NEUTRON       -38      MOD4      MOD5          I1_5
-USRBDX        0.0007     1E-13       500                             3 &
-USRBDX            98   NEUTRON       -39      MOD5      MOD6          I1_6
-USRBDX        0.0007     1E-13       500                             3 &
-USRBDX            98   NEUTRON       -40      MOD6      MOD7          I1_7
-USRBDX        0.0007     1E-13       500                             3 &
-USRBDX            98   NEUTRON       -41      MOD7      MOD8          I1_8
-USRBDX        0.0007     1E-13       500                             3 &
-USRBDX            98   NEUTRON       -42      MOD8       AIR          I1_9
-USRBDX        0.0007     1E-13       500                             3 &
-USRBDX           108   NEUTRON       -43       AIR      MOD1          I2_1
-USRBDX        0.0007     1E-13       500                             3 &
-USRBDX           108   NEUTRON       -44      MOD1      MOD2          I2_2
-USRBDX        0.0007     1E-13       500                             3 &
-USRBDX           108   NEUTRON       -45      MOD2      MOD3          I2_3
-USRBDX        0.0007     1E-13       500                             3 &
-USRBDX           108   NEUTRON       -46      MOD3      MOD4          I2_4
-USRBDX        0.0007     1E-13       500                             3 &
-USRBDX           108   NEUTRON       -47      MOD4      MOD5          I2_5
-USRBDX        0.0007     1E-13       500                             3 &
-USRBDX           108   NEUTRON       -48      MOD5      MOD6          I2_6
-USRBDX        0.0007     1E-13       500                             3 &
-USRBDX           108   NEUTRON       -49      MOD6      MOD7          I2_7
-USRBDX        0.0007     1E-13       500                             3 &
-USRBDX           108   NEUTRON       -50      MOD7      MOD8          I2_8
-USRBDX        0.0007     1E-13       500                             3 &
-USRBDX           108   NEUTRON       -51      MOD8       AIR          I2_9
-USRBDX        0.0007     1E-13       500                             3 &
-USRBDX           111   NEUTRON       -52       LIF    FLANGE          I_n2
-USRBDX         0.001     1E-13       100                             3 &
-USRBDX           101   NEUTRON       -52       LIF    FLANGE          I_n1
-USRBDX         0.001     1E-13       100                             3 &
-SCORE         PROTON   NEUTRON
-*USRTRACK               NEUTRON       -41    DET_AM   78.5398       100flnvlm
-*USRTRACK                 0.001                                         &
-*IONTRANS          -2
-*IRRPROFI        3600   3.1E+12
-LOW-NEUT         260        42      0.02         0                   4
 LOW-PWXS                                                              ENDF-VIII0
-*PHYSICS            3                                 NEUTRON      1000DECAYS
-*PHYSICS            1                                                  PEATHRES
-*PHYSICS            4                                                  EM-DISSO
-*PHYSICS                                                               DPMTHRES
-*EVENTYPE                               1                              DPMJET
-*EVENTYPE                               2                              DPMJET
-*PART-THR      -1E-14             NEUTRON
-*LOW-DOWN
+LAM-BIAS                0.0001       LiF    PROTON                    GDECAY
+LAM-BIAS                0.0001     BORON   NEUTRON                    INEALL
+PHYSICS            1                                                  COALESCE
+PHYSICS            3                                                  EVAPORAT
+USRBIN            10   NEUTRON       -21        20        20        35neutrons
+USRBIN           -20       -20       -25       100       100       100 &
+USRBIN            10    PHOTON       -21        20        20        35photons
+USRBIN           -20       -20       -25       100       100       100 &
+USRBIN            10    PROTON       -21        20        20        35protons
+USRBIN           -20       -20       -25       100       100       100 &
+USRBIN            11   NEUTRON       -23        20                  35n_RZ
+USRBIN                               -30       500         1       500 &
+USRBIN            11    PHOTON       -23        20                  35g_RZ
+USRBIN                               -30       500         1       500 &
+USRBDX           101   NEUTRON       -40       LIF    FLANGE          n1way
+USRBDX         0.001     1E-13       100                            10 &
+USRBDX           111   NEUTRON       -40       LIF    FLANGE          n2way
+USRBDX         0.001     1E-13       100                            10 &
+USRBDX           101   NEUTRON       -40     MOD33       AIR          n1wayOut
+USRBDX         0.001     1E-13       100                            10 &
+USRBDX           111   NEUTRON       -40     MOD33       AIR          n2wayOut
+USRBDX         0.001     1E-13       100                            10 &
+USRBDX            99   NEUTRON       -41       LIF    FLANGE          toflan1
+USRBDX         0.001     1E-13       500                            10 &
+USRBDX           109   NEUTRON       -41       LIF    FLANGE          toflan2
+USRBDX         0.001     1E-13       500                            10 &
+USRBDX            99   NEUTRON       -41    FLANGE      MOD2          0cm
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX           109   NEUTRON       -41    FLANGE      MOD2          0cm
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX            99   NEUTRON       -41      MOD4      MOD5          4cm
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX           109   NEUTRON       -41      MOD4      MOD5          4cm
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX            99   NEUTRON       -41      MOD8      MOD9          8cm
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX           109   NEUTRON       -41      MOD8      MOD9          8cm
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX            99   NEUTRON       -41     MOD12     MOD13          12cm
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX           109   NEUTRON       -41     MOD12     MOD13          12cm
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX            99   NEUTRON       -41     MOD16     MOD17          16cm
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX           109   NEUTRON       -41     MOD16     MOD17          16cm
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX            99   NEUTRON       -41     MOD20     MOD21          20cm
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX           109   NEUTRON       -41     MOD20     MOD21          20cm
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX            99   NEUTRON       -41     MOD24     MOD25          24cm
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX           109   NEUTRON       -41     MOD24     MOD25          24cm
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX            99   NEUTRON       -41     MOD28     MOD29          28cm
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX           109   NEUTRON       -41     MOD28     MOD29          28cm
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX            99   NEUTRON       -41     MOD32     MOD33          32cm
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX           109   NEUTRON       -41     MOD32     MOD33          32cm
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX            99   NEUTRON       -41     MOD33       AIR          toair_1
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX           109   NEUTRON       -41     MOD33       AIR          toair_2
+USRBDX        0.0025     1E-13       500                             1 &
+USRBDX            99   NEUTRON       -42      TUBE       AIR          tube1
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX           109   NEUTRON       -42      TUBE       AIR          tube2
+USRBDX         0.001     1E-13       500                             1 &
+USRBDX           101    PHOTON       -43     BORON   PHANTOM          pg1lin
+USRBDX        0.0025      1E-6       500                             1 &
+USRBDX           111    PHOTON       -43     BORON   PHANTOM          pg2lin
+USRBDX        0.0025      1E-6       500                             1 &
+USRBDX           101    PHOTON       -44       AIR   LINECAM          detg1lin
+USRBDX        0.0025      1E-6       500                             1 &
+USRBDX           111    PHOTON       -44       AIR   LINECAM          detg2lin
+USRBDX        0.0025      1E-6       500                             1 &
 GEOBEGIN                                                              COMBNAME
     0    0          
 SPH blkbody    0.0 0.0 0.0 100000.0
 SPH air        0.0 0.0 0.0 10000.0
 RCC pipeIn     0 0 -30 0 0 30.1 3.5
 RCC pipeOut    0 0 -30 0 0 30.1 4
-#if 0
-XYP LiFStart   -0.3
-#endif
-#if 0
-XYP LiFEnd     0
-#endif
-#if 0
-XYP DumpEnd    0.25
-#endif
 RCC lif        0 0 -0.9 0 0 1 1.9
-RCC flange     0 0 -0.5 0 0 1.0 5
-RPP tube       -15.0 15.0 -15.0 15.0 -16 32.0
-RPP tube1      -10.0 10.0 -10.0 10.0 -15 32.0
-RPP tubeHole   -5.0 5.0 -5.0 5.0 -16 0
-#if 0
-RPP ref1       -5 5 -5 5 -25 0
-#endif
-#if 0
-RPP ref2       -5 5 -5 5 -20 -5
-#endif
-#if 0
-RPP czt        -1 1 48 50 48 50
-#endif
-XYP modEnd1    4
-XYP modEnd2    8
-XYP modEnd3    12
-XYP modEnd4    16
-XYP modEnd5    20
-XYP modEnd6    24
-XYP modEnd7    28
+RCC flange     0 0 -0.5 0 0 1.0 4
+RPP tube       -15.0 15.0 -15.0 15.0 -20 0
+RPP tube1      -10.0 10.0 -10.0 10.0 0 32.0
+RPP tubeHole   -9.0 9.0 -9.0 9.0 -16 0
+RPP tubeHol1   -9.0 9.0 -9.0 9.0 -20 -15
+RPP phantom    -3 3 -3 3 35 41
+RPP boron      -1 1 -1 1 37 39
+RPP linecam    -10 10 9.9 10.1 37.8 38
+XYP modp2      1
+XYP modp3      2
+XYP modp4      3
+XYP modp5      4
+XYP modp6      5
+XYP modp7      6
+XYP modp8      7
+XYP modp9      8
+XYP modp10     9
+XYP modp11     10
+XYP modp12     11
+XYP modp13     12
+XYP modp14     13
+XYP modp15     14
+XYP modp16     15
+XYP modp17     16
+XYP modp18     17
+XYP modp19     18
+XYP modp20     19
+XYP modp21     20
+XYP modp22     21
+XYP modp23     22
+XYP modp24     23
+XYP modp25     24
+XYP modp26     25
+XYP modp27     26
+XYP modp28     27
+XYP modp29     28
+XYP modp30     29
+XYP modp31     30
+XYP modp32     31
+XYP modp33     32
 RPP mod        -5 5 -5 5 0 32
-#if 0
-XYP scorerp1   20.3
-#endif
-#if 0
-XYP scorerp2   20.4
-#endif
-#if 0
-RCC scorer     0.0 0.0 20 0.0 0.0 1 50
-#endif
-#if 0
-RPP scorer     0 100 0 100 20 21
-#endif
-#if 0
-RPP BB         -100 100 -100 100 21.1 22.1
-#endif
-#if 0
-XYP modEnd2    111
-#endif
-#if 0
-XYP modEnd4    111
-#endif
-#if 0
-XYP modEnd7    111
-#endif
-#if 0
-XYP modEnd8    111
-#endif
-#if 0
-XYP modEnd11   111
-#endif
-#if 0
-XYP modEnd12   111
-#endif
-#if 0
-XYP modEnd15   111
-#endif
-#if 0
-XYP modEnd16   111
-#endif
-#if 0
-XYP modEnd19   111
-#endif
-#if 0
-XYP modEnd20   111
-#endif
-#if 0
-XYP modEnd25   111
-#endif
-#if 0
-XYP modEnd26   111
-#endif
-#if 0
-XYP modEnd27   111
-#endif
-#if 0
-XYP modEnd28   111
-#endif
-#if 0
-XYP modEnd33   111
-#endif
-#if 0
-XYP modEnd34   111
-#endif
-#if 0
-XYP modEnd35   111
-#endif
-#if 0
-XYP modEnd36   111
-#endif
-#if 0
-XYP modEnd41   111
-#endif
-#if 0
-XYP modEnd42   111
-#endif
 END
-#if 0
-TARGET       5 +tubeIn -LiFStart +LiFEnd
-#endif
 * Black hole
 BLKBODY      5 +blkbody -air
-AIR          5 +air -tube -tubeHole -pipeOut
+AIR          5 +air -tube -tube1 -tubeHole -pipeOut -phantom -linecam
 LIF          5 +lif -flange
 FLANGE       5 +flange -mod
 !@alpha=50
-TUBE         5 +tube -tube1 -tubeHole
+TUBE         5 +tube -tubeHole -tubeHol1
 !@alpha=50
-TUBE1        5 +tube1 -mod -tubeHole
+TUBE1        5 +tube1 -tubeHole -mod
 !@alpha=50
-TUBEHOLE     5 +tubeHole -flange -pipeOut
+TUBEHOLE     5 +tubeHole -flange -pipeOut -tubeHol1
+!@alpha=50
+TUBEHOL1     5 +tubeHol1 -pipeOut
 !@alpha=50
 PIPEOUT      5 +pipeOut -pipeIn -flange
 !@alpha=50
 PIPEIN       5 +pipeIn -lif -flange
-#if 0
 !@alpha=50
-CZT          5 +czt
-#endif
-#if 0
-REF1         5 +ref1
-#endif
-#if 0
-REF2         5 +ref2
-#endif
-MOD1         5 +mod +modEnd1
-MOD2         5 +mod -modEnd1 +modEnd2
-MOD3         5 +mod -modEnd2 +modEnd3
-MOD4         5 +mod -modEnd3 +modEnd4
-MOD5         5 +mod -modEnd4 +modEnd5
-MOD6         5 +mod -modEnd5 +modEnd6
-MOD7         5 +mod -modEnd6 +modEnd7
-MOD8         5 +mod -modEnd7
+LINECAM      5 +linecam
+!@alpha=50
+BORON        5 +boron
+!@alpha=50
+PHANTOM      5 +phantom -boron
+MOD2         5 +mod +modp2
+MOD3         5 +mod -modp2 +modp3
+MOD4         5 +mod -modp3 +modp4
+MOD5         5 +mod -modp4 +modp5
+MOD6         5 +mod -modp5 +modp6
+MOD7         5 +mod -modp6 +modp7
+MOD8         5 +mod -modp7 +modp8
+MOD9         5 +mod -modp8 +modp9
+MOD10        5 +mod -modp9 +modp10
+MOD11        5 +mod -modp10 +modp11
+MOD12        5 +mod -modp11 +modp12
+MOD13        5 +mod -modp12 +modp13
+MOD14        5 +mod -modp13 +modp14
+MOD15        5 +mod -modp14 +modp15
+MOD16        5 +mod -modp15 +modp16
+MOD17        5 +mod -modp16 +modp17
+MOD18        5 +mod -modp17 +modp18
+MOD19        5 +mod -modp18 +modp19
+MOD20        5 +mod -modp19 +modp20
+MOD21        5 +mod -modp20 +modp21
+MOD22        5 +mod -modp21 +modp22
+MOD23        5 +mod -modp22 +modp23
+MOD24        5 +mod -modp23 +modp24
+MOD25        5 +mod -modp24 +modp25
+MOD26        5 +mod -modp25 +modp26
+MOD27        5 +mod -modp26 +modp27
+MOD28        5 +mod -modp27 +modp28
+MOD29        5 +mod -modp28 +modp29
+MOD30        5 +mod -modp29 +modp30
+MOD31        5 +mod -modp30 +modp31
+MOD32        5 +mod -modp31 +modp32
+MOD33        5 +mod -modp32 +modp33
 END
 GEOEND
 MATERIAL           9           0.0015803                              FLUORINE
@@ -253,27 +219,30 @@ MATERIAL          24                7.18                              CHROMIUM
 *4 - 19 Atomic Percent, and with C content from 0 - 4 percent.
 MATERIAL                             8.0                              Stainles
 COMPOUND        18.0  CHROMIUM      74.0      IRON       8.0    NICKELStainles
+MATERIAL           5                2.37                              BORON
+*Boron oxide B2_O3
+MATERIAL                           1.812                              B2O3
+COMPOUND   -0.310551     BORON -0.689449    OXYGEN                    B2O3
+*Boron acid
+MATERIAL                           1.435                              BAcid
+COMPOUND   -0.174842     BORON -0.776255    OXYGEN -0.048903  HYDROGENBAcid
 ASSIGNMA    BLCKHOLE   BLKBODY
 ASSIGNMA         AIR       AIR
 ASSIGNMA        LEAD      TUBE
-ASSIGNMA      TEFLON     TUBE1
-ASSIGNMA         AIR  TUBEHOLE
+ASSIGNMA        LEAD     TUBE1
+ASSIGNMA      TEFLON  TUBEHOLE
+ASSIGNMA         AIR  TUBEHOL1
 ASSIGNMA    Stainles   PIPEOUT
 ASSIGNMA      VACUUM    PIPEIN
-*ASSIGNMA        CdTe       CZT
-*ASSIGNMA      TEFLON      REF1
-ASSIGNMA    ALUMINUM    FLANGE
+ASSIGNMA    Stainles    FLANGE
 ASSIGNMA         LiF       LIF
-ASSIGNMA      TEFLON      MOD1
-ASSIGNMA    ALUMINUM      MOD2
-ASSIGNMA      TEFLON      MOD3
-ASSIGNMA    ALUMINUM      MOD4
-ASSIGNMA      TEFLON      MOD5
-ASSIGNMA    ALUMINUM      MOD6
-ASSIGNMA      TEFLON      MOD7
-ASSIGNMA    ALUMINUM      MOD8
+ASSIGNMA        PMMA   PHANTOM
+ASSIGNMA       BAcid     BORON
+ASSIGNMA        CdTe   LINECAM
+ASSIGNMA      TEFLON      MOD2     MOD32         2
+ASSIGNMA    ALUMINUM      MOD3     MOD33         2
 * Set the random number seed
 RANDOMIZ                377746
 * Set the number of primary histories to be simulated in the run
-START       50000000                             1
+START      100000000                             1
 STOP

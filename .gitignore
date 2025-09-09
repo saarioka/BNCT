@@ -73,7 +73,6 @@ docs/_build/
 
 # PyBuilder
 .pybuilder/
-target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
@@ -163,16 +162,27 @@ cython_debug/
 
 *~
 *_fort.*
-ranbnct_?????
-bnct_??.inp
-bnct_?????.out
-bnct_??.out
-bnct_?????.err
-bnct_?????.log
+ranbnct_*
+bnct_*inp
+bnct-*inp
+bnct*out
+bnct*out
+bnct*err
+bnct*log
+bnct*lis
+bnct*bnx
+bnct*bnn
+ranbnct*
+ex_*.out
+ex_*.err
+*_plot.dat
+*_plot.geo.dat
+fort.*
+fluka_*
 
 FLUKA/fluka_*
-Geant4/G4NDL*
-Geant4/G4TENDL*
+**/G4NDL*
+**/G4TENDL*
 
-*build*
-
+**/build
+**/results*/**

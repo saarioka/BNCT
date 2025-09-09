@@ -38,7 +38,6 @@ void EventAction::EndOfEventAction(const G4Event* event)
 
   for (G4int i=0; i<nHit; i++){
     auto hit = dynamic_cast<TargetHit*>(hc->GetHit(i));
-    //G4double protonE = hit->GetProtonE();
     G4double neutronE = hit->GetNeutronE();
     G4double Edep = hit->GetEdep();
     G4ThreeVector pos = hit->GetPos();
@@ -46,14 +45,13 @@ void EventAction::EndOfEventAction(const G4Event* event)
 
     analysisManager->FillNtupleIColumn(0, eventID);
     analysisManager->FillNtupleDColumn(1, Edep / keV);
-    //analysisManager->FillNtupleDColumn(2, protonE / keV);
-    analysisManager->FillNtupleDColumn(3, neutronE / keV);
-    analysisManager->FillNtupleDColumn(4, pos.x() / cm);
-    analysisManager->FillNtupleDColumn(5, pos.y() / cm);
-    analysisManager->FillNtupleDColumn(6, pos.z() / cm);
-    analysisManager->FillNtupleDColumn(7, mom.x() / keV);
-    analysisManager->FillNtupleDColumn(8, mom.y() / keV);
-    analysisManager->FillNtupleDColumn(9, mom.z() / keV);
+    analysisManager->FillNtupleDColumn(2, neutronE / keV);
+    analysisManager->FillNtupleDColumn(3, pos.x() / cm);
+    analysisManager->FillNtupleDColumn(4, pos.y() / cm);
+    analysisManager->FillNtupleDColumn(5, pos.z() / cm);
+    analysisManager->FillNtupleDColumn(6, mom.x() / keV);
+    analysisManager->FillNtupleDColumn(7, mom.y() / keV);
+    analysisManager->FillNtupleDColumn(8, mom.z() / keV);
     analysisManager->AddNtupleRow();
   }
 }

@@ -10,12 +10,6 @@
 
 namespace B2 {
 
-/// Target hit class
-///
-/// It defines data members to store the trackID, energy deposit,
-/// and position of charged particles in a selected volume:
-/// - fTrackID, fEdep, fPos
-
 class TargetHit : public G4VHit {
   public:
     TargetHit() = default;
@@ -35,21 +29,18 @@ class TargetHit : public G4VHit {
 
     // Set methods
     void SetEdep(G4double de) { fEdep = de; };
-    void SetProtonE(G4double e) { fProtonE = e; };
     void SetNeutronE(G4double e) { fNeutronE = e; };
     void SetPos(G4ThreeVector xyz) { fPos = xyz; };
     void SetMom(G4ThreeVector xyz) { fMom = xyz; };
 
     // Get methods
     G4double GetEdep() const { return fEdep; };
-    G4double GetProtonE() const { return fProtonE; };
     G4double GetNeutronE() const { return fNeutronE; };
     G4ThreeVector GetPos() const { return fPos; };
     G4ThreeVector GetMom() const { return fMom; };
 
   private:
     G4double fEdep = 0.;
-    G4double fProtonE = 0.;
     G4double fNeutronE = 0.;
     G4ThreeVector fPos;
     G4ThreeVector fMom;

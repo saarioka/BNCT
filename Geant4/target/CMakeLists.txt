@@ -44,7 +44,10 @@ target_link_libraries(exampleB2b ${Geant4_LIBRARIES})
 set(EXAMPLEB2B_SCRIPTS
   gui.mac
   init_vis.mac
-  run.mac
+  run_proton.mac
+  run_neutron.mac
+  neutron.mac
+  neutrontest.mac
   vis.mac
   )
 

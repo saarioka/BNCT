@@ -11,6 +11,9 @@
 /gui/addMenu run Run
 /gui/addButton run "beamOn 1" "/run/beamOn 1"
 /gui/addButton run run1 "/control/execute run1.mac"
+/gui/addButton run neutrontest "/control/execute neutrontest.mac"
+/gui/addButton run neutron "/control/execute neutron.mac"
+
 #
 # Gun menu :
 /gui/addMenu gun Gun

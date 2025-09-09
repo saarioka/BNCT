@@ -51,9 +51,12 @@ void PrimaryGeneratorAction1::GeneratePrimaries(G4Event* anEvent)
     return;
   }
 
-  G4cout << "PrimaryGeneratorAction1::GeneratePrimaries" << G4endl;
+  //G4cout << "PrimaryGeneratorAction1::GeneratePrimaries" << G4endl;
 
-  G4cout << "Primary vertex with E: " << fE / eV << " keV"
+  // TODO why
+  fE = fE / 1000;
+
+  G4cout << "Primary vertex with E: " << fE / keV << " keV"
          << ", X: " << fX / mm << " mm"
          << ", Y: " << fY / mm << " mm"
          << ", Z: " << fZ / mm << " mm"
@@ -62,8 +65,8 @@ void PrimaryGeneratorAction1::GeneratePrimaries(G4Event* anEvent)
          << ", pZ: " << fpZ
          << G4endl;
 
-  fParticleGun->SetParticleEnergy(fE * eV);
-  fParticleGun->SetParticlePosition(G4ThreeVector(fX * mm, fY * mm, fZ  * mm));
+  fParticleGun->SetParticleEnergy(fE);
+  fParticleGun->SetParticlePosition(G4ThreeVector(fX, fY, fZ));
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(fpX, fpY, fpZ));
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }

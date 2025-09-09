@@ -36,7 +36,6 @@ void TargetHit::Print()
 {
   G4cout
      << " Edep: " << std::setw(4) << G4BestUnit(fEdep, "Energy")
-     << " ProtonE: " << std::setw(4) << G4BestUnit(fProtonE, "Energy")
      << " NeutronE: " << std::setw(4) << G4BestUnit(fNeutronE, "Energy")
      << " Position: " << std::setw(4) << G4BestUnit(fPos, "Length")
      << " Momentum: " << std::setw(4) << G4BestUnit(fMom, "Momentum")

@@ -3,6 +3,7 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4CsvAnalysisReader.hh"
+#include "G4SystemOfUnits.hh"
 #include "globals.hh"
 
 class G4ParticleGun;
@@ -22,7 +23,7 @@ class PrimaryGeneratorAction1
     G4ParticleGun* fParticleGun = nullptr;
     G4String fFilepattern = "";
     G4CsvAnalysisReader *fAnalysisReader = nullptr;
-    G4double fE, fX, fY, fZ, fpX, fpY, fpZ;
+    G4double fE = 0*keV, fX = 0 * mm, fY = 0 * mm, fZ = 0 * mm, fpX = 0, fpY = 0, fpZ = 0;
     void InitializeAnalysisReader();
 };
 

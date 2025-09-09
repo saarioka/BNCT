@@ -3,6 +3,7 @@
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
 #include "TargetSD.hh"
+#include "TallySD.hh"
 
 #include "G4Material.hh"
 #include "G4NistManager.hh"
@@ -87,9 +88,10 @@ void DetectorConstruction::DefineMaterials() {
     LiF->AddElement(Li, natoms = 1);
     LiF->AddElement(F, natoms = 1);
 
+    fWorldMaterial = nistManager->FindOrBuildMaterial("G4_AIR");
     fTargetMaterial = nistManager->FindOrBuildMaterial("LiF");
-
-    fWorldMaterial = nistManager->FindOrBuildMaterial("G4_Galactic");
+    fFlangeMaterial = nistManager->FindOrBuildMaterial("G4_Al");
+    fTallyMaterial = nistManager->FindOrBuildMaterial("G4_AIR");
 
     // Print materials
     G4cout << *(G4Material::GetMaterialTable()) << G4endl;
@@ -98,10 +100,18 @@ void DetectorConstruction::DefineMaterials() {
 G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
     // Sizes of the principal geometrical components (solids)
 
-    G4double targetLength = 1.5 * mm;      // half length of Target
     G4double targetRadius = 38.1 * mm / 2; // Radius of Target
+    G4double targetLength = 1.5 * mm;      // half length of Target
+
+    G4double tallyRadius = 10 * cm / 2;
+    G4double tallyLength = 2 * mm / 2;
+
+    G4double flangeRadius = 5 * cm / 2;
+    G4double flangeLength = 2 * mm / 2;
 
     G4ThreeVector positionTarget = G4ThreeVector(0, 0, targetLength);
+    G4ThreeVector positionFlange = G4ThreeVector(0, 0, targetLength + flangeLength);
+    G4ThreeVector positionTally = G4ThreeVector(0, 0, targetLength + flangeLength + tallyLength + 137.6 * cm);
 
     // Definitions of Solids, Logical Volumes, Physical Volumes
 
@@ -110,7 +120,7 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
 
     G4cout << "Computed tolerance = " << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance() / mm << " mm" << G4endl;
 
-    auto worldS = new G4Box("world", targetRadius + 1 * mm, targetRadius + 1 * mm, 3.2 * mm); // its size
+    auto worldS = new G4Box("world", 250 * cm, 250 * cm, 1.5 * m); // its size
     auto worldLV = new G4LogicalVolume(worldS,                    // its solid
                                        fWorldMaterial,                  // its material
                                        "World");                  // its name
@@ -138,12 +148,47 @@ G4VPhysicalVolume *DetectorConstruction::DefineVolumes() {
 
     G4cout << "Target is " << fTargetMaterial->GetName() << ", " << 2 * targetLength / cm << " cm long and has radius of " << targetRadius / cm << " cm" << G4endl;
 
+
+    // Flange
+    auto flangeS = new G4Tubs("flange", 0., flangeRadius, flangeLength, 0. * deg, 360. * deg);
+    auto logicFlange = new G4LogicalVolume(flangeS, fWorldMaterial, "Flange", nullptr, nullptr, nullptr);
+    new G4PVPlacement(nullptr,         // no rotation
+                      positionFlange,  // at (x,y,z)
+                      logicFlange,    // its logical volume
+                      "Flange",       // its name
+                      worldLV,        // its mother volume
+                      false,          // no boolean operations
+                      0,              // copy number
+                      fCheckOverlaps);// checking overlaps
+    G4cout << "Flange is " << fWorldMaterial->GetName() << ", " << 2 * flangeLength / cm << " cm long and has radius of " << flangeRadius / cm << " cm" << G4endl;
+
+
+    // Tally
+    auto tallyS = new G4Tubs("tally", 0., tallyRadius, tallyLength, 0. * deg, 360. * deg);
+    fLogicTally = new G4LogicalVolume(tallyS, fWorldMaterial, "Tally", nullptr, nullptr, nullptr);
+    new G4PVPlacement(nullptr,         // no rotation
+                      positionTally,  // at (x,y,z)
+                      fLogicTally,    // its logical volume
+                      "Tally",        // its name
+                      worldLV,        // its mother volume
+                      false,          // no boolean operations
+                      0,              // copy number
+                      fCheckOverlaps);// checking overlaps
+    G4cout << "Tally is " << fWorldMaterial->GetName() << ", " << 2 * tallyLength / cm << " cm long and has radius of " << tallyRadius / cm << " cm" << G4endl;
+    
+
     // Visualization attributes
     auto boxVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
     worldLV->SetVisAttributes(boxVisAtt);
 
     auto targetVisAtt = new G4VisAttributes(G4Colour(1, 1, 0));
     fLogicTarget->SetVisAttributes(targetVisAtt);
+
+    auto flangeVisAtt = new G4VisAttributes(G4Colour(0.7, 0.7, 0.7));
+    logicFlange->SetVisAttributes(flangeVisAtt);
+
+    auto tallyVisAtt = new G4VisAttributes(G4Colour(0, 1, 1));
+    fLogicTally->SetVisAttributes(tallyVisAtt);
 
     // User Limits
     G4double maxStep = 0.1*mm;
@@ -156,6 +201,10 @@ void DetectorConstruction::ConstructSDandField() {
     auto targetSD = new TargetSD("TargetSD", "TargetHitCollection");
     G4SDManager::GetSDMpointer()->AddNewDetector(targetSD);
     SetSensitiveDetector(fLogicTarget, targetSD);
+
+    auto tallySD = new TallySD("TallySD", "TallyHitCollection");
+    G4SDManager::GetSDMpointer()->AddNewDetector(tallySD);
+    SetSensitiveDetector(fLogicTally, tallySD);
 }
 
 void DetectorConstruction::SetTargetMaterial(G4String materialName) {
