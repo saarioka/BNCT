@@ -1,0 +1,4 @@
+/run/numberOfThreads 22
+/run/initialize
+
+/control/execute neutron.mac

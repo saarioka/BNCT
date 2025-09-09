@@ -1,0 +1,8 @@
+/gun/particle neutron
+/gun/energy 600 keV
+/gun/position 0 0 0 cm
+/gun/direction 0 0 1
+
+/BNCT/selectInputFolder asd
+
+/run/beamOn 10000
