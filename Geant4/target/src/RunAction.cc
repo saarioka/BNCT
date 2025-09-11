@@ -33,12 +33,13 @@ void RunAction::BeginOfRunAction(const G4Run* run)
 
   G4String fileName = "Run" + runnumber + identifier + ".csv";
 
-  //analysisManager->SetNtupleMerging(false);
+  analysisManager->SetNtupleMerging(false);
   analysisManager->OpenFile(fileName);
 
   // Ntuples
   analysisManager->CreateNtuple("Kinematics", "Kinematics");
   analysisManager->CreateNtupleIColumn("Evt");
+  analysisManager->CreateNtupleIColumn("HC");
   analysisManager->CreateNtupleDColumn("Edep");
   analysisManager->CreateNtupleDColumn("ENeutron");
   analysisManager->CreateNtupleDColumn("X");

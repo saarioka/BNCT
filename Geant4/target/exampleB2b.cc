@@ -42,7 +42,9 @@ int main(int argc,char** argv)
 
   //G4VModularPhysicsList* physicsList = new QGSP_BIC_HP;
   G4VModularPhysicsList* physicsList = new QGSP_BIC_AllHP;
-  physicsList->RegisterPhysics(new G4StepLimiterPhysics());
+  G4StepLimiterPhysics* stepLimitPhys = new G4StepLimiterPhysics();
+  stepLimitPhys->SetApplyToAll(true); // activates step limit for ALL particles
+  physicsList->RegisterPhysics(stepLimitPhys);
 
   runManager->SetUserInitialization(physicsList);
 

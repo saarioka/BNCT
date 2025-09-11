@@ -1,4 +1,5 @@
 import sys
+import argparse
 from glob import glob
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -9,11 +10,11 @@ hep.style.use("CMS")
 
 from wcsv import read_wcsv
 
+FORWARD_CUT = 1 - round(1/13.8, 3)
+#FORWARD_CUT = 0.96
 
-def main():
-    files = sys.argv[1:]
-    print(f"Found {len(files)} files")
 
+def plots(files, radius):
     df = []
     for f in files:
         #Evt  Edep   EProton  ENeutron         X         Y             Z
@@ -27,11 +28,23 @@ def main():
     df['pX'] /= 1e3
     df['pY'] /= 1e3
     df['pZ'] /= 1e3
+
     df['pT'] = np.sqrt(df['pX']**2 + df['pY']**2)
+    df['R'] = np.sqrt(df['X']**2 + df['Y']**2)
 
-    print(df)
+    #df = df[df['Z'] < 200]
+
+    if radius:
+        rcut = radius
+        print(f"Applying radius cut of {rcut} mm on neutron position")
+        len_1 = len(df)
+        df = df[df['R'] < rcut*1000]
+        print(f"Neutrons after cut: {len(df)} out of {len_1}, fraction {len(df)/len_1*100:.1f} %")
+
+    #print(df)
 
 
+    '''
     # plot xy 2d heatmap on log z scale
     plt.figure(figsize=(8, 6))
     plt.hist2d(
@@ -48,6 +61,7 @@ def main():
     plt.axis("equal")
     plt.tight_layout()
 
+    '''
 
     plt.figure(figsize=(8, 6))
     plt.hist(
@@ -74,45 +88,47 @@ def main():
 
 
     ## cylindrical binning
+    plot_cylindrical = True
 
-    # Define binning
-    nbins_z = 50
-    nbins_r = 50
-    #z_edges = np.linspace(0, np.max(df["Z"]), nbins_z + 1)
-    z_edges = np.linspace(0, 1.5, nbins_z + 1)
-    r_edges = np.linspace(0, 0.1, nbins_r + 1)
+    if plot_cylindrical:
+        # Define binning
+        nbins_z = 50
+        nbins_r = 50
+        #z_edges = np.linspace(0, np.max(df["Z"]), nbins_z + 1)
+        z_edges = np.linspace(0, 1.5, nbins_z + 1)
+        r_edges = np.linspace(0, 0.1, nbins_r + 1)
 
-    # Histogram counts (no weights yet)
-    H, z_edges, r_edges = np.histogram2d(df["Z"], r, bins=[z_edges, r_edges])
+        # Histogram counts (no weights yet)
+        H, z_edges, r_edges = np.histogram2d(df["Z"], r, bins=[z_edges, r_edges])
 
-    # Bin centers
-    z_centers = 0.5 * (z_edges[:-1] + z_edges[1:])
-    r_centers = 0.5 * (r_edges[:-1] + r_edges[1:])
+        # Bin centers
+        z_centers = 0.5 * (z_edges[:-1] + z_edges[1:])
+        r_centers = 0.5 * (r_edges[:-1] + r_edges[1:])
 
-    # Bin widths
-    dz = np.diff(z_edges)
-    dr = np.diff(r_edges)
+        # Bin widths
+        dz = np.diff(z_edges)
+        dr = np.diff(r_edges)
 
-    # 2D meshgrid of bin widths and centers
-    Zc, Rc = np.meshgrid(z_centers, r_centers, indexing="ij")
-    DZ, DR = np.meshgrid(dz, dr, indexing="ij")
+        # 2D meshgrid of bin widths and centers
+        Zc, Rc = np.meshgrid(z_centers, r_centers, indexing="ij")
+        DZ, DR = np.meshgrid(dz, dr, indexing="ij")
 
-    # Cylindrical shell volume for each bin
-    dV = 2 * np.pi * Rc * DR * DZ
+        # Cylindrical shell volume for each bin
+        dV = 2 * np.pi * Rc * DR * DZ
 
-    # Density = counts / volume
-    rho = H / dV
+        # Density = counts / volume
+        rho = H / dV
 
-    # Normalize if desired (probability density)
-    rho /= rho.sum() * dV.mean()  # ensures ∫ρ dV = 1
+        # Normalize if desired (probability density)
+        #rho /= rho.sum() * dV.mean()  # ensures ∫ρ dV = 1
 
-    # Plot
-    plt.figure(figsize=(8, 6))
-    plt.pcolormesh(z_edges, r_edges, rho.T, cmap="viridis", norm=plt.matplotlib.colors.LogNorm())
-    plt.colorbar(label="Density (1/mm³)")
-    plt.xlabel("Z (um)")
-    plt.ylabel("Radial distance r (um)")
-    plt.tight_layout()
+        # Plot
+        plt.figure(figsize=(8, 6))
+        plt.pcolormesh(z_edges, r_edges, rho.T, cmap="viridis", norm=plt.matplotlib.colors.LogNorm())
+        plt.colorbar(label="Density (1/mm³)")
+        plt.xlabel("Z (um)")
+        plt.ylabel("Radial distance r (um)")
+        plt.tight_layout()
 
 
 
@@ -124,7 +140,7 @@ def main():
 
     # different cuts on cos(theta)
     plt.figure(figsize=(8, 6))
-    thetacuts = (-1, 0, 0.6, 0.7, 0.8, 0.9, 1 - round(1/13.8, 3))
+    thetacuts = (-1, 0, 0.6, 0.7, 0.8, 0.9, FORWARD_CUT)
     for c in thetacuts:
         plt.hist(
             df["ENeutron"][cos_theta > c],
@@ -138,18 +154,22 @@ def main():
     plt.tight_layout()
 
 
-    # forward neutrons only, acceptance cut
+    # forward neutrons only, acceptance cut, print max bin height
     plt.figure(figsize=(8, 6))
-    plt.hist(
-        df["ENeutron"][cos_theta > thetacuts[-1]],
-        bins=np.linspace(0, 600, 600//5),
+    heights, bins, _ = plt.hist( 
+        df["ENeutron"][cos_theta > FORWARD_CUT],
+        bins=np.linspace(0, 600, 600//3),
         histtype="step",
     )
     plt.xlabel("Neutron energy (keV)")
     #plt.ylabel("Normalized counts")
-    plt.title(r"$\cos(\theta) >$" + f" {thetacuts[-1]} (device acceptance)")
+    plt.title(r"$\cos(\theta) >$" + f" {FORWARD_CUT} (device acceptance)")
     plt.xlim(0, 600)
     plt.tight_layout()
+
+    print(f"Max bin height in forward energy spectrum: {heights.max()} at {bins[np.argmax(heights)]} keV")
+    with open("max_bin.csv", "a") as f:
+        f.write(f"{files[0]}, {heights.max()}, {bins[np.argmax(heights)]}\n")
 
     # momentum direction distribution
     plt.figure(figsize=(8, 6))
@@ -201,7 +221,7 @@ def main():
     plt.colorbar()
     plt.xlabel("Neutron energy (keV)")
     plt.ylabel("pZ")
-    plt.title(r"$\cos(\theta) >$" + f" {thetacuts[-1]} (device acceptance)")
+    plt.title(r"$\cos(\theta) >$" + f" {FORWARD_CUT} (device acceptance)")
     plt.tight_layout()
 
     
@@ -234,6 +254,33 @@ def main():
         axs[i].axis("equal")
     plt.tight_layout()
 
+    #plt.close('all')
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Plot neutron data")
+    parser.add_argument("files", nargs="+", type=str, help="Input CSV files")
+    parser.add_argument('-r', '--radius', type=float, required=False, help='Radius cut from beam axis on neutron position (mm)')
+    args = parser.parse_args()
+
+    files = args.files
+    print(f"Found {len(files)} files")
+
+    runs = {}
+    for f in files:
+        run = int(f.split("/")[-1].split("_")[0][3:])
+
+        if not run in runs:
+            runs[run] = [f]
+        else:
+            runs[run].append(f)
+    
+    print(f"Found {len(runs)} runs")
+    print(runs)
+    
+    for r in sorted(runs.keys()):
+        print(f'Run {r}')
+        plots(runs[r], args.radius)
 
     plt.show()
 

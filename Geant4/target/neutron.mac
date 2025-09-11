@@ -1,10 +1,10 @@
 /gun/particle neutron
 /BNCT/selectGunAction 1
-/BNCT/selectInputFolder ../results_skimmed3_2B_all/Run2_skimmed
+/BNCT/selectInputFolder ../results_skimmed[3-5]_2B_all/Run2_skimmed_-100_1
 
 /run/verbose 0
 /event/verbose 0
 /hits/verbose 0
 /tracking/verbose 0
 
-/run/beamOn 220
+/run/beamOn 175000

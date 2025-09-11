@@ -23,36 +23,38 @@ void EventAction::EndOfEventAction(const G4Event* event)
   G4int n_trajectories = 0;
   if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
 
-  // periodic printing
   G4int eventID = event->GetEventID();
-
-  G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(0);
-  G4int nHit = hc->GetSize();
-  if (nHit <= 0) {
-    return;
-  }
-
-  //G4cout << "Number of hits in this event: " << nHit << G4endl;
 
   auto analysisManager = G4AnalysisManager::Instance();
 
-  for (G4int i=0; i<nHit; i++){
-    auto hit = dynamic_cast<TargetHit*>(hc->GetHit(i));
-    G4double neutronE = hit->GetNeutronE();
-    G4double Edep = hit->GetEdep();
-    G4ThreeVector pos = hit->GetPos();
-    G4ThreeVector mom = hit->GetMom();
+  for (G4int i_hc=0; i_hc<2; i_hc++)
+  {
+    G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(i_hc);
+    G4int nHit = hc->GetSize();
+    if (nHit <= 0) {
+      continue;
+    }
+    //G4cout << "Number of hits in this event: " << nHit << G4endl;
 
-    analysisManager->FillNtupleIColumn(0, eventID);
-    analysisManager->FillNtupleDColumn(1, Edep / keV);
-    analysisManager->FillNtupleDColumn(2, neutronE / keV);
-    analysisManager->FillNtupleDColumn(3, pos.x() / cm);
-    analysisManager->FillNtupleDColumn(4, pos.y() / cm);
-    analysisManager->FillNtupleDColumn(5, pos.z() / cm);
-    analysisManager->FillNtupleDColumn(6, mom.x() / keV);
-    analysisManager->FillNtupleDColumn(7, mom.y() / keV);
-    analysisManager->FillNtupleDColumn(8, mom.z() / keV);
-    analysisManager->AddNtupleRow();
+    for (G4int i=0; i<nHit; i++){
+      auto hit = dynamic_cast<TargetHit*>(hc->GetHit(i));
+      G4double neutronE = hit->GetNeutronE();
+      G4double Edep = hit->GetEdep();
+      G4ThreeVector pos = hit->GetPos();
+      G4ThreeVector mom = hit->GetMom();
+
+      analysisManager->FillNtupleIColumn(0, eventID);
+      analysisManager->FillNtupleIColumn(1, hit->getHitCollection());
+      analysisManager->FillNtupleDColumn(2, Edep / keV);
+      analysisManager->FillNtupleDColumn(3, neutronE / keV);
+      analysisManager->FillNtupleDColumn(4, pos.x() / cm);
+      analysisManager->FillNtupleDColumn(5, pos.y() / cm);
+      analysisManager->FillNtupleDColumn(6, pos.z() / cm);
+      analysisManager->FillNtupleDColumn(7, mom.x() / keV);
+      analysisManager->FillNtupleDColumn(8, mom.y() / keV);
+      analysisManager->FillNtupleDColumn(9, mom.z() / keV);
+      analysisManager->AddNtupleRow();
+    }
   }
 }
 }

@@ -1,5 +1,4 @@
 #include "PrimaryGeneratorAction0.hh"
-
 #include "PrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"

@@ -28,18 +28,21 @@ class TargetHit : public G4VHit {
     void Print() override;
 
     // Set methods
+    void setHitCollection(G4int hc) { fHitCollection = hc; };
     void SetEdep(G4double de) { fEdep = de; };
     void SetNeutronE(G4double e) { fNeutronE = e; };
     void SetPos(G4ThreeVector xyz) { fPos = xyz; };
     void SetMom(G4ThreeVector xyz) { fMom = xyz; };
 
     // Get methods
+    G4int getHitCollection() const { return fHitCollection; };
     G4double GetEdep() const { return fEdep; };
     G4double GetNeutronE() const { return fNeutronE; };
     G4ThreeVector GetPos() const { return fPos; };
     G4ThreeVector GetMom() const { return fMom; };
 
   private:
+    G4int fHitCollection = -1;  // 0 = target, 1 = tally
     G4double fEdep = 0.;
     G4double fNeutronE = 0.;
     G4ThreeVector fPos;

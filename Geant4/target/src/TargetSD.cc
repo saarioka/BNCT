@@ -34,10 +34,10 @@ void TargetSD::Initialize(G4HCofThisEvent* hce)
 
 G4bool TargetSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 {
-  auto track = step->GetTrack();
-
+  // proton run
   if (G4CsvAnalysisReader::Instance()->GetFileName() == "") {
-    // proton run
+    auto track = step->GetTrack();
+
     //G4cout << "Input file set to " << G4CsvAnalysisReader::Instance()->GetFileName() << G4endl;
 
     G4double cutoffEnergy = 1800 * keV;
@@ -57,12 +57,13 @@ G4bool TargetSD::ProcessHits(G4Step* step, G4TouchableHistory*)
       G4double neutronE = step->GetPreStepPoint()->GetKineticEnergy();
       //G4double neutronE = step->GetPostStepPoint()->GetKineticEnergy();
 
-      G4cout << track->GetCreatorProcess()->GetProcessName() << " " 
-            << step->GetPreStepPoint()->GetKineticEnergy()/keV << " keV -> "
-            << step->GetPostStepPoint()->GetKineticEnergy()/keV << " keV" << G4endl;
+      //G4cout << track->GetCreatorProcess()->GetProcessName() << " " 
+      //      << step->GetPreStepPoint()->GetKineticEnergy()/keV << " keV -> "
+      //      << step->GetPostStepPoint()->GetKineticEnergy()/keV << " keV" << G4endl;
 
       auto newHit = new TargetHit();
 
+      newHit->setHitCollection(0);
       newHit->SetEdep(edep);
       newHit->SetNeutronE(neutronE);
       newHit->SetPos(step->GetPreStepPoint()->GetPosition());
@@ -75,14 +76,7 @@ G4bool TargetSD::ProcessHits(G4Step* step, G4TouchableHistory*)
       track->SetTrackStatus(fStopAndKill);
       return true;
     }
-    return false;
   }
-
-  // neutron run
-  //G4cout << "Input file set to " << G4CsvAnalysisReader::Instance()->GetFileName() << G4endl;
-  //G4cout << "TargetSD::ProcessHits: Particle " << track->GetDefinition()->GetParticleName()
-  //        << " E = " << track->GetKineticEnergy()/keV << " keV"
-  //        << G4endl;
 
   return false;
 }
